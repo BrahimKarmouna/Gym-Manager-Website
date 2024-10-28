@@ -3,6 +3,7 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue'
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 import { fileURLToPath, URL } from 'node:url';
+import VueDevTools from 'vite-plugin-vue-devtools';
 
 export default defineConfig({
   plugins: [
@@ -10,8 +11,10 @@ export default defineConfig({
       template: { transformAssetUrls }
     }),
 
+    VueDevTools(),
+
     laravel({
-      input: ['resources/css/app.css', 'resources/js/app.js'],
+      input: ['resources/scss/app.scss', 'resources/js/app.js'],
       refresh: true,
     }),
 
@@ -19,7 +22,7 @@ export default defineConfig({
     // https://github.com/quasarframework/quasar/blob/dev/vite-plugin/index.d.ts
     quasar({
       autoImportComponentCase: 'combined',
-      // sassVariables: 'resources/scss/quasar-variables.scss'
+      sassVariables: fileURLToPath(new URL('./resources/scss/quasar-variables.scss', import.meta.url))
     })
   ],
   resolve: {
@@ -28,5 +31,10 @@ export default defineConfig({
       vue: 'vue/dist/vue.esm-bundler.js',
       '@': fileURLToPath(new URL('./resources/js', import.meta.url))
     }
+  },
+
+  server: {
+    port: 3000
   }
 });
+

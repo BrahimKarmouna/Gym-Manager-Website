@@ -16,7 +16,7 @@ class TransactionCategoryController extends Controller
   {
     $categories = TransactionCategory::all();
 
-    return TransactionCategoryResource::collection($categories);
+    return TransactionCategoryResource::collection( $categories);
   }
 
   /**
@@ -24,7 +24,15 @@ class TransactionCategoryController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    $request->validate([
+      'name' => ['required', 'string'],
+    ]);
+
+    $transactionCategory = TransactionCategory::create([
+      'name' => $request->name
+    ]);
+
+    return TransactionCategoryResource::make($transactionCategory);
   }
 
   /**
@@ -40,7 +48,15 @@ class TransactionCategoryController extends Controller
    */
   public function update(Request $request, TransactionCategory $transactionCategory)
   {
-    //
+    $request->validate([
+      'name' => ['required', 'string'],
+    ]);
+
+    $transactionCategory->update([
+      'name'=> $request->name
+    ]);
+
+    return TransactionCategoryResource::make($transactionCategory);
   }
 
   /**
@@ -48,6 +64,7 @@ class TransactionCategoryController extends Controller
    */
   public function destroy(TransactionCategory $transactionCategory)
   {
+    // DELETE
     $transactionCategory->delete();
 
     // TransactionCategory::where('id', $transactionCategory->id)->delete();

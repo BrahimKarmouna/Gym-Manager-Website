@@ -1,0 +1,118 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// app global css in SCSS form
+body {
+  background-color: $grey-2;
+  font-family: "Inter", sans-serif;
+}
+
+.q-field--outlined .q-field__control:before {
+  border-width: 1px !important;
+  transition: border-color 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.q-field--outlined .q-field__control:after {
+  border-width: 0.2px !important;
+  // transition: border-color 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.q-field--outlined.q-field--highlighted .q-field__control:after {
+  border-width: 1.5px !important;
+  transform: scaleZ(1);
+}
+
+.q-btn.q-btn--outline:before {
+  opacity: 0.24;
+}
+
+// Make outlined style follow Material Design guidelines.
+.q-field--outlined .q-field__label {
+  transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-property: opacity, transform, left, top, padding, background-color;
+  transform-origin: left center;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.q-field--outlined.q-field--labeled.q-field--float {
+  // Change the label position
+  & .q-field__label {
+    top: 0;
+    z-index: 1;
+    padding-left: 5px;
+    padding-right: 5px;
+    // background-color: white;
+    background-color: theme("colors.white");
+    transform: translateY(-45%) scale(0.75);
+  }
+
+  // Adjust the left position if there is inner prepend
+  & .q-field__prepend + .q-field__control-container .q-field__label {
+    left: -35px;
+  }
+
+  // Reduce the top padding when floating in outlined style
+  & .q-field__control-container {
+    padding-top: 8px; // freamwork 24px
+
+    & .q-field__native,
+    & .q-field__prefix,
+    & .q-field__suffix {
+      padding-top: 0;
+    }
+  }
+
+  &.q-field--dense .q-field__control-container {
+    padding-top: 4px; // freamwork 20px
+  }
+
+  &.q-textarea {
+    & .q-field__control-container {
+      padding-top: 16px; // freamwork 26px
+      // padding-bottom: 10px; // Avoid page strange shakes
+
+      & .q-field__native {
+        padding-top: 1px; // Avoid scoll bar in textarea （this from freamwork）
+      }
+    }
+  }
+}
+
+.body--dark {
+  .q-field--outlined.q-field--labeled {
+    & .q-field__label {
+      background-color: var(--q-dark);
+    }
+  }
+}
+
+// QBtn
+.q-btn {
+  text-transform: none;
+}
+
+// QIcon
+.q-icon,
+.material-icons,
+.material-icons-outlined,
+.material-icons-round,
+.material-icons-sharp,
+.material-symbols-outlined,
+.material-symbols-rounded,
+.material-symbols-sharp {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: inherit;
+  font-size: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
