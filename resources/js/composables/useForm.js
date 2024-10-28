@@ -73,8 +73,10 @@ export function useForm(fields = {}) {
         this.clearErrors().setError(errors);
 
         if (options.onError) {
-          return options.onError(errors);
+          options.onError(errors);
         }
+
+        return Promise.reject(errors);
       } finally {
         this.processing = false;
         this.progress = null;

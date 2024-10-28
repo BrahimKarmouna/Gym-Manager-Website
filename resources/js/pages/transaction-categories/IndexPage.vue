@@ -3,15 +3,15 @@
 
   <ul>
     <li v-for="transactionCategory in data">
-      #{{ transactionCategory.id }} -
 
       <router-link :to="{ name: 'transaction-categories.edit', params: { id: transactionCategory.id } }">
+        #{{ transactionCategory.id }} -
         {{ transactionCategory.name }}
       </router-link>
 
       <q-btn flat
              color="primary"
-             icon="home"
+             icon="delete"
              @click="deleteItem(transactionCategory)" />
     </li>
   </ul>
@@ -31,7 +31,7 @@ const {
   filter,
   pagination,
   fetch,
-} = useResourceIndex('transaction-categories');
+} = useResourceIndex('http://localhost:8000/api/transaction-categories');
 
 onMounted(() => {
   fetch();
@@ -49,4 +49,5 @@ function deleteItem(transactionCategory) {
     });
   });
 }
+
 </script>
