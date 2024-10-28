@@ -108,6 +108,12 @@ const routes = [
             props: true,
             component: () => import("../pages/transaction-categories/EditPage.vue"),
           },
+          {
+            path: "transaction",
+            name: "transaction.index",
+            props: true,
+            component: () => import("../pages/transaction/IndexTransaction.vue"),
+          },
         ],
       },
     ],
