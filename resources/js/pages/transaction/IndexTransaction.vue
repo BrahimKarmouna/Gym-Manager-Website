@@ -4,9 +4,10 @@
         <q-card class="my-card text-white bg-blue-8" 
         style="width:530px;"
        >
-       <q-icon name="" />
-          <q-card-section >
-            <div class="text-h6">Income</div>
+       
+          <q-card-section>
+            
+            <div class="text-h6" >Income</div>
           </q-card-section>
           
           
@@ -15,15 +16,15 @@
           </q-card-section>
         </q-card>
 
-        <q-card class="my-card text-white bg-blue-8"
-        style="width:530px;">
-          <q-card-section>
-            <div class="text-h6">Expenses</div>
-          </q-card-section>
-          <q-card-section class="q-pt-none">
-            {{ 0.00 }}
-          </q-card-section>
-        </q-card>
+      <q-card class="my-card text-white bg-blue-8"
+      style="width:530px;">
+        <q-card-section >
+          <div class="text-h6">Expenses</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          {{ 0.00 }}
+        </q-card-section>
+      </q-card>
 
         <q-card class="my-card text-white bg-blue-8"
         style="width:530px;"s>
@@ -37,7 +38,7 @@
       </div>
   
       <div class="q-pa-md">
-        <q-table
+        <q-table 
           flat
           bordered
           title="Treats"
@@ -47,15 +48,16 @@
           :filter="filter"
           :loading="loading"
         >
+   
           <template v-slot:top>
             <q-btn color="green-8" :disable="loading" label="Add Transfert" @click="dialog = true" />
             <q-btn v-if="rows.length !== 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Transfert" @click="removeRow" />
             <q-space />
-            <q-input borderless dense debounce="300" color="primary" v-model="filter">
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
+            <q-input v-model="search" filled type="search" dense="dense">
+        <template v-slot:append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
           </template>
         </q-table>
       </div>
@@ -67,7 +69,7 @@
               <q-form @submit.prevent="onSubmit" @reset="onReset" class="q-gutter-md">
                 <q-input
                   style="width: 430px;"
-                  v-model="amount"
+                  v-model="amount"                 
                   type="number"
                   label="Amount"
                   lazy-rules
@@ -87,7 +89,8 @@
                   lazy-rules
                   :rules="[val => val && val.length > 0 || 'Please insert a recipient']"
                 />
-                <q-input
+                <q-select
+                  :options="options"
                   type="text"
                   v-model="category"
                   label="Category"
@@ -127,13 +130,15 @@
   import { ref } from 'vue'
   import { useQuasar } from 'quasar'
   
+
+
   const columns = [
-    { name: 'amount', required: true, label: 'Amount', align: 'left', field: row => row.amount, sortable: true },
-    { name: 'from', align: 'center', label: 'From', field: 'from', sortable: true },
-    { name: 'to', label: 'To', field: 'to', sortable: true },
-    { name: 'category', label: 'Category', field: 'category' },
-    { name: 'note', label: 'Note', field: 'note' },
-    { name: 'description', label: 'Description', field: 'description' },
+    { name: 'amount', required: true, label: "Amount" ,align: "left", field: row => row.amount, sortable: true },
+    { name: 'from', align: 'center', align: "left", label: 'From', field: 'from', sortable: true },
+    { name: 'to', label: 'To', align: "left", field: 'to', sortable: true },
+    { name: 'category', align: "left", label: 'Category', field: 'category' },
+    { name: 'note', align: "left",label: 'Note', field: 'note' },
+    { name: 'description', align: "left", label: 'Description', field: 'description' },
   ]
   
   const originalRows = []
@@ -215,7 +220,11 @@
         onReset,
         dialog,
         lorem,
-      }
+        search: ref(''),
+        model: ref(null),
+      options: [
+        'Nutrition', 'Health', 'Transport', 'Education', 'Gift'
+      ]}
     }
   }
   </script>
