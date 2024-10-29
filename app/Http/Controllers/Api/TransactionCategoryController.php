@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 class TransactionCategoryController extends Controller
 {
-  /**
-   * Display a listing of the resource.
-   */
   public function index()
   {
     $categories = TransactionCategory::all();
@@ -19,59 +16,41 @@ class TransactionCategoryController extends Controller
     return TransactionCategoryResource::collection( $categories);
   }
 
-  /**
-   * Store a newly created resource in storage.
-   */
   public function store(Request $request)
   {
     $request->validate([
       'name' => ['required', 'string'],
+      'emoji' => ['nullable', 'string'],
     ]);
 
     $transactionCategory = TransactionCategory::create([
-      'name' => $request->name
+      'name' => $request->name,
+      'emoji' => $request->emoji
     ]);
 
     return TransactionCategoryResource::make($transactionCategory);
   }
 
-  /**
-   * Display the specified resource.
-   */
   public function show(TransactionCategory $transactionCategory)
   {
     return TransactionCategoryResource::make($transactionCategory);
-  }
-
-  /**
-   * Update the specified resource in storage.
-   */
-  public function update(Request $request, TransactionCategory $transactionCategory)
+  }  public function update(Request $request, TransactionCategory $transactionCategory)
   {
     $request->validate([
       'name' => ['required', 'string'],
+      'emoji' => ['nullable', 'string'],
     ]);
 
     $transactionCategory->update([
-      'name'=> $request->name
+      'name'=> $request->name,
+      'emoji' => $request->emoji
     ]);
 
     return TransactionCategoryResource::make($transactionCategory);
   }
-
-  /**
-   * Remove the specified resource from storage.
-   */
   public function destroy(TransactionCategory $transactionCategory)
   {
-    // DELETE
     $transactionCategory->delete();
-
-    // TransactionCategory::where('id', $transactionCategory->id)->delete();
-
-    // $item = TransactionCategory::where('id', $transactionCategory->id)->first();
-
-    // $item->delete();
 
     return response()->noContent();
   }

@@ -18,6 +18,7 @@ class TransactionCategoryResource extends JsonResource
       "id" => $this->id,
       "name" => $this->name,
       "slug" => \Str::slug($this->id . '-' . $this->name),
+      "emoji" => $this->emoji,
       "created_at" => $this->created_at->diffForHumans(),
       "updated_at" => $this->updated_at->diffForHumans(),
     ];
