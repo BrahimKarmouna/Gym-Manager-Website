@@ -4,6 +4,7 @@
         <q-card class="my-card text-white bg-blue-8" 
         style="width:530px;"
        >
+       <q-icon name="" />
           <q-card-section >
             <div class="text-h6">Income</div>
           </q-card-section>
@@ -173,8 +174,12 @@
       }
   
       const removeRow = () => {
-        const selectedRows = rows.value.filter(row => row.selected) // Assuming you have a 'selected' property
-        rows.value = rows.value.filter(row => !selectedRows.includes(row))
+        loading.value = true
+        setTimeout(() => {
+          const index = Math.floor(Math.random() * rows.value.length)
+          rows.value = [ ...rows.value.slice(0, index), ...rows.value.slice(index + 1) ]
+          loading.value = false
+        }, 500)
       }
   
       const onSubmit = () => {
