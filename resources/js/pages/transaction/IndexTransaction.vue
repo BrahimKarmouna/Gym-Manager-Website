@@ -1,160 +1,216 @@
-
 <template>
-    
   <div class="q-pa-md">
-    
-    <q-tabs
-        v-model="tab"
-        no-caps
-        class="bg-blue-4 text-white shadow-2"
+    <div class="row items-start q-gutter-md ">
+      <q-card class="my-card text-white bg-blue-8"
+      style="width:530px;"
+     >
+        <q-card-section >
+          <div class="text-h6">Income</div>
+        </q-card-section>
+
+
+        <q-card-section class="q-pt-none" >
+          {{ 0.00 }}
+        </q-card-section>
+      </q-card>
+
+      <q-card class="my-card text-white bg-blue-8"
+      style="width:530px;">
+        <q-card-section>
+          <div class="text-h6">Expenses</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          {{ 0.00 }}
+        </q-card-section>
+      </q-card>
+
+      <q-card class="my-card text-white bg-blue-8"
+      style="width:530px;"s>
+        <q-card-section>
+          <div class="text-h6">Total</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          {{ 0.00 }}
+        </q-card-section>
+      </q-card>
+    </div>
+
+    <div class="q-pa-md">
+      <q-table
+        flat
+        bordered
+        title="Treats"
+        :rows="rows"
+        :columns="columns"
+        row-key="id"
+        :filter="filter"
+        :loading="loading"
       >
-        <q-tab name="Revenus" label="Revenus" />
-        <q-tab name="Dépenses" label="Dépenses" />
-        <q-tab name="Total" label="Total" />
-      </q-tabs>
-      
-     
-      <br>
-    <q-table
-      color="primary"
-      card-class="bg-pink-1 text-brown"
-      table-class="text-grey-8"
-      table-header-class="text-brown"
-      flat
-      bordered
-      title="Treats"
-      :rows="rows"
-      :columns="columns"
-      row-key="name"
-    />
+        <template v-slot:top>
+          <q-btn color="green-8" :disable="loading" label="Add Transfert" @click="dialog = true" />
+          <q-btn v-if="rows.length !== 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Transfert" @click="removeRow" />
+          <q-space />
+          <q-input borderless dense debounce="300" color="primary" v-model="filter">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+      </q-table>
+    </div>
+
+    <div class="q-pa-md">
+      <q-dialog v-model="dialog" persistent>
+        <q-card>
+          <q-card-section>
+            <q-form @submit.prevent="onSubmit" @reset="onReset" class="q-gutter-md">
+              <q-input
+                style="width: 430px;"
+                v-model="amount"
+                type="number"
+                label="Amount"
+                lazy-rules
+                :rules="[val => val && val.length > 0 || 'Please insert an amount']"
+              />
+              <q-input
+                type="text"
+                v-model="from"
+                label="From"
+                lazy-rules
+                :rules="[val => val && val.length > 0 || 'Please insert a sender']"
+              />
+              <q-input
+                type="text"
+                v-model="to"
+                label="To"
+                lazy-rules
+                :rules="[val => val && val.length > 0 || 'Please insert a recipient']"
+              />
+              <q-input
+                type="text"
+                v-model="category"
+                label="Category"
+                lazy-rules
+                :rules="[val => val && val.length > 0 || 'Please insert a category']"
+              />
+              <q-input
+                type="text"
+                v-model="note"
+                label="Note"
+                lazy-rules
+                :rules="[val => val && val.length > 0 || 'Please insert a note']"
+              />
+              <q-input
+                type="text"
+                v-model="description"
+                label="Description"
+                lazy-rules
+                :rules="[val => val && val.length > 0 || 'Please insert a description']"
+              />
+              <div>
+                <q-btn label="Submit" type="submit" color="green-7" />
+                <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+              </div>
+            </q-form>
+          </q-card-section>
+          <q-card-actions>
+            <q-btn label="Close" @click="dialog = false" color="red" flat />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+    </div>
   </div>
-  
-  <q-btn class="transition ease-in-out delay-150 bg-blue-4 hover:-translate-y-1 hover:scale-110 hover:bg-pink-100 duration-300 ...">
-  Add an Account
-</q-btn>
 </template>
-<script setup >
+
+<script>
+import { ref } from 'vue'
+import { useQuasar } from 'quasar'
+
 const columns = [
-  {
-    name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-  { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+  { name: 'amount', required: true, label: 'Amount', align: 'left', field: row => row.amount, sortable: true },
+  { name: 'from', align: 'center', label: 'From', field: 'from', sortable: true },
+  { name: 'to', label: 'To', field: 'to', sortable: true },
+  { name: 'category', label: 'Category', field: 'category' },
+  { name: 'note', label: 'Note', field: 'note' },
+  { name: 'description', label: 'Description', field: 'description' },
 ]
 
-const rows = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%'
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%'
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%'
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%'
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%'
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%'
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%'
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%'
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%'
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%'
+const originalRows = []
+
+export default {
+  setup() {
+    const $q = useQuasar()
+    const loading = ref(false)
+    const filter = ref('')
+    const rowCount = ref(0)
+    const rows = ref([...originalRows])
+    const dialog = ref(false)
+
+    const amount = ref(null)
+    const from = ref('')
+    const to = ref('')
+    const category = ref('')
+    const note = ref('')
+    const description = ref('')
+    const lorem = ref('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
+
+    const addRow = () => {
+      loading.value = true
+      const newRow = {
+        id: ++rowCount.value,
+        amount: amount.value,
+        from: from.value,
+        to: to.value,
+        category: category.value,
+        note: note.value,
+        description: description.value,
+      }
+      rows.value.push(newRow)
+      loading.value = false
+
+      dialog.value = false
+      onReset();
+    }
+
+    const removeRow = () => {
+      const selectedRows = rows.value.filter(row => row.selected) // Assuming you have a 'selected' property
+      rows.value = rows.value.filter(row => !selectedRows.includes(row))
+    }
+
+    const onSubmit = () => {
+      if (amount.value && from.value && to.value && category.value && note.value && description.value) {
+        addRow();
+      }
+    }
+
+    const onReset = () => {
+      amount.value = null
+      from.value = ''
+      to.value = ''
+      category.value = ''
+      note.value = ''
+      description.value = ''
+    }
+
+    return {
+      columns,
+      rows,
+      loading,
+      filter,
+      rowCount,
+      amount,
+      from,
+      to,
+      category,
+      note,
+      description,
+      addRow,
+      removeRow,
+      onSubmit,
+      onReset,
+      dialog,
+      lorem,
+    }
   }
-]
-
-
+}
 </script>
