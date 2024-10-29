@@ -9,7 +9,6 @@
           <q-btn flat size="sm" padding="xs" dense icon="sym_r_close" v-close-popup />
         </div>
       </q-card-section>
-
       <q-card-section class="q-pt-none">
         <div class="flex flex-col gap-3">
           <q-input dense :error="'name' in createForm.errors" hide-bottom-space label="Name"
@@ -29,14 +28,13 @@
           </q-input>
         </div>
       </q-card-section>
-
       <q-card-actions align="right" class="text-primary">
         <q-btn flat label="Cancel" @click="resetForm" />
         <q-btn flat label="Save" @click="isEditing ? updateItem() : createItem()" :loading="createForm.processing" />
       </q-card-actions>
     </q-card>
   </q-dialog>
-Hello
+
   <section class="bg-gray-50 py-8 antialiased dark:bg-gray-900 md:py-16">
     <q-btn @click="openCreateModal" color="primary" icon="sym_r_add" label="Create" />
     <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -45,17 +43,20 @@ Hello
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        <a v-for="transactionCategory in data" :key="transactionCategory.id" href="#"
-          class="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+        <a v-for="transactionCategory in data" :key="transactionCategory.id" href="#" class="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+
           <img v-if="transactionCategory.emoji"
             :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${transactionCategory.emoji}.png`"
             class="me-2 w-6">
+
           <span class="text-sm font-medium text-gray-900 dark:text-white">
             {{ transactionCategory.name }}
           </span>
+
           <q-btn flat class="pr-0 ml-2" color="primary" icon="edit" @click.stop="editeItem(transactionCategory)" />
           <q-btn flat class="pl-0" color="primary" icon="delete" @click.stop="deleteItem(transactionCategory)" />
         </a>
+
       </div>
     </div>
   </section>
