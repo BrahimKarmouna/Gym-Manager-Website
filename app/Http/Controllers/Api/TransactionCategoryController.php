@@ -36,17 +36,19 @@ class TransactionCategoryController extends Controller
     return TransactionCategoryResource::make($transactionCategory);
   }  public function update(Request $request, TransactionCategory $transactionCategory)
   {
-    $request->validate([
-      'name' => ['required', 'string'],
-      'emoji' => ['nullable', 'string'],
-    ]);
+      \Log::info("Updating category with ID: " . $transactionCategory->id);
 
-    $transactionCategory->update([
-      'name'=> $request->name,
-      'emoji' => $request->emoji
-    ]);
+      $request->validate([
+          'name' => ['required', 'string'],
+          'emoji' => ['nullable', 'string'],
+      ]);
 
-    return TransactionCategoryResource::make($transactionCategory);
+      $transactionCategory->update([
+          'name'=> $request->name,
+          'emoji' => $request->emoji
+      ]);
+
+      return TransactionCategoryResource::make($transactionCategory->fresh());
   }
   public function destroy(TransactionCategory $transactionCategory)
   {
