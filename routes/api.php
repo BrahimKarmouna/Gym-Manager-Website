@@ -1,21 +1,41 @@
 <?php
 
+use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\CurrentUserController;
 use App\Http\Controllers\Api\OtherBrowserSessionsController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfilePhotoController;
 use App\Http\Controllers\Api\TransactionCategoryController;
 use App\Http\Controllers\Api\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Transaction categories
-Route::get('transaction-categories', [TransactionCategoryController::class, 'index']);
-Route::get('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'show']);
-Route::post('transaction-categories', [TransactionCategoryController::class, 'store']);
-Route::put('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'update']);
-Route::delete('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'destroy']);
+// Route::get('transaction-categories', [TransactionCategoryController::class, 'index']);
+// Route::get('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'show']);
+// Route::post('transaction-categories', [TransactionCategoryController::class, 'store']);
+// Route::put('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'update']);
+// Route::delete('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'destroy']);
+
+Route::apiResource('transaction-categories', TransactionCategoryController::class);
 
 
 // Accounts
+Route::get('accounts', [AccountController::class, 'index']);
+
+
+
+
+
+
+// Route::get('posts', [PostController::class, 'index']);
+// Route::delete('posts/{post}', [PostController::class, 'destroy']);
+// Route::post('posts', [PostController::class, 'store']);
+// Route::put('posts/{post}', [PostController::class, 'update']);
+// Route::get('posts/{post}', [PostController::class, 'show']);
+
+Route::apiResource('posts', PostController::class);
+
+
 
 
 // Transactions

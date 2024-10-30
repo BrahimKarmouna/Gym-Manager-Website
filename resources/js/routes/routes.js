@@ -90,6 +90,7 @@ const routes = [
         },
 
         children: [
+          // Transaction Categories
           {
             path: "transaction-categories",
             name: "transaction-categories.index",
@@ -108,11 +109,28 @@ const routes = [
             props: true,
             component: () => import("../pages/transaction-categories/EditPage.vue"),
           },
+
+          // Transactions
           {
             path: "transaction",
             name: "transaction.index",
             props: true,
             component: () => import("../pages/transaction/IndexTransaction.vue"),
+          },
+
+          // Posts
+          {
+            path: "posts",
+            name: "posts.index",
+            props: true,
+            component: () => import("../pages/posts/IndexPage.vue"),
+          },
+
+          {
+            path: "posts/:id",
+            name: "posts.show",
+            props: true,
+            component: () => import("../pages/posts/ShowPage.vue"),
           },
         ],
       },
