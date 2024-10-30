@@ -1,4 +1,4 @@
 users(id, name, email, password)
-accounts(id, name, rib, balance, user_id, account_type(courant, épargne), total_expense, total income)
+accounts(id, name, rib, balance, user_id, account_type, total_expense, total income)
 transactions(id, note, category_id, user_id, source_account_id, destination_account_id, amount, transaction_type(income, expense))
 transaction_categories(id, name)

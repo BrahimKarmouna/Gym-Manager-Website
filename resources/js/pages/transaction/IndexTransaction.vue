@@ -1,21 +1,16 @@
 <template>
   <div class="q-pa-md">
-    <div class="row items-start q-gutter-md ">
-      <q-card class="my-card text-white bg-blue-8"
-      style="width:530px;"
-     >
-        <q-card-section >
+    <div class="row items-start q-gutter-md">
+      <q-card class="my-card text-white bg-blue-8" style="width: 530px;">
+        <q-card-section>
           <div class="text-h6">Income</div>
         </q-card-section>
-
-
-        <q-card-section class="q-pt-none" >
+        <q-card-section class="q-pt-none">
           {{ 0.00 }}
         </q-card-section>
       </q-card>
 
-      <q-card class="my-card text-white bg-blue-8"
-      style="width:530px;">
+      <q-card class="my-card text-white bg-blue-8" style="width: 530px;">
         <q-card-section>
           <div class="text-h6">Expenses</div>
         </q-card-section>
@@ -24,8 +19,7 @@
         </q-card-section>
       </q-card>
 
-      <q-card class="my-card text-white bg-blue-8"
-      style="width:530px;"s>
+      <q-card class="my-card text-white bg-blue-8" style="width: 530px;">
         <q-card-section>
           <div class="text-h6">Total</div>
         </q-card-section>
@@ -47,10 +41,10 @@
         :loading="loading"
       >
         <template v-slot:top>
-          <q-btn color="green-8" :disable="loading" label="Add Transfert" @click="dialog = true" />
-          <q-btn v-if="rows.length !== 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Transfert" @click="removeRow" />
+          <q-btn color="green-8" :disable="loading" label="Add Transfer" @click="dialog = true" />
+          <q-btn v-if="rows.length !== 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Transfer" @click="removeRow" />
           <q-space />
-          <q-input borderless dense debounce="300" color="primary" v-model="filter">
+          <q-input v-model="search" filled type="search" dense>
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -86,8 +80,8 @@
                 lazy-rules
                 :rules="[val => val && val.length > 0 || 'Please insert a recipient']"
               />
-              <q-input
-                type="text"
+              <q-select
+                :options="options"
                 v-model="category"
                 label="Category"
                 lazy-rules
@@ -119,7 +113,12 @@
         </q-card>
       </q-dialog>
     </div>
+
   </div>
+
+  
+
+
 </template>
 
 <script>
@@ -127,12 +126,12 @@ import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 
 const columns = [
-  { name: 'amount', required: true, label: 'Amount', align: 'left', field: row => row.amount, sortable: true },
-  { name: 'from', align: 'center', label: 'From', field: 'from', sortable: true },
-  { name: 'to', label: 'To', field: 'to', sortable: true },
-  { name: 'category', label: 'Category', field: 'category' },
-  { name: 'note', label: 'Note', field: 'note' },
-  { name: 'description', label: 'Description', field: 'description' },
+  { name: 'amount', required: true, label: "Amount", align: "left", field: row => row.amount, sortable: true },
+  { name: 'from', align: 'left', label: 'From', field: 'from', sortable: true },
+  { name: 'to', label: 'To', align: 'left', field: 'to', sortable: true },
+  { name: 'category', align: 'left', label: 'Category', field: 'category' },
+  { name: 'note', align: 'left', label: 'Note', field: 'note' },
+  { name: 'description', align: 'left', label: 'Description', field: 'description' },
 ]
 
 const originalRows = []
@@ -145,6 +144,7 @@ export default {
     const rowCount = ref(0)
     const rows = ref([...originalRows])
     const dialog = ref(false)
+    const menuDialog = ref(false)
 
     const amount = ref(null)
     const from = ref('')
@@ -152,7 +152,6 @@ export default {
     const category = ref('')
     const note = ref('')
     const description = ref('')
-    const lorem = ref('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
 
     const addRow = () => {
       loading.value = true
@@ -168,18 +167,22 @@ export default {
       rows.value.push(newRow)
       loading.value = false
 
-      dialog.value = false
-      onReset();
+      dialog.value = false 
+      onReset() 
     }
 
     const removeRow = () => {
-      const selectedRows = rows.value.filter(row => row.selected) // Assuming you have a 'selected' property
-      rows.value = rows.value.filter(row => !selectedRows.includes(row))
+      loading.value = true
+      setTimeout(() => {
+        const index = Math.floor(Math.random() * rows.value.length)
+        rows.value = [...rows.value.slice(0, index), ...rows.value.slice(index + 1)]
+        loading.value = false
+      }, 500)
     }
 
     const onSubmit = () => {
       if (amount.value && from.value && to.value && category.value && note.value && description.value) {
-        addRow();
+        addRow() 
       }
     }
 
@@ -209,7 +212,13 @@ export default {
       onSubmit,
       onReset,
       dialog,
-      lorem,
+      menuDialog,
+      search: ref(''),
+      options: [
+        'Nutrition', 'Health', 'Transport', 'Education', 'Gift'
+      ],
+      dialog: ref(false),
+      dialog2: ref(false)
     }
   }
 }
