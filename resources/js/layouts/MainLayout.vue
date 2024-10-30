@@ -121,6 +121,11 @@ const linksList = [
     icon: 'sym_r_category',
     to: { name: 'transaction.index' }
   },
+  {
+    title: 'Posts',
+    icon: 'sym_r_category',
+    to: { name: 'posts.index' }
+  }
 ]
 
 export default defineComponent({
