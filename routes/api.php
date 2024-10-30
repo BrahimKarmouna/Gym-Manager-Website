@@ -16,6 +16,9 @@ Route::delete('transaction-categories/{transaction_category}', [TransactionCateg
 
 
 // Accounts
+Route::get('accounts', [TransactionCategoryController::class, 'index']);
+
+
 
 
 // Transactions

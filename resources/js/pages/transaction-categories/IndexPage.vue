@@ -1,4 +1,4 @@
-<template>  
+<template>
   <q-page class="bg-gray-50 dark:bg-gray-900">
     <q-dialog v-model="showCreateDialog" persistent>
       <q-card style="min-width: 350px">
@@ -149,4 +149,13 @@ function resetForm() {
   isEditing.value = false;
   showCreateDialog.value = false;
 }
+
+// const types = [
+//   { label: 'Checking', value: 'checking' },
+//   { label: 'Savings', value: 'savings' },
+//   { label: 'Credit', value: 'credit' },
+//   { label: 'Investment', value: 'investment' },
+//   { label: 'Cash', value: 'cash' },
+//   { label: 'Retirement', value: 'retirement' },
+// ];
 </script>
