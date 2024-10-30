@@ -1,4 +1,55 @@
 <template>
+
+
+<div class="q-pa-md">
+    <div class="q-gutter-y-md" style="max-width: 600px">
+      <q-card>
+        <q-tabs
+          v-model="tab"
+          dense
+          class="text-grey"
+          active-color="primary"
+          indicator-color="primary"
+          align="justify"
+          narrow-indicator
+        >
+          <q-tab name="Transfert" label="Transfert" />
+          <q-tab name="Income" label="Income" />
+          <q-tab name="Expenses" label="Expenses" />
+        </q-tabs>
+
+        <q-separator />
+
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="Transfert">
+            <div class="text-h6">Transfert</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+
+          <q-tab-panel name="Income">
+            <div class="text-h6">Income</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+
+          <q-tab-panel name="Expenses">
+            <div class="text-h6">Expenses</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-card>
+      <q-tabs
+          v-model="tab"
+          dense
+          :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
+          align="justify"
+          narrow-indicator
+        ></q-tabs>
+      </div>
+      </div>
+
+
+
+
   <div class="q-pa-md">
     <div class="row items-start q-gutter-md">
       <q-card class="my-card text-white bg-blue-8" style="width: 530px;">
@@ -218,7 +269,8 @@ export default {
         'Nutrition', 'Health', 'Transport', 'Education', 'Gift'
       ],
       dialog: ref(false),
-      dialog2: ref(false)
+      dialog2: ref(false),
+      tab: ref('mails')
     }
   }
 }

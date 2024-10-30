@@ -112,15 +112,11 @@ const linksList = [
     to: { name: 'transaction-categories.index' }
   },
   {
-    title: 'Transferts',
+    title: 'Transactions',
     icon: 'sym_r_category',
     to: { name: 'transaction.index' }
   },
-  {
-    title: 'Income',
-    icon: 'sym_r_category',
-    to: { name: 'transaction.index' }
-  },
+
 ]
 
 export default defineComponent({
