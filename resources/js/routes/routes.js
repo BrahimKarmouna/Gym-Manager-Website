@@ -118,6 +118,7 @@ const routes = [
             component: () => import("../pages/transaction/IndexTransaction.vue"),
           },
 
+
           // Posts
           {
             path: "posts",
@@ -131,6 +132,14 @@ const routes = [
             name: "posts.show",
             props: true,
             component: () => import("../pages/posts/ShowPage.vue"),
+          },
+
+          //account
+          {
+            path: "account",
+            name: "account.indexAccount",
+            props: true,
+            component: () => import("../pages/Account/indexAccount.vue"),
           },
         ],
       },

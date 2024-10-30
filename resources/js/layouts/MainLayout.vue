@@ -49,7 +49,6 @@
                       :to="{ name: 'profile.index' }">
                 <q-item-section>Your profile</q-item-section>
               </q-item>
-
               <q-item clickable
                       @click="confirmLogout">
                 <q-item-section>Sign out</q-item-section>
@@ -106,6 +105,11 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
 const linksList = [
+{
+    title: 'Dashboad',
+    icon: 'sym_r_category',
+    to: { name: 'account.indexAccount' }
+  },
   {
     title: 'Transaction Categories',
     icon: 'sym_r_category',
@@ -121,6 +125,8 @@ const linksList = [
     icon: 'sym_r_category',
     to: { name: 'transaction.index' }
   },
+
+
   {
     title: 'Posts',
     icon: 'sym_r_category',
