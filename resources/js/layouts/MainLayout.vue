@@ -108,7 +108,7 @@ const linksList = [
 {
     title: 'Dashboad',
     icon: 'sym_r_category',
-    to: { name: 'account.indexAccount' }
+    to: { name: 'Dashboard.index' }
   },
   {
     title: 'Transaction Categories',
@@ -116,18 +116,16 @@ const linksList = [
     to: { name: 'transaction-categories.index' }
   },
   {
-    title: 'Transactions',
+    title: 'Transfers',
     icon: 'sym_r_category',
     to: { name: 'transaction.index' }
   },
 
-
   {
-    title: 'Posts',
+    title: 'Account',
     icon: 'sym_r_category',
-    to: { name: 'posts.index' }
-  }
-
+    to: { name: 'account.indexAccount' }
+  },
 ]
 
 export default defineComponent({

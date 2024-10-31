@@ -90,6 +90,12 @@ const routes = [
         },
 
         children: [
+          {
+            path: "transaction-categories",
+            name: "Dashboard.index",
+            component: () => import("../pages/Dashboard/dashboardIndex.vue"),
+          },
+
           // Transaction Categories
           {
             path: "transaction-categories",

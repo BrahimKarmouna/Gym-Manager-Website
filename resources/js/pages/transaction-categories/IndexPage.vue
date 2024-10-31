@@ -44,7 +44,7 @@
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <a v-for="transactionCategory in data" :key="transactionCategory.id" href="#"
+          <div v-for="transactionCategory in data" :key="transactionCategory.id"
             class="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
 
             <img v-if="transactionCategory.emoji"
@@ -55,9 +55,9 @@
               {{ transactionCategory.name }}
             </span>
 
-            <q-btn flat class="pr-0 ml-2" color="primary" icon="edit" @click.stop="editeItem(transactionCategory)" />
-            <q-btn flat class="pl-0" color="primary" icon="delete" @click.stop="deleteItem(transactionCategory)" />
-          </a>
+            <q-btn flat class="pe-0 ms-2" color="primary" icon="edit" @click.stop="editeItem(transactionCategory)" />
+            <q-btn flat class="ps-0" color="primary" icon="delete" @click.stop="deleteItem(transactionCategory)" />
+          </div>
 
         </div>
       </div>

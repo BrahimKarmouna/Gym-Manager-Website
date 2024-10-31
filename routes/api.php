@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\OtherBrowserSessionsController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfilePhotoController;
 use App\Http\Controllers\Api\TransactionCategoryController;
+use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,8 @@ Route::get('accounts', [AccountController::class, 'index']);
 
 Route::apiResource('posts', PostController::class);
 
+Route::apiResource('transactions', TransactionController::class);
+
 
 
 
@@ -61,4 +64,5 @@ Route::name('api.')
     // Delete profile
     Route::delete('/user', [CurrentUserController::class, 'destroy'])
       ->name('current-user.destroy');
+
   });
