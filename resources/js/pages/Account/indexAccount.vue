@@ -1,4 +1,7 @@
 <template>
+
+  <CreateAccount v-model:visible="showCreateAccountModal" @created="handleCreated"  />
+
 <div class="  px-4 pt-6">
     <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3  ">
       <!-- Main widget -->
@@ -147,15 +150,26 @@
       </div>
 
 </div>
+<div class="bg-gray-100 py-7 px-4 rounded-xl dark:bg-gray-800 my-3 mx-4">
+  <h1 class=" font-semibold text-2xl text-gray-700  m-5 dark:text-white ">Add New Bank Account</h1>
+  <div class="grid grid-cols-4 gap-4">
+    <div class="w-full h-64 bg-gray-300 flex items-center justify-center rounded-md border">
+      <button class="text-8xl font-bold text-gray-700" @click="showCreateAccountModal = true">+</button>
+    </div>
 
-<div class="bg-gray-100 h-screen flex flex-col  pt-7 w-full rounded-xl">
-  <span class="text-2xl text-gray-500 font-bold m-5">Add New Bank Account</span>
-  <div class="w-1/4 h-64 bg-gray-300 flex items-center justify-center rounded-md border">
-    <button class="text-8xl font-bold text-gray-700 ">+</button>
   </div>
 </div>
 
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import CreateAccount from './CreateAccount.vue';
+
+const showCreateAccountModal = ref(false);
+
+const handleCreated = () => {
+  showCreateAccountModal.value = false;
+  fetch();
+};
 </script>
