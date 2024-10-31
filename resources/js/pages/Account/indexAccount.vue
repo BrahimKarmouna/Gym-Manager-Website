@@ -1,6 +1,6 @@
 <template>
-<div class="px-4 pt-6">
-    <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+<div class="  px-4 pt-6">
+    <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3  ">
       <!-- Main widget -->
       <!-- <div class="grid w-full grid-cols-1 gap-4 mt-4 xl:grid-cols-2 2xl:grid-cols-3">
       <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
@@ -41,42 +41,51 @@
       <!--Tabs widget -->
 
     </div>
-    <div class="grid w-full grid-cols-1 gap-4 mt-4 xl:grid-cols-2 2xl:grid-cols-3">
-      <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-        <div class="w-full">
-          <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
-          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">2,340</span>
-          <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
-            <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path clip-rule="evenodd" fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z"></path>
-              </svg>
-              12.5%
-            </span>
-            Since last month
-          </p>
-        </div>
-        <div class="w-full" id="new-products-chart"></div>
-      </div>
-      <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-        <div class="w-full">
-          <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expenses</h3>
-          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">2,340</span>
-          <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
-            <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path clip-rule="evenodd" fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z"></path>
-              </svg>
-              3,4%
-            </span>
-            Since last month
-          </p>
-        </div>
-        <div class="w-full" id="week-signups-chart"></div>
+    <div class="grid w-full grid-cols-1 gap-4 mt-4 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3  ">
+  <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+    <div class="w-full">
+      <h3 class="text-base font-normal text-gray-500 dark:text-gray-400   ">Accounts number</h3>
+      <span class=" pt-4 m-4 mt-3text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">3</span>
 
-        <div id="traffic-channels-chart" class="w-full"></div>
-      </div>
+
+
     </div>
+    <div class="w-full" id="new-products-chart"></div>
+  </div>
+  <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+    <div class="w-full">
+      <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
+      <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">$2,340</span>
+      <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
+        <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z"></path>
+          </svg>
+          12.5%
+        </span>
+        Since last month
+      </p>
+    </div>
+    <div class="w-full" id="new-products-chart"></div>
+  </div>
+  <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+    <div class="w-full">
+      <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expenses</h3>
+      <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">$2,340</span>
+      <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
+        <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z"></path>
+          </svg>
+          3.4%
+        </span>
+        Since last month
+      </p>
+    </div>
+    <div class="w-full" id="week-signups-chart"></div>
+  </div>
+</div>
+
 
     <!-- 2 columns -->
     <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
@@ -138,6 +147,14 @@
       </div>
 
 </div>
+
+<div class="bg-gray-100 h-screen flex flex-col  pt-7 w-full rounded-xl">
+  <span class="text-2xl text-gray-500 font-bold m-5">Add New Bank Account</span>
+  <div class="w-1/4 h-64 bg-gray-300 flex items-center justify-center rounded-md border">
+    <button class="text-8xl font-bold text-gray-700 ">+</button>
+  </div>
+</div>
+
 </template>
 
 <script setup>
