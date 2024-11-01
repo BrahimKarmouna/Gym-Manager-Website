@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostResource extends JsonResource
+class TransactionResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -16,15 +16,17 @@ class PostResource extends JsonResource
   {
     return [
       'id' => $this->id,
-      'amount' => $this->title,
-      'content' => $this->content,
-      'created_at' => $this->created_at->diffForHumans(),
-      'updated_at' => $this->updated_at->diffForHumans(),
-
+      'amount' => $this->amount,
+      'from' => $this->sourceAccount,
+      'to' => $this->destinationAccount,
+      'note' => $this->note,
+      // 'description' => $this->content,
+      'category' => $this->category,
       // 'user' => [
       //   'id' => $this->user->id,
       //   'name' => $this->user->name,
-      //   'photo_url' => $this->user->profile_photo_url
+      //   'photo_url' => $this->user->profile_photo_url,
+      //   'email' => $this->user->email,
       // ]
 
       'user' => UserResource::make($this->user),

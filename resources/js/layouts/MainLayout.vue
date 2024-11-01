@@ -116,22 +116,11 @@ const linksList = [
     to: { name: 'transaction-categories.index' }
   },
   {
-    title: 'Transferts',
-    icon: 'sym_r_category',
-    to: { name: 'transaction.index' }
-  },
-  {
-    title: 'Income',
+    title: 'Transfers',
     icon: 'sym_r_category',
     to: { name: 'transaction.index' }
   },
 
-
-  {
-    title: 'Posts',
-    icon: 'sym_r_category',
-    to: { name: 'posts.index' }
-  },
   {
     title: 'Account',
     icon: 'sym_r_category',
