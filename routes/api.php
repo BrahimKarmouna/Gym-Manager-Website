@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 // Route::put('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'update']);
 // Route::delete('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'destroy']);
 
-Route::apiResource('transaction-categories', TransactionCategoryController::class);
+Route::apiResource('transaction_categories', TransactionCategoryController::class);
 
 
 // Accounts
@@ -37,7 +37,7 @@ Route::get('accounts', [AccountController::class, 'index']);
 Route::apiResource('posts', PostController::class);
 
 Route::apiResource('transactions', TransactionController::class);
-
+Route::get('transactions/income', [TransactionController::class, '']);
 
 
 

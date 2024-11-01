@@ -25,7 +25,7 @@ class TransactionRequest extends FormRequest
   {
     return [
       'amount' => ['required', 'numeric', 'gt:0'],
-      'from' => ['required', 'integer', 'exists:accounts,id'],
+      'from' => ['required', 'string', 'exists:accounts,id'],
       'to' => ['required', 'integer', 'exists:accounts,id'],
       'note' => ['required', 'string', 'max:255'],
       'type' => ['required', Rule::enum(TransactionType::class)],

@@ -122,6 +122,20 @@ const routes = [
             name: "transaction.index",
             props: true,
             component: () => import("../pages/transaction/IndexTransaction.vue"),
+            children:[
+              {
+                  path: "",
+                  name: "transaction.transfer",
+                  props: true,
+                  component: () => import('../pages/transaction/Transfer/IndexTransfer.vue'),
+              },
+              {
+                  path: "income",
+                  name: "transfer.income",
+                  props: true,
+                  component: () => import('../pages/transaction/Income/IndexIncome.vue'),
+              },
+            ]
           },
 
 

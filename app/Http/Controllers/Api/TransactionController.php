@@ -24,7 +24,7 @@ class TransactionController extends Controller
     return TransactionResource::collection($data);
   }
 
-  public function store(TransactionRequest $request)
+  public function store(Request $request)
   {
     // Create a new transaction
     $transaction = Transaction::create([
@@ -38,6 +38,17 @@ class TransactionController extends Controller
       'user_id' => auth()->id()
     ]);
 
+
+    // $transaction = Transaction::create([
+    //   //  'amount' => 2,
+    //   //   'source_account_id' =>4,
+    //   //   'destination_account_id' => 2,
+    //   //   'category_id' => 1,
+    //   //   'note' => 'hhhh',
+    //   //   'transaction_type' => 8,
+    //   //   // 'description' => $request->content,
+    //   //   'user_id' => auth()->id()
+    // ]);
     return TransactionResource::make($transaction);
   }
 
@@ -57,21 +68,7 @@ class TransactionController extends Controller
       'description' => $request->content
     ]);
 
-    $post->update([
-      'amount' => $request->title,
-      'category' => $request->content,
-      'account' => $request->content,
-      'note' => $request->content,
-      'description' => $request->content
-    ]);
 
-    $post->update([
-      'amount' => $request->title,
-      'category' => $request->content,
-      'account' => $request->content,
-      'note' => $request->content,
-      'description' => $request->content
-    ]);
 
     return PostResource::make($post);
   }
