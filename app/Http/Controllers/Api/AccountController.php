@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
+use App\Http\Resources\AccountRessource;
 use App\Models\Account;
 use App\Enums\AccountType;
 use Illuminate\Http\Request;
