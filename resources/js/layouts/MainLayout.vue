@@ -17,7 +17,7 @@
                     size="1.8em"
                     class="text-dark dark:text-white" />
           </q-avatar>
-          Adsglory Installer
+          Money Manager
         </q-toolbar-title>
 
         <!-- Dark mode toggler -->
@@ -118,7 +118,7 @@ const linksList = [
   {
     title: 'Transactions',
     icon: 'sym_r_category',
-    to: { name: 'transaction.index' }
+    to: { name: 'transaction.transfer' }
   },
 
   {

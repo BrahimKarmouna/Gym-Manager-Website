@@ -1,16 +1,14 @@
 <template>
+
+<CreateForm v-model:visible="showCreateDialog" @created="handleCreated" />
+
     <div class="q-pa-md">
       <div class="q-gutter-y-md" style="max-width: 1700px; height:550px;">
         <q-card>
          
-       
-  
           <q-separator />
-  
 
-                        <!-- transfer  -->
-
-
+        <!-- transfer  -->
           <q-tab-panels v-model="tab" animated>
            
             <q-tab-panel name="Transfer">
@@ -38,21 +36,21 @@
                   </q-card>
                 </div>
   
-                
                 <div class="q-pa-md">
                   <q-table
                     flat
                     bordered
                     title="Transfer Records"
-                    :rows="rows"
+                    
+                    :rows="data ?? []"
                     :columns="transferColumns"
                     row-key="id"
                     :filter="filter"
                     :loading="loading"
-                    
+                    @request="onRequest"
                   >
                     <template v-slot:top>
-                      <q-btn color="green-8" :disable="loading" label="Add Transfer" @click="dialog = true" />
+                      <q-btn color="green-8" :disable="loading" label="Add Transfer" @click="showCreateDialog = true" />
                       <!-- <q-btn v-if="selected.length > 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Transfer" @click="removeRow" :loading="deleting"/> -->
                       <q-space />
                       <q-input v-model="search" filled type="search" dense>
@@ -72,69 +70,20 @@
                 </div>
               </div>
              
-              <q-dialog v-model="dialog" persistent>
-                <q-card>
-                  <q-card-section>
-                    <q-form @submit.prevent="onSubmit" @reset="onReset" class="q-gutter-md">
-                      <q-input
-                        style="width: 430px;"
-                        v-model="amount"
-                        type="number"
-                        label="Amount"
-                        lazy-rules
-                        :rules="[val => val && val.length > 0 || 'Please insert an amount']"
-                        />
-                        <!-- Select  From Account -->
-                        <q-select v-model="model"  :options="accounts" option-value="id"  option-label="name"  label="From" />
-                      <!-- Select To Account -->
-                      <q-select v-model="model" :options="accounts" option-value="id"  option-label="name"  label="To" />
-                      <!-- Select a category -->
-                      <q-select v-model="model" :options="transaction_categories" option-value="id" option-label="name" label="Category" />
-  
-                     
-                      <q-input
-                        type="text"
-                        v-model="note"
-                        label="Note"
-                        lazy-rules
-                        :rules="[val => val && val.length > 0 || 'Please insert a note']"
-                      />
-                      <div>
-                        <q-btn label="Submit" type="submit" color="green-7" />
-                        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
-                      </div>
-                    </q-form>
-                  </q-card-section>
-                  <q-card-actions>
-                    <q-btn label="Close" @click="dialog = false" color="red" flat />
-                  </q-card-actions>
-                </q-card>
-              </q-dialog>
             </q-tab-panel>
-  
-           
-  
-          </q-tab-panels>
-
-
-                          <!-- income  -->
-  
-       
-
-
-                                <!-- Expense -->
-  
-        
+          </q-tab-panels> 
         </q-card>
       </div>
     </div>
   </template>
   
-  <script>
+  <script >
   import { onMounted, ref } from 'vue';
   import { useQuasar } from 'quasar';
   import { api } from '@/boot/axios';
   import { useResourceIndex } from '@/composables/useResourceIndex';
+  import { data } from 'autoprefixer';
+import CreateForm from './CreateForm.vue';
   
   export default {
     setup() {
@@ -143,6 +92,9 @@
       const filter = ref('');
       const rows = ref([]);
       const dialog = ref(false);
+
+      const showCreateDialog = ref(false);
+      
   
       // const selected = ref([]);
   
@@ -154,85 +106,32 @@
       const description = ref('');
   
       const transferColumns = [
-        { name: 'user', label: 'User', align: 'left', field: (row) => row.user.name },
+        { name: 'user', label: 'User', align: 'left', field: (row) => row.user.name ?? 'N/A'},
         { name: 'amount', label: 'Amount', align: 'left', field: 'amount', sortable: true },
-        { name: 'from', label: 'From', align: 'left', field: (row) => row.from.name, sortable: true },
-        { name: 'to', label: 'To', align: 'left', field: (row) => row.to.name, sortable: true },
+        { name: 'date', label: 'Date', align: 'left', field: 'date', sortable: true },
+        { name: 'from', label: 'From', align: 'left', field: (row) => row.from ?? 'N/A', sortable: true },
+        { name: 'to', label: 'To', align: 'left', field: (row) => row.to, sortable: true },
         { name: 'note', label: 'Note', align: 'left', field: 'note' },
-        { name: 'transaction_category', label: 'Transaction Category', align: 'left', field: 'transaction_category', sortable: true },
+        { name: 'transaction_category', label: 'Transaction Category', align: 'left', field: 'category', sortable: true },
         { name: 'actions', label: '', align: 'right', field: 'actions' },
       ];
   
- 
-  
-  
-      // call Account, transaction_categories
-  
-      const { data: accounts, fetch: fetchAccount , error } = useResourceIndex('accounts');
-      const { data: transaction_categories, fetch: fetchTransactionCategories } = useResourceIndex('transaction_categories');
-  
+
+       
+const { data , fetch , loading: loadingTransfer } = useResourceIndex('transactions?type=transfer');
+
+
       onMounted(() => {
-        fetchAccount();
-        fetchTransactionCategories();
+        fetch();
+        console.log(data);
       })
-      const addRow = () => {
-        loading.value = true;
-  
-        const newRow = {
-          amount: amount.value,
-          from: from.value,
-          to: to.value,
-          category: category.value,
-          note: note.value,
-          description: description.value,
-          category: category.value,
-          type: 'transfer',
-        };
-  
-        api.post('transactions', newRow).then((response) => {
-          loading.value = false;
-          
-          $q.notify({
-            type: 'positive',
-            message: 'Success!',
-            caption: 'Transfer added successfully.',
-            position: 'bottom-right',
-            timeout: 3000
-          });
-  
-          rows.value.unshift(response.data.data);
-          dialog.value = false;
-          onReset();
-        });
-      };
+    
   
       const removeRow = () => {
-        // if (rows.value.length) {
-        //   rows.value.pop(); 
-        // }
-        
-        // $q.notify({
-        //   type: 'positive',
-        //   message: 'Success!',
-        //   caption: 'Transfer deleted successfully.',
-        //   position: 'bottom-right',
-        //   timeout: 3000
-        // });
+       
       };
   
-      const onSubmit = () => {
-        
-        addRow();
-      };
-  
-      const onReset = () => {
-        amount.value = null;
-        from.value = '';
-        to.value = '';
-        category.value = '';
-        note.value = '';
-        description.value = '';
-      };
+    
   
       onMounted(() => {
         loading.value = true;
@@ -242,7 +141,6 @@
           loading.value = false;
         });
       });
-  
   
   
       function deleteRow(transaction) {
@@ -273,7 +171,6 @@
       return {
         tab: ref('Transfer'),
         transferColumns,
-       
         rows,
         loading,
         filter,
@@ -284,23 +181,16 @@
         note,
         dialog,
         search: ref(''),
-        addRow,
+       data,
         removeRow,
         deleteRow,
         editRow,
-        onSubmit,
-        onReset,
-        accounts,
-        transaction_categories,     
-        AccountOptions: [
-          'Salary', 'Pocket Money', 'Allowance', 'Bonus', 
-        ],
-        date: ref('today'),
+          
+        text: ref(''),
+      ph: ref(''),
+      dense: ref(false),
+      date: ref(''),
         // selected,
-        transaction_categoriesOptions: [
-          'Salary', 'Pocket Money', 'Allowance', 'Bonus', 
-        ],
-      
       };
     },
   };

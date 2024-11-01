@@ -12,4 +12,9 @@ class TransactionCategory extends Model
       'name',
       'emoji'
     ];
+
+    public function transactions()
+    {
+      return $this->hasMany(Transaction::class);
+    }
 }

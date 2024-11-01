@@ -1,4 +1,5 @@
 <template>
+  
   <div class="q-pa-md">
     <div class="q-gutter-y-md" style="max-width: 1700px; max-height:500px;">
       <q-card>
@@ -57,8 +58,7 @@
                   :columns="transferColumns"
                   row-key="id"
                   :filter="filter"
-                  :loading="loading"
-                  
+                  :loading="loading"                  
                 >
                   <template v-slot:top>
                     <q-btn color="green-8" :disable="loading" label="Add Transfer" @click="dialog = true" />
@@ -535,20 +535,10 @@ function editRow(transaction) {
       onReset,
       accounts,
       transaction_categories,
-      incomeOptions: [
-        'Salary', 'Pocket Money', 'Allowance', 'Bonus', 
-      ],
-      AccountOptions: [
-        'Salary', 'Pocket Money', 'Allowance', 'Bonus', 
-      ],
+   
       date: ref('today'),
       // selected,
-      transferOptions: [
-        'Salary', 'Pocket Money', 'Allowance', 'Bonus', 
-      ],
-      expenseOptions: [
-        'Salary', 'Pocket Money', 'Allowance', 'Bonus', 
-      ],
+      
     };
   },
 };

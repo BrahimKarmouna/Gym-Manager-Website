@@ -22,13 +22,12 @@
                                  label="Income">
                         
                     </q-route-tab>
-                    <!-- <q-route-tab name="Expense"
+                    <q-route-tab name="Expense"
                                  :to="{ name: 'transfer.expense' }"
                                  label="Expense">
                         
-                    </q-route-tab>  -->
+                    </q-route-tab> 
         </q-tabs>
-
         <q-separator />
 
         <RouterView />

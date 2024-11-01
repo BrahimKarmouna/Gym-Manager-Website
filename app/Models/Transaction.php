@@ -8,6 +8,7 @@ class Transaction extends Model
 {
   protected $fillable = [
     'user_id',
+    'date',
     'amount',
     'source_account_id',
     'destination_account_id',
@@ -31,5 +32,8 @@ class Transaction extends Model
   public function destinationAccount()
   {
     return $this->belongsTo(Account::class);
+  }
+  public function category(){
+    return $this->belongsTo(TransactionCategory::class);
   }
 }

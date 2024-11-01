@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TransactionRequest;
 use App\Http\Resources\TransactionResource;
@@ -14,13 +15,13 @@ use App\Http\Requests\PostRequest;
 
 class TransactionController extends Controller
 {
-  public function index()
+  public function index(Request $request)
   {
-
     $data = Transaction::query()
       ->orderBy("id", "desc")
+      ->where('transaction_type' ,$request->type)
       ->get();
-
+    
     return TransactionResource::collection($data);
   }
 
@@ -28,6 +29,7 @@ class TransactionController extends Controller
   {
     // Create a new transaction
     $transaction = Transaction::create([
+      'date' => $request->date,
       'amount' => $request->amount,
       'source_account_id' => $request->from,
       'destination_account_id' => $request->to,
@@ -61,6 +63,7 @@ class TransactionController extends Controller
   {
     // Update the existing transaction
     $post->update([
+      'date' => $request->date,
       'amount' => $request->title,
       'from' => $request->content,
       'to' => $request->content,
@@ -78,6 +81,27 @@ class TransactionController extends Controller
     $transaction->delete();
 
     return response()->noContent();
+  }
+
+  public function indextransfer()
+  {
+
+    $test = Transaction::where('transaction_type', TransactionType::TRANSFER->value)->get();
+    return TransactionResource::collection($test);
+  }
+
+  public function indexincome()
+  {
+
+    $test = Transaction::where('transaction_type', TransactionType::INCOME->value)->get();
+    return TransactionResource::collection($test);
+  }
+
+  public function indexexpense()
+  {
+
+    $test = Transaction::where('transaction_type', TransactionType::EXPENSE->value)->get();
+    return TransactionResource::collection($test);
   }
 
 }

@@ -93,7 +93,7 @@ const routes = [
           {
             path: "transaction-categories",
             name: "Dashboard.index",
-            component: () => import("../pages/Dashboard/dashboardIndex.vue"),
+            component: () => import("../pages/Dashboard/DashboardIndex.vue"),
           },
 
           // Transaction Categories
@@ -134,7 +134,14 @@ const routes = [
                   name: "transfer.income",
                   props: true,
                   component: () => import('../pages/transaction/Income/IndexIncome.vue'),
-              },
+                },
+                  {
+                    path: "expense",
+                    name: "transfer.expense",
+                    props: true,
+                    component: () => import('../pages/transaction/Expense/IndexExpense.vue'),
+                },
+              
             ]
           },
 

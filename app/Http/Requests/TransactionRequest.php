@@ -24,6 +24,7 @@ class TransactionRequest extends FormRequest
   public function rules(): array
   {
     return [
+      'date' => ['required', Rule::unique('date')->ignore($this->date)],
       'amount' => ['required', 'numeric', 'gt:0'],
       'from' => ['required', 'string', 'exists:accounts,id'],
       'to' => ['required', 'integer', 'exists:accounts,id'],
