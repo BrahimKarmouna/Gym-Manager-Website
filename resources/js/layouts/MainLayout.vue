@@ -17,7 +17,7 @@
                     size="1.8em"
                     class="text-dark dark:text-white" />
           </q-avatar>
-          Adsglory Installer
+          Money Manager
         </q-toolbar-title>
 
         <!-- Dark mode toggler -->

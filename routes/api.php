@@ -18,9 +18,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('transaction-categories', TransactionCategoryController::class);
 
+Route::apiResource('accounts', AccountController::class);
 
 // Accounts
-Route::get('accounts', [AccountController::class, 'index']);
 
 
 
