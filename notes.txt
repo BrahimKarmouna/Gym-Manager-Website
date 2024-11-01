@@ -1,0 +1,15 @@
+1. PHP Naming Convension
+
+  - PascalCase => Class, Interface, Trait, Enum, Abstract Class, Namespace
+  - snake_case => Function
+  - camelCase => Property, Method
+  - UPPER_CASE => Constant
+
+
+
+
+
+users(id, name, email, password)
+accounts(id, name, rib, balance, user_id, account_type, total_expense, total income)
+transactions(id, note, category_id, user_id, source_account_id, destination_account_id, amount, transaction_type(income, expense, transaction))
+transaction_categories(id, name)

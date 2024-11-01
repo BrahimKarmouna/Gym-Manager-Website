@@ -18,6 +18,7 @@
                     class="text-dark dark:text-white" />
           </q-avatar>
           Money Manager
+          Money Manager
         </q-toolbar-title>
 
         <!-- Dark mode toggler -->
@@ -117,6 +118,7 @@ const linksList = [
   },
   {
     title: 'Transfers',
+    title: 'Transfers',
     icon: 'sym_r_category',
     to: { name: 'transaction.index' }
   },
@@ -126,6 +128,7 @@ const linksList = [
     icon: 'sym_r_category',
     to: { name: 'account.indexAccount' }
   },
+
 ]
 
 export default defineComponent({

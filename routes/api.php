@@ -29,6 +29,7 @@ Route::name('api.')
     // Delete profile
     Route::delete('/user', [CurrentUserController::class, 'destroy'])
       ->name('current-user.destroy');
+
   });
 
 

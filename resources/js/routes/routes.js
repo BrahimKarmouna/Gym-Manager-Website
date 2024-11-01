@@ -117,6 +117,8 @@ const routes = [
           },
 
           // Transactions
+
+          // Transactions
           {
             path: "transaction",
             name: "transaction.index",
