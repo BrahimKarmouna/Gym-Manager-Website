@@ -89,7 +89,7 @@ const createForm = useForm({
 const {
   data,
   fetch,
-} = useResourceIndex('http://localhost:8000/api/transaction-categories');
+} = useResourceIndex('http://localhost:8000/api/categories');
 
 onMounted(() => {
   fetch();
@@ -102,7 +102,7 @@ function deleteItem(transactionCategory) {
     cancel: true,
     persistent: true,
   }).onOk(() => {
-    api.delete(`/transaction-categories/${transactionCategory.id}`).then(() => {
+    api.delete(`/categories/${transactionCategory.id}`).then(() => {
       fetch();
     });
   });
@@ -119,7 +119,7 @@ function editeItem(transactionCategory) {
 function updateItem() {
   console.log("Updating with data:", createForm.fields);
 
-  api.put(`/transaction-categories/${createForm.fields.id}`, createForm.fields)
+  api.put(`/categories/${createForm.fields.id}`, createForm.fields)
     .then(response => {
       console.log("Update response:", response.data);
       resetForm();
@@ -131,7 +131,7 @@ function updateItem() {
 }
 
 function createItem() {
-  createForm.post('/transaction-categories').then(() => {
+  createForm.post('/categories').then(() => {
     resetForm();
     fetch();
   });
@@ -159,4 +159,3 @@ function resetForm() {
 //   { label: 'Retirement', value: 'retirement' },
 // ];
 </script>
-

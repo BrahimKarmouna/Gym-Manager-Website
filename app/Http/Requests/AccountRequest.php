@@ -25,15 +25,15 @@ class AccountRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'rib' => 'required|string|max:24|min:24|unique:accounts',
+            'balance' => 'required|numeric',
+            'total_expense' => 'nullable|numeric',
+            'total_income' => 'nullable|numeric',
             'account_type' => [
               'required',
               'string',
               Rule::enum(AccountType::class)
             ],
-            'rib' => 'required|string|max:128|unique:accounts',
-            'balance' => 'required|numeric',
-            'total_expense' => 'nullable|numeric',
-            'total_income' => 'nullable|numeric',
         ];
     }
 

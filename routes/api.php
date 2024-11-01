@@ -5,7 +5,7 @@ use App\Http\Controllers\Api\CurrentUserController;
 use App\Http\Controllers\Api\OtherBrowserSessionsController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfilePhotoController;
-use App\Http\Controllers\Api\TransactionCategoryController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserProfileController;
 use Illuminate\Support\Facades\Route;
@@ -68,3 +68,16 @@ Route::name('api.')
       ->name('current-user.destroy');
 
   });
+
+
+  //! Categories
+Route::apiResource('categories', CategoryController::class);
+
+//! Accounts
+Route::apiResource('accounts', AccountController::class);
+
+//! POSTS
+Route::apiResource('posts', PostController::class);
+
+//! Transactions
+Route::apiResource('transactions', TransactionController::class);
