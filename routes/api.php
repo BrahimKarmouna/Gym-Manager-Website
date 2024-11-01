@@ -1,26 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\CurrentUserController;
 use App\Http\Controllers\Api\OtherBrowserSessionsController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfilePhotoController;
-use App\Http\Controllers\Api\TransactionCategoryController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserProfileController;
 use Illuminate\Support\Facades\Route;
-
-// Transaction categories
-Route::get('transaction-categories', [TransactionCategoryController::class, 'index']);
-Route::get('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'show']);
-Route::post('transaction-categories', [TransactionCategoryController::class, 'store']);
-Route::put('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'update']);
-Route::delete('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'destroy']);
-
-
-// Accounts
-
-
-// Transactions
-
-
 
 // Auth
 Route::name('api.')
@@ -42,3 +30,16 @@ Route::name('api.')
     Route::delete('/user', [CurrentUserController::class, 'destroy'])
       ->name('current-user.destroy');
   });
+
+
+  //! Categories
+Route::apiResource('categories', CategoryController::class);
+
+//! Accounts
+Route::apiResource('accounts', AccountController::class);
+
+//! POSTS
+Route::apiResource('posts', PostController::class);
+
+//! Transactions
+Route::apiResource('transactions', TransactionController::class);

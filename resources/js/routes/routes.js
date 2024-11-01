@@ -91,28 +91,73 @@ const routes = [
 
         children: [
           {
-            path: "transaction-categories",
-            name: "transaction-categories.index",
-            component: () => import("../pages/transaction-categories/IndexPage.vue"),
+            path: "categories",
+            name: "Dashboard.index",
+            component: () => import("../pages/dashboard/DashboardIndex.vue"),
+          },
+
+          // Transaction Categories
+          {
+            path: "categories",
+            name: "categories.index",
+            component: () => import("../pages/categories/IndexPage.vue"),
           },
 
           {
-            path: "transaction-categories/create",
-            name: "transaction-categories.create",
-            component: () => import("../pages/transaction-categories/CreatePage.vue"),
+            path: "categories/create",
+            name: "categories.create",
+            component: () => import("../pages/categories/CreatePage.vue"),
           },
 
           {
-            path: "transaction-categories/:id/edit",
-            name: "transaction-categories.edit",
+            path: "categories/:id/edit",
+            name: "categories.edit",
             props: true,
-            component: () => import("../pages/transaction-categories/EditPage.vue"),
+            component: () => import("../pages/categories/EditPage.vue"),
           },
+
+          // Transactions
           {
             path: "transaction",
             name: "transaction.index",
             props: true,
-            component: () => import("../pages/transaction/IndexTransaction.vue"),
+            component: () => import("../pages/transactions/IndexTransaction.vue"),
+          },
+
+
+          // Posts
+          {
+            path: "posts",
+            name: "posts.index",
+            props: true,
+            component: () => import("../pages/posts/IndexPage.vue"),
+          },
+
+          {
+            path: "posts/:id",
+            name: "posts.show",
+            props: true,
+            component: () => import("../pages/posts/ShowPage.vue"),
+          },
+
+          //account
+          {
+            path: "account",
+            component: RouterView,
+            children: [
+              {
+                path: "",
+                name: "account.indexAccount",
+                component: () => import("../pages/accounts/IndexAccount.vue"),
+              },
+
+              {
+                path: "show/:id",
+                props: true,
+                name: "account.show",
+                component: () => import("../pages/accounts/ShowPage.vue"),
+              },
+            ]
           },
         ],
       },

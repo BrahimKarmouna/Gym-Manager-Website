@@ -17,7 +17,7 @@
                     size="1.8em"
                     class="text-dark dark:text-white" />
           </q-avatar>
-          Adsglory Installer
+          Money Manager
         </q-toolbar-title>
 
         <!-- Dark mode toggler -->
@@ -49,7 +49,6 @@
                       :to="{ name: 'profile.index' }">
                 <q-item-section>Your profile</q-item-section>
               </q-item>
-
               <q-item clickable
                       @click="confirmLogout">
                 <q-item-section>Sign out</q-item-section>
@@ -106,15 +105,26 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
 const linksList = [
-  {
-    title: 'Transaction Categories',
+{
+    title: 'Dashboad',
     icon: 'sym_r_category',
-    to: { name: 'transaction-categories.index' }
+    to: { name: 'Dashboard.index' }
   },
   {
-    title: 'Transaction',
+    title: 'Categories',
+    icon: 'sym_r_category',
+    to: { name: 'categories.index' }
+  },
+  {
+    title: 'Transfers',
     icon: 'sym_r_category',
     to: { name: 'transaction.index' }
+  },
+
+  {
+    title: 'Account',
+    icon: 'sym_r_category',
+    to: { name: 'account.indexAccount' }
   },
 ]
 
