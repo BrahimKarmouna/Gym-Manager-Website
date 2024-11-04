@@ -50,7 +50,7 @@
                          :columns="transferColumns"
                          row-key="id"
                          :filter="filter"
-                         :loading="loading"
+                         :loading="loadingTransfer"
                          @request="onRequest">
                   <template v-slot:top>
                     <q-btn color="green-8"
@@ -150,7 +150,6 @@ export default {
     };
 
     const handleCreated = () => {
-      showCreateDialog.value = false;
       fetch();
     }
 
@@ -206,6 +205,7 @@ export default {
       removeRow,
       deleteRow,
       editRow,
+      handleCreated,
 
       text: ref(''),
       ph: ref(''),

@@ -42,26 +42,6 @@
                    lazy-rules
                    hide-bottom-space />
 
-          <!-- Select  From Account -->
-          <q-select v-model="form.fields.source_account"
-                    :options="accounts"
-                    option-value="id"
-                    option-label="name"
-                    label="From"
-                    :error="'source_account_id' in form.errors"
-                   :error-message="form.errors.source_account_id?.[0]"
-                   hide-bottom-space />
-
-          <!-- Select To Account -->
-          <q-select v-model="form.fields.destination_account"
-                    :options="accounts"
-                    option-value="id"
-                    option-label="name"
-                    label="To"
-                     :error="'destination_account_id' in form.errors"
-                   :error-message="form.errors.destination_account_id?.[0]"
-                   hide-bottom-space />
-
           <!-- Select a category -->
           <q-select v-model="form.fields.category"
                     :options="transaction_categories"
@@ -122,10 +102,11 @@ const form = useForm({
   category_id: '',
   note: '',
   transaction_type: {
-    'label': 'Transfer',
-    'value': 'transfer',
+    'label': 'Income',
+    'value': 'Income',
   },
 })
+
 
 
 const onSubmit = () => {
@@ -135,7 +116,7 @@ form.post('/transactions', {}, {
     $q.notify({
       type: 'positive',
       message: 'Success!',
-      caption: 'Transfer added successfully.',
+      caption: 'Income added successfully.',
       position: 'bottom-right',
       timeout: 3000
     });
