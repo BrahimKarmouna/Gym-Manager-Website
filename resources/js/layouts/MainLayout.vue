@@ -122,7 +122,6 @@ const linksList = [
     icon: 'sym_r_category',
     to: { name: 'transaction.index' }
   },
-
   {
     title: 'Account',
     icon: 'sym_r_category',
