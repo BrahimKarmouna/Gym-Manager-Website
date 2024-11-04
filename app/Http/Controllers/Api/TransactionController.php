@@ -20,7 +20,7 @@ class TransactionController extends Controller
     $data = Transaction::latest()
       ->where('transaction_type' ,$request->type)
       ->get();
-    
+
     return TransactionResource::collection($data);
   }
 
@@ -53,9 +53,9 @@ class TransactionController extends Controller
     return TransactionResource::make($transaction);
   }
 
-  public function show(Post $post)
+  public function show(Transaction $transaction)
   {
-    return TransactionResource::make($post);
+    return TransactionResource::make($transaction);
   }
 
   public function update(PostRequest $request, Post $post)
