@@ -142,7 +142,6 @@ export default {
 
     onMounted(() => {
       fetch();
-      console.log(data);
     })
 
 

@@ -1,38 +1,4 @@
 <template>
-  <!-- <q-tab-panels v-model="tab" animated>    
-             <div class="q-pa-md">
-               <q-table
-                 flat
-                 bordered
-                 title="Transfer Records"
-                 :rows="rows"
-                 :columns="transferColumns"
-                 row-key="id"
-                 :filter="filter"
-                 :loading="loading"
-                 
-               >
-                 <template v-slot:top>
-                   <q-btn color="green-8" :disable="loading" label="Add Transfer" @click="visible = true" />
-                   <q-btn v-if="selected.length > 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Transfer" @click="removeRow" :loading="deleting"/>
-                   <q-space />
-                   <q-input v-model="search" filled type="search" dense>
-                     <template v-slot:append>
-                       <q-icon name="search" />
-                     </template>
-</q-input>
-</template>
-
-<template v-slot:body-cell-actions="props">
-                   <q-td v-bind:props="props">
-                     <q-btn flat class="pr-0 ml-2" color="primary" icon="edit" @click.stop="editRow(transaction)" />
-                     <q-btn flat class="pl-0" color="red" icon="delete" @click.stop="deleteRow(transaction)" />
-                   </q-td>
-                 </template>
-</q-table>
-</div>
-
-</q-tab-panels> -->
 
   <q-dialog v-model="visible"
             persistent>
@@ -42,22 +8,23 @@
                 @reset="onReset"
                 class="q-gutter-md">
 
-          <q-input
-            label="Date"
-            v-model="data.date"
-            hide-bottom-space
-            required
-            dense
-            mask="date"
-            >
+          <q-input label="Date"
+                   v-model="data.date"
+                   hide-bottom-space
+                   required
+                   :error="!!validation?.date"
+                   :error-message="validation.date?.[0]"
+                   mask="date">
             <template v-slot:append>
-              <q-icon name="event" class="cursor-pointer">
+              <q-icon name="event"
+                      class="cursor-pointer">
                 <q-popup-proxy cover
-                                transition-show="scale"
-                                transition-hide="scale">
+                               transition-show="scale"
+                               transition-hide="scale">
                   <q-date v-model="data.date">
                     <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close"
+                      <q-btn v-close-popup
+                             label="Close"
                              color="primary"
                              flat />
                     </div>
@@ -71,34 +38,49 @@
                    v-model="data.amount"
                    type="number"
                    label="Amount"
-                   lazy-rules />
+                   :error="!!validation?.amount"
+                   :error-message="validation.amount?.[0]"
+                   lazy-rules
+                   hide-bottom-space />
 
           <!-- Select  From Account -->
           <q-select v-model="data.source_account"
                     :options="accounts"
                     option-value="id"
                     option-label="name"
-                    label="From" />
+                    label="From"
+                    :error="!!validation?.source_account_id"
+                   :error-message="validation.source_account_id?.[0]"
+                   hide-bottom-space />
 
           <!-- Select To Account -->
           <q-select v-model="data.destination_account"
                     :options="accounts"
                     option-value="id"
                     option-label="name"
-                    label="To" />
+                    label="To"
+                    :error="!!validation?.destination_account_id"
+                   :error-message="validation.destination_account_id?.[0]"
+                   hide-bottom-space />
 
           <!-- Select a category -->
           <q-select v-model="data.category"
                     :options="transaction_categories"
                     option-value="id"
                     option-label="name"
-                    label="Category" />
+                    label="Category"
+                    :error="!!validation?.category_id"
+                   :error-message="validation.category_id?.[0]"
+                   hide-bottom-space />
 
 
           <q-input type="text"
                    v-model="data.note"
                    label="Note"
-                   lazy-rules />
+                   lazy-rules
+                   :error="!!validation?.note"
+                   :error-message="validation.note?.[0]"
+                   hide-bottom-space />
           <div>
             <q-btn label="Submit"
                    type="submit"
@@ -139,44 +121,36 @@ const data = ref({
   },
 });
 
-// const amount = ref(null);
-// const from = ref('');
-// const date = ref('');
-// const to = ref('');
-// const category = ref('');
-// const note = ref('');
-// const description = ref('');
+const validation = ref({});
 
-const addRow = () => {
-  loading.value = true;
+const addRow = async () => {
+  try {
+    loading.value = true;
 
-  // const newRow = {
-  //   date: date.value,
-  //   amount: amount.value,
-  //   from: from.value,
-  //   to: to.value,
-  //   category: category.value,
-  //   note: note.value,
-  //   description: description.value,
-  //   category: category.value,
-  //   type: 'transfer',
-  // };
+    await api.post('transactions', data.value).then((response) => {
 
-  api.post('transactions', data.value).then((response) => {
-    loading.value = false;
+      $q.notify({
+        type: 'positive',
+        message: 'Success!',
+        caption: 'Transfer added successfully.',
+        position: 'bottom-right',
+        timeout: 3000
+      });
 
-    $q.notify({
-      type: 'positive',
-      message: 'Success!',
-      caption: 'Transfer added successfully.',
-      position: 'bottom-right',
-      timeout: 3000
+      rows.value.unshift(response.data.data);
+      visible.value = false;
+      onReset();
     });
 
-    rows.value.unshift(response.data.data);
-    visible.value = false;
-    onReset();
-  });
+  } catch (error) {
+    console.log(error);
+    console.error('Error creating account:', error.response.data);
+    if (error.status === 422) {
+      validation.value = error.response.data.errors;
+    }
+  } finally {
+    loading.value = false;
+  }
 };
 
 
@@ -187,13 +161,6 @@ const onSubmit = () => {
 };
 
 const onReset = () => {
-  // date.value = '';
-  // amount.value = null;
-  // from.value = '';
-  // to.value = '';
-  // category.value = '';
-  // note.value = '';
-  // description.value = '';
   data.value = {
     'type': 'transfer',
   };

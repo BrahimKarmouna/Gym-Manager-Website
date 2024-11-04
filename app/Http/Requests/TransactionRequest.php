@@ -26,8 +26,8 @@ class TransactionRequest extends FormRequest
     return [
       'date' => ['required', 'date', 'date_format:Y/m/d'],
       'amount' => ['required', 'numeric', 'gt:0'],
-      'source_account_id' => ['required', 'integer', 'exists:accounts,id', 'distinct'],
-      'destination_account_id' => ['required', 'integer', 'exists:accounts,id', 'distinct'],
+      'source_account_id' => ['required', 'integer', 'exists:accounts,id', 'different:destination_account_id'],
+      'destination_account_id' => ['required', 'integer', 'exists:accounts,id', 'different:source_account_id'],
       'note' => ['required', 'string', 'max:255'],
       'transaction_type' => ['required', 'string', Rule::enum(TransactionType::class)],
       'category_id' => ['required', 'integer', 'exists:categories,id'],
