@@ -119,9 +119,8 @@ const linksList = [
   {
     title: 'Transactions',
     icon: 'sym_r_category',
-    to: { name: 'transaction.transfer' }
+    to: { name: 'transaction.index' }
   },
-
   {
     title: 'Account',
     icon: 'sym_r_category',

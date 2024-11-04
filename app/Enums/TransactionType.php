@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-enum TransactionType: string
+use Illuminate\Contracts\Support\Arrayable;
+
+enum TransactionType: string implements Arrayable
 {
     case TRANSFER = "transfer";
     case INCOME = "income";

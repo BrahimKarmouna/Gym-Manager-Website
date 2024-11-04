@@ -13,21 +13,22 @@
           narrow-indicator
         >
         <q-route-tab name="Transfer"
-                                 :to="{ name: 'transaction.transfer' }"
+                                 :to="{ name: 'transaction.index' }"
                                  label="Transfer">
                         
                     </q-route-tab>
           <q-route-tab name="Income"
-                                 :to="{ name: 'transfer.income' }"
+                                 :to="{ name: 'transaction.income' }"
                                  label="Income">
                         
                     </q-route-tab>
                     <q-route-tab name="Expense"
-                                 :to="{ name: 'transfer.expense' }"
+                                 :to="{ name: 'transaction.expense' }"
                                  label="Expense">
                         
                     </q-route-tab> 
         </q-tabs>
+        
         <q-separator />
 
         <RouterView />

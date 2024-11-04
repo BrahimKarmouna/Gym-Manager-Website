@@ -26,14 +26,14 @@ class Transaction extends Model
 
   public function sourceAccount()
   {
-    return $this->belongsTo(Account::class);
+    return $this->belongsTo(Account::class, 'source_account_id');
   }
 
   public function destinationAccount()
   {
-    return $this->belongsTo(Account::class);
+    return $this->belongsTo(Account::class, 'destination_account_id');
   }
   public function category(){
-    return $this->belongsTo(TransactionCategory::class);
+    return $this->belongsTo(Category::class);
   }
 }

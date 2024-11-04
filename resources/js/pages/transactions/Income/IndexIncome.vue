@@ -79,7 +79,6 @@ import { onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { api } from '@/boot/axios';
 import { useResourceIndex } from '@/composables/useResourceIndex';
-import { data } from 'autoprefixer';
 
 export default {
   setup() {

@@ -18,11 +18,13 @@ class TransactionResource extends JsonResource
       'id' => $this->whenHas('id'),
       'date' => $this->whenHas('date'),
       'amount' => $this->whenHas('amount'),
-      'from' =>$this->whenHas('source_account_id'),
-      'to' => $this->whenHas('destination_account_id'),
+      'sourceAccount' => AccountResource::make($this->sourceAccount),
+      'destinationAccount' => AccountResource::make($this->destinationAccount),
       'note' =>$this->whenHas('note'),
-      'category' =>$this->whenHas('category_id'),
+      'category' =>CategoryResource::make($this->category),
       'user' => UserResource::make($this->user),
+      // 'created_at' => $this->when($this->created_at, $this->created_at->diffForHumans()),
+      // 'updated_at' => $this->when($this->updated_at, $this->updated_at->diffForHumans()),
     ];
   }
 }

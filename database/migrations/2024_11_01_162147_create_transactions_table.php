@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('source_account_id')->constrained();
             $table->foreignId('destination_account_id')->constrained();
             $table->foreignId('category_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->text('note')->nullable();
             $table->string('transaction_type');
             $table->timestamps();

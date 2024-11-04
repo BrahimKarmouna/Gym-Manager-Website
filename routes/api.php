@@ -10,33 +10,12 @@ use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
-// Transaction categories
-// Route::get('transaction-categories', [TransactionCategoryController::class, 'index']);
-// Route::get('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'show']);
-// Route::post('transaction-categories', [TransactionCategoryController::class, 'store']);
-// Route::put('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'update']);
-// Route::delete('transaction-categories/{transaction_category}', [TransactionCategoryController::class, 'destroy']);
 
-Route::apiResource('transaction_categories', TransactionCategoryController::class);
-
-Route::apiResource('accounts', AccountController::class);
-
-// Accounts
-
-
-
-
-
-
-// Route::get('posts', [PostController::class, 'index']);
-// Route::delete('posts/{post}', [PostController::class, 'destroy']);
-// Route::post('posts', [PostController::class, 'store']);
-// Route::put('posts/{post}', [PostController::class, 'update']);
-// Route::get('posts/{post}', [PostController::class, 'show']);
 
 Route::apiResource('posts', PostController::class);
 
 Route::apiResource('transactions', TransactionController::class);
+
 Route::get('transactions/income', [TransactionController::class, '']);
 
 Route::get('transactions/transfer', [TransactionController::class, 'indextransfer']);
@@ -80,4 +59,4 @@ Route::apiResource('accounts', AccountController::class);
 Route::apiResource('posts', PostController::class);
 
 //! Transactions
-Route::apiResource('transactions', TransactionController::class);
+// Route::apiResource('transactions', TransactionController::class);

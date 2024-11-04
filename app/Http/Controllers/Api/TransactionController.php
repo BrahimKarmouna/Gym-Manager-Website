@@ -17,25 +17,24 @@ class TransactionController extends Controller
 {
   public function index(Request $request)
   {
-    $data = Transaction::query()
-      ->orderBy("id", "desc")
+    $data = Transaction::latest()
       ->where('transaction_type' ,$request->type)
       ->get();
     
     return TransactionResource::collection($data);
   }
 
-  public function store(Request $request)
+  public function store(TransactionRequest $request)
   {
     // Create a new transaction
     $transaction = Transaction::create([
-      'date' => $request->date,
+      'date' => $request->date('date'),
       'amount' => $request->amount,
-      'source_account_id' => $request->from,
-      'destination_account_id' => $request->to,
-      'category_id' => $request->category,
+      'source_account_id' => $request->source_account_id,
+      'destination_account_id' => $request->destination_account_id,
+      'category_id' => $request->category_id,
       'note' => $request->note,
-      'transaction_type' => $request->type,
+      'transaction_type' => $request->transaction_type,
       // 'description' => $request->content,
       'user_id' => auth()->id()
     ]);
@@ -56,7 +55,7 @@ class TransactionController extends Controller
 
   public function show(Post $post)
   {
-    return PostResource::make($post);
+    return TransactionResource::make($post);
   }
 
   public function update(PostRequest $request, Post $post)
@@ -73,7 +72,7 @@ class TransactionController extends Controller
 
 
 
-    return PostResource::make($post);
+    return TransactionResource::make($post);
   }
 
   public function destroy(Transaction $transaction)
