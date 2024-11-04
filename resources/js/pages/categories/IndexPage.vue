@@ -1,5 +1,6 @@
 <template>
   <q-page class="bg-gray-50 dark:bg-gray-900">
+
     <q-dialog v-model="showCreateDialog" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>

@@ -24,13 +24,25 @@ class TransactionRequest extends FormRequest
   public function rules(): array
   {
     return [
+      'date' => ['required', 'date', 'date_format:Y/m/d'],
       'amount' => ['required', 'numeric', 'gt:0'],
-      'from' => ['required', 'integer', 'exists:accounts,id'],
-      'to' => ['required', 'integer', 'exists:accounts,id'],
+      'source_account_id' => ['required', 'integer', 'exists:accounts,id', 'distinct'],
+      'destination_account_id' => ['required', 'integer', 'exists:accounts,id', 'distinct'],
       'note' => ['required', 'string', 'max:255'],
-      'type' => ['required', Rule::enum(TransactionType::class)],
-      'category' => ['required', 'integer', 'exists:transaction_categories,id'],
+      'transaction_type' => ['required', 'string', Rule::enum(TransactionType::class)],
+      'category_id' => ['required', 'integer', 'exists:categories,id'],
     ];
+  }
+
+  public function prepareForValidation()
+  {
+    $this->merge([
+      'transaction_type' => $this->input('transaction_type.value'),
+      'category_id' => $this->input('category.id'),
+      'source_account_id' => $this->input('source_account.id'),
+      'destination_account_id' => $this->input('destination_account.id'),
+      'date'=> $this->input('date'),
+    ]);
   }
 
   // public function messages()
