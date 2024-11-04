@@ -103,8 +103,8 @@ const form = useForm({
   category_id: '',
   note: '',
   transaction_type: {
-    'label': 'Income',
-    'value': 'income',
+    'label': 'Expense',
+    'value': 'expense',
   },
 })
 
@@ -116,7 +116,7 @@ form.post('/transactions', {}, {
     $q.notify({
       type: 'positive',
       message: 'Success!',
-      caption: 'Transfer added successfully.',
+      caption: 'Expense added successfully.',
       position: 'bottom-right',
       timeout: 3000
     });

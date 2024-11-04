@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\TransactionType;
+use App\Models\Transaction;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,8 +27,8 @@ class TransactionRequest extends FormRequest
     return [
       'date' => ['required', 'date', 'date_format:Y/m/d'],
       'amount' => ['required', 'numeric', 'gt:0'],
-      'source_account_id' => ['required', 'integer', 'exists:accounts,id', 'different:destination_account_id'],
-      'destination_account_id' => ['required', 'integer', 'exists:accounts,id', 'different:source_account_id'],
+      'source_account_id' => ['nullable', 'integer', 'exists:accounts,id', 'different:destination_account_id', 'required_if:transaction_type,' . TransactionType::TRANSFER->value],
+      'destination_account_id' => ['nullable', 'integer', 'exists:accounts,id', 'different:source_account_id', 'required_if:transaction_type,' . TransactionType::TRANSFER->value],
       'note' => ['required', 'string', 'max:255'],
       'transaction_type' => ['required', 'string', Rule::enum(TransactionType::class)],
       'category_id' => ['required', 'integer', 'exists:categories,id'],

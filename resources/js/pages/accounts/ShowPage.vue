@@ -598,7 +598,7 @@ const props = defineProps({
   id: {
     type: [Number, String]
   }
-})
+});
 
 const account = ref({});
 const transactionsData = ref([]);
@@ -615,6 +615,8 @@ const getAccount = async () => {
     loading.value = false;
   }
 }
+
+
 
 const fetchTransactions = async () => {
   try {

@@ -19,7 +19,7 @@ const props = defineProps({
   id: String,
 });
 
-const { fetch, loading, record } = useResourceShow(() => `transaction-categories/${props.id}`);
+const { fetch, loading, record } = useResourceShow(() => `categories/${props.id}`);
 
 const form = useForm(() => record.value);
 

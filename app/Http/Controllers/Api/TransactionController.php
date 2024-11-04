@@ -18,7 +18,7 @@ class TransactionController extends Controller
   public function index(Request $request)
   {
     $data = Transaction::latest()
-      ->where('transaction_type' ,$request->type)
+      ->where('transaction_type', $request->type)
       ->get();
 
     return TransactionResource::collection($data);
@@ -26,30 +26,28 @@ class TransactionController extends Controller
 
   public function store(TransactionRequest $request)
   {
-    // Create a new transaction
-    $transaction = Transaction::create([
-      'date' => $request->date('date'),
-      'amount' => $request->amount,
-      'source_account_id' => $request->source_account_id,
-      'destination_account_id' => $request->destination_account_id,
-      'category_id' => $request->category_id,
-      'note' => $request->note,
-      'transaction_type' => $request->transaction_type,
-      // 'description' => $request->content,
-      'user_id' => auth()->id()
-    ]);
+    if ($request->transaction_type == TransactionType::TRANSFER->value) {
+      $transaction = Transaction::create([
+        'date' => $request->date('date'),
+        'amount' => $request->amount,
+        'source_account_id' => $request->source_account_id,
+        'destination_account_id' => $request->destination_account_id,
+        'category_id' => $request->category_id,
+        'note' => $request->note,
+        'transaction_type' => $request->transaction_type,
+        'user_id' => auth()->id()
+      ]);
+    } else {
+      $transaction = Transaction::create([
+        'date' => $request->date('date'),
+        'amount' => $request->amount,
+        'category_id' => $request->category_id,
+        'note' => $request->note,
+        'transaction_type' => $request->transaction_type,
+        'user_id' => auth()->id()
+      ]);
+    }
 
-
-    // $transaction = Transaction::create([
-    //   //  'amount' => 2,
-    //   //   'source_account_id' =>4,
-    //   //   'destination_account_id' => 2,
-    //   //   'category_id' => 1,
-    //   //   'note' => 'hhhh',
-    //   //   'transaction_type' => 8,
-    //   //   // 'description' => $request->content,
-    //   //   'user_id' => auth()->id()
-    // ]);
     return TransactionResource::make($transaction);
   }
 

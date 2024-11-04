@@ -1,6 +1,6 @@
 <template>
 
-  <CreateForm v-model:visible="showCreateDialog"
+  <CreateIncome v-model:visible="showCreateDialog"
               @created="handleCreated" />
 
   <div class="q-pa-md">
@@ -10,11 +10,11 @@
 
         <q-separator />
 
-        <!-- Income  -->
+        <!-- transfer  -->
         <q-tab-panels v-model="tab"
                       animated>
 
-          <q-tab-panel name="Income">
+          <q-tab-panel name="Transfer">
             <div class="text-h6 q-pa-md">
               <div class="row items-start q-gutter-md">
                 <q-card class="my-card text-black bg-grey-1"
@@ -47,17 +47,17 @@
                          bordered
                          title="Income Records"
                          :rows="data ?? []"
-                         :columns="incomeColumns"
+                         :columns="transferColumns"
                          row-key="id"
                          :filter="filter"
-                         :loading="loadingIncome"
+                         :loading="loadingTransfer"
                          @request="onRequest">
                   <template v-slot:top>
                     <q-btn color="green-8"
                            :disable="loading"
                            label="Add Income"
                            @click="showCreateDialog = true" />
-                    <!-- <q-btn v-if="selected.length > 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Income" @click="removeRow" :loading="deleting"/> -->
+                    <!-- <q-btn v-if="selected.length > 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Transfer" @click="removeRow" :loading="deleting"/> -->
                     <q-space />
                     <q-input v-model="search"
                              filled
@@ -98,11 +98,11 @@ import { onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { api } from '@/boot/axios';
 import { useResourceIndex } from '@/composables/useResourceIndex';
-import CreateForm from './CreateIncome.vue';
+import CreateIncome from './CreateIncome.vue';
 
 export default {
   components: {
-    CreateForm
+    CreateIncome
   },
   setup() {
 
@@ -114,19 +114,16 @@ export default {
     const showCreateDialog = ref(false);
 
 
-    // const selected = ref([]);
-
     const amount = ref(null);
     const from = ref('');
     const to = ref('');
     const category = ref('');
     const note = ref('');
-    const description = ref('');
 
-    const incomeColumns = [
+    const transferColumns = [
       { name: 'user', label: 'User', align: 'left', field: (row) => row.user.name ?? 'N/A' },
+      { name: 'amount', label: 'Amount', align: 'left', field: 'amount', sortable: true },
       { name: 'date', label: 'Date', align: 'left', field: 'date', sortable: true },
-      { name: 'amount', label: 'Amount', align: 'left', field: 'amount', sortable: true },      
       { name: 'note', label: 'Note', align: 'left', field: 'note' },
       { name: 'transaction_category', label: 'Transaction Category', align: 'center', field: (row) => row.category?.name ?? 'N/A', sortable: false },
       // { name: "created_at", label: "Created At", field: "created_at", sortable: true },
@@ -136,7 +133,7 @@ export default {
 
 
 
-    const { data, fetch, loading: loadingIncome } = useResourceIndex('transactions?type=income');
+    const { data, fetch, loading: loadingTransfer } = useResourceIndex('transactions?type=income');
 
     onMounted(() => {
       fetch();
@@ -187,8 +184,8 @@ export default {
 
 
     return {
-      tab: ref('Income'),
-      incomeColumns,
+      tab: ref('Transfer'),
+      transferColumns,
       rows,
       loading,
       filter,
