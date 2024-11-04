@@ -3,6 +3,7 @@
     <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-8">
   <div class="mx-auto max-w-screen-lg px-4 2xl:px-0">
 
+
     <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl md:mb-6">Account overview</h2>
 
     <div class="py-4 md:py-8">
@@ -583,6 +584,7 @@
     </div>
 </section>
     <pre>{{ account }}</pre>
+    <pre>{{transactionsData}}</pre>
 
     <div v-if="loading">Loading...</div>
   </div>
@@ -592,7 +594,6 @@
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
-
 const props = defineProps({
   id: {
     type: [Number, String]
@@ -600,7 +601,7 @@ const props = defineProps({
 })
 
 const account = ref({});
-
+const transactionsData = ref([]);
 const loading = ref(true);
 
 const getAccount = async () => {
@@ -615,7 +616,21 @@ const getAccount = async () => {
   }
 }
 
+const fetchTransactions = async () => {
+  try {
+    loading.value = true;
+    const response = await axios.get(`/api/transactions/${props.id}`);
+    transactionsData.value = response.data.data;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
+}
+
 onMounted(async () => {
   await getAccount();
+  await fetchTransactions();
 })
 </script>
+

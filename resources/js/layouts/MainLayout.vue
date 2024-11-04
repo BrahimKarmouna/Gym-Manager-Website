@@ -18,7 +18,6 @@
                     class="text-dark dark:text-white" />
           </q-avatar>
           Money Manager
-          Money Manager
         </q-toolbar-title>
 
         <!-- Dark mode toggler -->

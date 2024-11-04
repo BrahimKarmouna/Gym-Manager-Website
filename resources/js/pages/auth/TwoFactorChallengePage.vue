@@ -84,7 +84,7 @@
 </template>
 
 <script setup>
-import { api } from 'src/boot/axios';
+import { api } from '@/boot/axios';
 import { ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router';
 
