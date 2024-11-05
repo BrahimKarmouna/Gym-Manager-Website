@@ -6,7 +6,7 @@
       <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
         <div class="mr-6">
           <h1 class="text-4xl font-semibold mb-2">Dashboard</h1>
-          <h2 class="text-gray-600 ml-0.5">Mobile UX/UI Design course</h2>
+
         </div>
         <div class="flex flex-wrap items-start justify-end -mb-3">
           <button class="inline-flex px-5 py-3 text-purple-600 hover:text-purple-700 focus:text-purple-700 hover:bg-purple-100 focus:bg-purple-100 border border-purple-600 rounded-md mb-3">
@@ -32,7 +32,7 @@
           </div>
           <div>
             <span class="block text-2xl font-bold">62</span>
-            <span class="block text-gray-500">Students</span>
+            <span class="block text-gray-500">Transfers</span>
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg">
@@ -43,7 +43,7 @@
           </div>
           <div>
             <span class="block text-2xl font-bold">6.8</span>
-            <span class="block text-gray-500">Average mark</span>
+            <span class="block text-gray-500">Income</span>
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg">
@@ -55,7 +55,7 @@
           <div>
             <span class="inline-block text-2xl font-bold">9</span>
             <span class="inline-block text-xl text-gray-500 font-semibold">(14%)</span>
-            <span class="block text-gray-500">Underperforming students</span>
+            <span class="block text-gray-500">Expense</span>
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg">
@@ -66,13 +66,13 @@
           </div>
           <div>
             <span class="block text-2xl font-bold">83%</span>
-            <span class="block text-gray-500">Finished homeworks</span>
+            <span class="block text-gray-500">Total</span>
           </div>
         </div>
       </section>
       <section class="grid md:grid-cols-2 xl:grid-cols-4 xl:grid-rows-3 xl:grid-flow-col gap-6">
         <div class="flex flex-col md:col-span-2 md:row-span-2 bg-white shadow rounded-lg">
-          <div class="px-6 py-5 font-semibold border-b border-gray-100">The number of applied and left students per month</div>
+          <div class="px-6 py-5 font-semibold border-b border-gray-100 text-gray-400">Last month</div>
           <div class="p-4 flex-grow">
             <div class="flex items-center justify-center h-full px-4 py-16 text-gray-400 text-3xl font-semibold bg-gray-100 border-2 border-gray-200 border-dashed rounded-md">Chart</div>
           </div>
@@ -180,9 +180,7 @@
           </div>
         </div>
       </section>
-      <section class="text-right font-semibold text-gray-500">
-        <a href="#" class="text-purple-600 hover:underline">Recreated on Codepen</a> with <a href="https://tailwindcss.com/" class="text-teal-400 hover:underline">Tailwind CSS</a> by Azri Kahar, <a href="https://dribbble.com/shots/10711741-Free-UI-Kit-for-Figma-Online-Courses-Dashboard" class="text-purple-600 hover:underline">original design</a> made by Chili Labs
-      </section>
+
     </main>
   </div>
 
