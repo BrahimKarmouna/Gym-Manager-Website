@@ -46,6 +46,7 @@ class AccountController extends Controller
   // Retrieve a specific account
   public function show(Account $account)
   {
+    $account->load('incomes', 'expenses', 'transfers');
     return AccountResource::make($account);
   }
 

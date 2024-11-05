@@ -52,7 +52,8 @@ const routes = [
 
   // Main
   {
-    path: "/admin",
+    path: "",
+    alias: "/admin",
     component: () => import("../layouts/MainLayout.vue"),
 
     meta: {
@@ -60,13 +61,6 @@ const routes = [
     },
 
     children: [
-      // Index
-      {
-        path: "",
-        name: "dashboard",
-        component: () => import("../pages/IndexPage.vue"),
-      },
-
       // Profile
       {
         path: "profile",
@@ -91,8 +85,8 @@ const routes = [
 
         children: [
           {
-            path: "categories",
-            name: "Dashboard.index",
+            path: "",
+            name: "dashboard.index",
             component: () => import("../pages/dashboard/DashboardIndex.vue"),
           },
 

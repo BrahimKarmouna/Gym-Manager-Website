@@ -108,7 +108,8 @@ const linksList = [
 {
     title: 'Dashboad',
     icon: 'sym_r_category',
-    to: { name: 'Dashboard.index' }
+    exact: true,
+    to: { name: 'dashboard.index' }
   },
   {
     title: 'Categories',

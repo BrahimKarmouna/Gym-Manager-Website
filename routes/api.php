@@ -10,22 +10,6 @@ use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
-
-
-Route::apiResource('posts', PostController::class);
-
-Route::apiResource('transactions', TransactionController::class);
-
-Route::get('transactions/income', [TransactionController::class, '']);
-
-Route::get('transactions/transfer', [TransactionController::class, 'indextransfer']);
-Route::get('transactions/income', [TransactionController::class, 'indexincome']);
-Route::get('transactions/expense', [TransactionController::class, 'indexexpense']);
-
-// Transactions
-
-
-
 // Auth
 Route::name('api.')
   ->middleware(['auth:sanctum'])
@@ -49,7 +33,7 @@ Route::name('api.')
   });
 
 
-  //! Categories
+//! Categories
 Route::apiResource('categories', CategoryController::class);
 
 //! Accounts
@@ -59,4 +43,4 @@ Route::apiResource('accounts', AccountController::class);
 Route::apiResource('posts', PostController::class);
 
 //! Transactions
-// Route::apiResource('transactions', TransactionController::class);
+Route::apiResource('transactions', TransactionController::class);
