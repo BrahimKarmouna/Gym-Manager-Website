@@ -99,8 +99,6 @@ class TransactionController extends Controller
       'description' => $request->content
     ]);
 
-
-
     return TransactionResource::make($post);
   }
 
@@ -109,27 +107,6 @@ class TransactionController extends Controller
     $transaction->delete();
 
     return response()->noContent();
-  }
-
-  public function indextransfer()
-  {
-
-    $test = Transaction::where('transaction_type', TransactionType::TRANSFER->value)->get();
-    return TransactionResource::collection($test);
-  }
-
-  public function indexincome()
-  {
-
-    $test = Transaction::where('transaction_type', TransactionType::INCOME->value)->get();
-    return TransactionResource::collection($test);
-  }
-
-  public function indexexpense()
-  {
-
-    $test = Transaction::where('transaction_type', TransactionType::EXPENSE->value)->get();
-    return TransactionResource::collection($test);
   }
 
 }

@@ -14,7 +14,6 @@ class Transaction extends Model
     'destination_account_id',
     'note',
     'category_id',
-    'description',
     'transaction_type',
   ];
 
