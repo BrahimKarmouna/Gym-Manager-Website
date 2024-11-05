@@ -24,12 +24,23 @@ class AccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => 'required|string|max:255',
+            'rib' => 'required|string|max:24|min:24|unique:accounts',
+            'balance' => 'required|numeric',
+            'total_expense' => 'nullable|numeric',
+            'total_income' => 'nullable|numeric',
             'account_type' => [
               'required',
               'string',
               Rule::enum(AccountType::class)
-            ]
+            ],
         ];
+    }
+
+    public function prepareForValidation()
+    {
+      $this->merge([
+        'account_type' => $this->input('account_type.value')
+      ]);
     }
 }

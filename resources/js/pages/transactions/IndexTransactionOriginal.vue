@@ -1,4 +1,5 @@
 <template>
+  
   <div class="q-pa-md">
     <div class="q-gutter-y-md" style="max-width: 1700px; max-height:500px;">
       <q-card>
@@ -12,7 +13,7 @@
           align="justify"
           narrow-indicator
         >
-          <q-tab name="Transfert" label="Transfert" />
+          <q-tab name="Transfer" label="Transfer" />
           <q-tab name="Income" label="Income" />
           <q-tab name="Expense" label="Expense" />
         </q-tabs>
@@ -22,7 +23,7 @@
         
         <q-tab-panels v-model="tab" animated>
          
-          <q-tab-panel name="Transfert">
+          <q-tab-panel name="Transfer">
             <div class="text-h6 q-pa-md">
               <div class="row items-start q-gutter-md">
                 <q-card class="my-card text-black bg-grey-1" style="width: 510px;">
@@ -52,13 +53,12 @@
                 <q-table
                   flat
                   bordered
-                  title="Transfert Records"
+                  title="Transfer Records"
                   :rows="rows"
                   :columns="transferColumns"
                   row-key="id"
                   :filter="filter"
-                  :loading="loading"
-                  
+                  :loading="loading"                  
                 >
                   <template v-slot:top>
                     <q-btn color="green-8" :disable="loading" label="Add Transfer" @click="dialog = true" />
@@ -92,28 +92,15 @@
                       label="Amount"
                       lazy-rules
                       :rules="[val => val && val.length > 0 || 'Please insert an amount']"
-                    />
-                    <q-input
-                      type="text"
-                      v-model="from"
-                      label="From"
-                      lazy-rules
-                      :rules="[val => val && val.length > 0 || 'Please insert a sender']"
-                    />
-                    <q-input
-                    type="text"
-                    v-model="to"
-                    label="To"
-                    lazy-rules
-                    :rules="[val => val && val.length > 0 || 'Please insert a recipient']"
-                    />
-                    <q-input
-                      v-model="category" 
-                   :options="transactionOptions"
-                      label="Category"
-                      lazy-rules
-                      :rules="[val => val && val.length > 0 || 'Please insert a category']"
-                    />
+                      />
+                      <!-- Select  From Account -->
+                      <q-select v-model="model"  :options="accounts" option-value="id"  option-label="name"  label="From" />
+                    <!-- Select To Account -->
+                    <q-select v-model="model" :options="accounts" option-value="id"  option-label="name"  label="To" />
+                    <!-- Select a category -->
+                    <q-select v-model="model" :options="transaction_categories" option-value="id" option-label="name" label="Category" />
+
+                   
                     <q-input
                       type="text"
                       v-model="note"
@@ -220,6 +207,7 @@
                    <q-select v-model="category" 
                    :options="incomeOptions" 
                    label="Category"
+                   
                    :rules="[val => val && val.length > 0 || 'Please insert a category']" />
                    <q-input
                      type="text"
@@ -243,7 +231,7 @@
                      :rules="[val => val && val.length > 0 || 'Please insert a description']"
                    />
                    <div>
-                     <q-btn label="Submit" type="submit" color="green-7" />
+                     <q-btn label="Submit" type="submit" color="green-7"  />
                      <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
                    </div>
                  </q-form>
@@ -263,7 +251,7 @@
         
 
        </q-tab-panels>
-
+<!-- Expense -->
 
        <q-tab-panels v-model="tab" animated>
          
@@ -297,7 +285,7 @@
                <q-table
                  flat
                  bordered
-                 title="Transfert Records"
+                 title="Expense Records"
                  :rows="rows"
                  :columns="expenseColumns"
                  row-key="id"
@@ -305,8 +293,8 @@
                  :loading="loading"
                >
                  <template v-slot:top>
-                   <q-btn color="green-8" :disable="loading" label="Add Transfer" @click="dialog = true" />
-                   <q-btn v-if="rows.length !== 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Transfer" @click="removeRow" />
+                   <q-btn color="green-8" :disable="loading" label="Add Expense" @click="dialog = true" />
+                   <q-btn v-if="rows.length !== 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove expense" @click="removeRow" />
                    <q-space />
                    <q-input v-model="search" filled type="search" dense>
                      <template v-slot:append>
@@ -324,7 +312,7 @@
                <q-card-section>
                  <q-form @submit.prevent="onSubmit" @reset="onReset" class="q-gutter-md">
                   <q-select v-model="category" 
-                   :options="expenseOptions" 
+                   :options="expenseOptions"
                    label="Category"
                    :rules="[val => val && val.length > 0 || 'Please insert a category']" />
                    <q-input
@@ -373,6 +361,7 @@
 import { onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { api } from '@/boot/axios';
+import { useResourceIndex } from '@/composables/useResourceIndex';
 
 export default {
   setup() {
@@ -417,6 +406,16 @@ export default {
       { name: 'description', label: 'Description', align: 'left', field: 'description' },
     ];
 
+
+    // call Account, transaction_categories
+
+    const { data: accounts, fetch: fetchAccount , error } = useResourceIndex('accounts');
+    const { data: transaction_categories, fetch: fetchTransactionCategories } = useResourceIndex('transaction_categories');
+
+    onMounted(() => {
+      fetchAccount();
+      fetchTransactionCategories();
+    })
     const addRow = () => {
       loading.value = true;
 
@@ -431,7 +430,7 @@ export default {
         type: 'transfer',
       };
 
-      api.post('transaction', newRow).then((response) => {
+      api.post('transactions', newRow).then((response) => {
         loading.value = false;
         
         $q.notify({
@@ -463,9 +462,8 @@ export default {
     };
 
     const onSubmit = () => {
-      if (amount.value && from.value && to.value && note.value && description.value) {
-        addRow();
-      }
+      
+      addRow();
     };
 
     const onReset = () => {
@@ -495,7 +493,7 @@ export default {
     cancel: true,
     persistent: true,
   }).onOk(() => {
-    api.delete(`/transaction/${transaction.id}`).then(() => {
+    api.delete(`/transactions/${transaction.id}`).then(() => {
       fetch();
     });
   });
@@ -514,7 +512,7 @@ function editRow(transaction) {
 
 
     return {
-      tab: ref('Transfert'),
+      tab: ref('Transfer'),
       transferColumns,
       incomeColumns,
       expenseColumns,
@@ -535,17 +533,12 @@ function editRow(transaction) {
       editRow,
       onSubmit,
       onReset,
-      incomeOptions: [
-        'Salary', 'Pocket Money', 'Allowance', 'Bonus', 
-      ],
+      accounts,
+      transaction_categories,
+   
       date: ref('today'),
       // selected,
-      transactionOptions: [
-        'Salary', 'Pocket Money', 'Allowance', 'Bonus', 
-      ],
-      expenseOptions: [
-        'Salary', 'Pocket Money', 'Allowance', 'Bonus', 
-      ],
+      
     };
   },
 };

@@ -91,37 +91,57 @@ const routes = [
 
         children: [
           {
-            path: "transaction-categories",
+            path: "categories",
             name: "Dashboard.index",
-            component: () => import("../pages/Dashboard/dashboardIndex.vue"),
+            component: () => import("../pages/dashboard/DashboardIndex.vue"),
           },
 
           // Transaction Categories
           {
-            path: "transaction-categories",
-            name: "transaction-categories.index",
-            component: () => import("../pages/transaction-categories/IndexPage.vue"),
+            path: "categories",
+            name: "categories.index",
+            component: () => import("../pages/categories/IndexPage.vue"),
           },
 
           {
-            path: "transaction-categories/create",
-            name: "transaction-categories.create",
-            component: () => import("../pages/transaction-categories/CreatePage.vue"),
+            path: "categories/create",
+            name: "categories.create",
+            component: () => import("../pages/categories/CreatePage.vue"),
           },
 
           {
-            path: "transaction-categories/:id/edit",
-            name: "transaction-categories.edit",
+            path: "categories/:id/edit",
+            name: "categories.edit",
             props: true,
-            component: () => import("../pages/transaction-categories/EditPage.vue"),
+            component: () => import("../pages/categories/EditPage.vue"),
           },
+
+          // Transactions
 
           // Transactions
           {
             path: "transaction",
             name: "transaction.index",
             props: true,
-            component: () => import("../pages/transaction/IndexTransaction.vue"),
+            component: () => import("../pages/transactions/IndexTransaction.vue"),
+
+            children: [
+              {
+                path: "",
+                name: "transaction.index",
+                component: () => import("../pages/transactions/Transfer/IndexTransfer.vue"),
+              },
+              {
+                path: "income",
+                name: "transaction.income",
+                component: () => import("../pages/transactions/Income/IndexIncome.vue"),
+              },
+              {
+                path: "expense",
+                name: "transaction.expense",
+                component: () => import("../pages/transactions/Expense/IndexExpense.vue"),
+              },
+            ],
           },
 
 
@@ -143,9 +163,21 @@ const routes = [
           //account
           {
             path: "account",
-            name: "account.indexAccount",
-            props: true,
-            component: () => import("../pages/Account/indexAccount.vue"),
+            component: RouterView,
+            children: [
+              {
+                path: "",
+                name: "account.indexAccount",
+                component: () => import("../pages/accounts/IndexAccount.vue"),
+              },
+
+              {
+                path: "show/:id",
+                props: true,
+                name: "account.show",
+                component: () => import("../pages/accounts/ShowPage.vue"),
+              },
+            ]
           },
         ],
       },
