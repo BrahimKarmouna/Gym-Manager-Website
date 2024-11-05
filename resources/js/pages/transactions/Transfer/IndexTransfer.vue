@@ -71,9 +71,6 @@ export default {
 
     const showCreateDialog = ref(false);
 
-
-    // const selected = ref([]);
-
     const amount = ref(null);
     const from = ref('');
     const to = ref('');

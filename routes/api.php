@@ -39,6 +39,10 @@ Route::apiResource('categories', CategoryController::class);
 //! Accounts
 Route::apiResource('accounts', AccountController::class);
 
+Route::get('accounts/{account}/transfers', [AccountController::class, 'transfers'])->name('accounts.transfers');
+Route::get('accounts/{account}/incomes', [AccountController::class, 'incomes'])->name('accounts.incomes');
+Route::get('accounts/{account}/expenses', [AccountController::class, 'expenses'])->name('accounts.expenses');
+
 //! POSTS
 Route::apiResource('posts', PostController::class);
 

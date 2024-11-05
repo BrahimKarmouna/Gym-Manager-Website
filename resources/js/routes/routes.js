@@ -111,8 +111,6 @@ const routes = [
           },
 
           // Transactions
-
-          // Transactions
           {
             path: "transaction",
             name: "transaction.index",
@@ -170,6 +168,26 @@ const routes = [
                 props: true,
                 name: "account.show",
                 component: () => import("../pages/accounts/ShowPage.vue"),
+                children: [
+                  {
+                    path: "",
+                    props: true,
+                    name: "account.transfers",
+                    component: () => import("../pages/accounts/TransfersPage.vue"),
+                  },
+                  {
+                    props: true,
+                    path: "incomes",
+                    name: "account.incomes",
+                    component: () => import("../pages/accounts/IncomesPage.vue"),
+                  },
+                  {
+                    props: true,
+                    path: "expenses",
+                    name: "account.expenses",
+                    component: () => import("../pages/accounts/ExpensesPage.vue"),
+                  },
+                ]
               },
             ]
           },
