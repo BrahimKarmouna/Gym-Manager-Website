@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->float('amount');
-            $table->foreignId('source_account_id')->constrained();
-            $table->foreignId('destination_account_id')->constrained();
+            $table->foreignId('source_account_id')->nullable()->constrained();
+            $table->foreignId('destination_account_id')->nullable()->constrained();
             $table->foreignId('category_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->text('note')->nullable();
