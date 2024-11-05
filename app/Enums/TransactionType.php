@@ -25,7 +25,7 @@ enum TransactionType: string implements Arrayable
       return match ($this) {
         TransactionType::TRANSFER => 'green',
         TransactionType::INCOME => 'blue',
-        TransactionType::EXPENSE => 'blue'
+        TransactionType::EXPENSE => 'red'
       };
     }
 

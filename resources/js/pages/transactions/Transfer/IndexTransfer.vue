@@ -3,94 +3,53 @@
   <CreateForm v-model:visible="showCreateDialog"
               @created="handleCreated" />
 
-  <div class="q-pa-md">
-    <div class="q-gutter-y-md"
-         style="max-width: 1700px; height:550px;">
-      <q-card>
+  <!-- transfer  -->
+  <q-table flat
+           title="Transfer Records"
+           :rows="data ?? []"
+           :columns="transferColumns"
+           row-key="id"
+           :filter="filter"
+           :pagination="{ rowsPerPage: 15 }"
+           :loading="loadingTransfer"
+           @request="onRequest">
+    <template v-slot:top>
+      <q-btn color="green-8"
+             :disable="loading"
+             label="Add Transfer"
+             @click="showCreateDialog = true" />
 
-        <q-separator />
+      <q-space />
 
-        <!-- transfer  -->
-        <q-tab-panels v-model="tab"
-                      animated>
+      <q-input v-model="search"
+               filled
+               type="search"
+               dense>
+        <template v-slot:append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+    </template>
 
-          <q-tab-panel name="Transfer">
-            <div class="text-h6 q-pa-md">
-              <div class="row items-start q-gutter-md">
-                <q-card class="my-card text-black bg-grey-1"
-                        style="width: 500px;">
-                  <q-card-section>
-                    <div class="text-h6">Income</div>
-                  </q-card-section>
-                  <q-card-section class="q-pt-none">{{ 0.00 }}</q-card-section>
-                </q-card>
+    <template v-slot:body-cell-actions="props">
+      <q-td v-bind:props="props"
+            class="q-gutter-x-xs">
+        <q-btn flat
+               size="sm"
+               padding="sm"
+               color="primary"
+               icon="edit"
+               @click.stop="editRow(props.row)" />
 
-                <q-card class="my-card text-black bg-grey-1"
-                        style="width: 500px;">
-                  <q-card-section>
-                    <div class="text-h6">Expense</div>
-                  </q-card-section>
-                  <q-card-section class="q-pt-none">{{ 0.00 }}</q-card-section>
-                </q-card>
-
-                <q-card class="my-card text-black bg-grey-1"
-                        style="width: 500px;">
-                  <q-card-section>
-                    <div class="text-h6">Total</div>
-                  </q-card-section>
-                  <q-card-section class="q-pt-none">{{ 0.00 }}</q-card-section>
-                </q-card>
-              </div>
-
-              <div class="q-pa-md">
-                <q-table flat
-                         bordered
-                         title="Transfer Records"
-                         :rows="data ?? []"
-                         :columns="transferColumns"
-                         row-key="id"
-                         :filter="filter"
-                         :loading="loadingTransfer"
-                         @request="onRequest">
-                  <template v-slot:top>
-                    <q-btn color="green-8"
-                           :disable="loading"
-                           label="Add Transfer"
-                           @click="showCreateDialog = true" />
-                    <!-- <q-btn v-if="selected.length > 0" class="q-ml-sm" color="primary" :disable="loading" label="Remove Transfer" @click="removeRow" :loading="deleting"/> -->
-                    <q-space />
-                    <q-input v-model="search"
-                             filled
-                             type="search"
-                             dense>
-                      <template v-slot:append>
-                        <q-icon name="search" />
-                      </template>
-                    </q-input>
-                  </template>
-
-                  <template v-slot:body-cell-actions="props">
-                    <q-td v-bind:props="props"
-                          class="q-gutter-x-xs">
-                      <q-btn flat
-                             color="primary"
-                             icon="edit"
-                             @click.stop="editRow(transaction)" />
-                      <q-btn flat
-                             color="red"
-                             icon="delete"
-                             @click.stop="deleteRow(transaction)" />
-                    </q-td>
-                  </template>
-                </q-table>
-              </div>
-            </div>
-
-          </q-tab-panel>
-        </q-tab-panels>
-      </q-card>
-    </div>
-  </div>
+        <q-btn flat
+               size="sm"
+               padding="sm"
+               color="red"
+               icon="delete"
+               @click.stop="deleteRow(props.row)" />
+      </q-td>
+    </template>
+  </q-table>
 </template>
 
 <script>
@@ -109,7 +68,6 @@ export default {
     const $q = useQuasar();
     const loading = ref(false);
     const filter = ref('');
-    const rows = ref([]);
 
     const showCreateDialog = ref(false);
 
@@ -121,7 +79,6 @@ export default {
     const to = ref('');
     const category = ref('');
     const note = ref('');
-    const description = ref('');
 
     const transferColumns = [
       { name: 'user', label: 'User', align: 'left', field: (row) => row.user.name ?? 'N/A' },
@@ -144,24 +101,9 @@ export default {
       fetch();
     })
 
-
-    const removeRow = () => {
-
-    };
-
     const handleCreated = () => {
       fetch();
     }
-
-    onMounted(() => {
-      loading.value = true;
-
-      api.get('transactions').then(response => {
-        rows.value = response.data.data;
-        loading.value = false;
-      });
-    });
-
 
     function deleteRow(transaction) {
       $q.dialog({
@@ -177,6 +119,7 @@ export default {
     }
 
     const itemToEdit = ref(null);
+    const showEditDialog = ref(false);
 
     function editRow(transaction) {
       // createForm.fields.amount = transaction.amount;
@@ -185,16 +128,11 @@ export default {
       // createForm.fields.transaction_type = transaction.transaction_type;
       // createForm.fields.id = transaction.id;
       itemToEdit.value = transaction;
-      isEditing.value = true;
-      showCreateDialog.value = true;
+      showEditDialog.value = true;
     }
 
-
-
     return {
-      tab: ref('Transfer'),
       transferColumns,
-      rows,
       loading,
       filter,
       amount,
@@ -203,9 +141,9 @@ export default {
       category,
       note,
       showCreateDialog,
+      showEditDialog,
       search: ref(''),
       data,
-      removeRow,
       deleteRow,
       editRow,
       handleCreated,
