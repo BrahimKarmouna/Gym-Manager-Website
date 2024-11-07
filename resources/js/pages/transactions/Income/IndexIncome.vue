@@ -1,9 +1,13 @@
 <template>
 
-  <CreateForm v-model:visible="showCreateDialog"
+  <CreateIncome v-model:visible="showCreateDialog"
               @created="handleCreated" />
 
-  <!-- transfer  -->
+  <EditIncome v-model:visible="showEditDialog"
+            @updated="handleUpdated"
+            :id="itemToEdit?.id" />
+
+  <!-- income  -->
   <q-table flat
            title="Income Records"
            :rows="data ?? []"
@@ -11,10 +15,17 @@
            row-key="id"
            :filter="filter"
            :pagination="{ rowsPerPage: 15 }"
-           :loading="loadingIncome"
-           @request="onRequest">
+           :loading="loadingTransfer"
+           @request="onRequest"
+          >
+
+     <template v-slot:header-selection="scope">
+              <q-checkbox v-model="scope.selected" />
+     </template>
+
     <template v-slot:top>
-      <q-btn color="green-8"
+      <q-btn color="green-8 dark:bg-green-900 "
+      class=" dark:text-gray-200"
              :disable="loading"
              label="Add Income"
              @click="showCreateDialog = true" />
@@ -22,7 +33,7 @@
       <q-space />
 
       <q-input v-model="search"
-               filled
+
                type="search"
                dense>
         <template v-slot:append>
@@ -44,7 +55,7 @@
         <q-btn flat
                size="sm"
                padding="sm"
-               color="red"
+               color="red "
                icon="delete"
                @click.stop="deleteRow(props.row)" />
       </q-td>
@@ -57,11 +68,13 @@ import { onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { api } from '@/boot/axios';
 import { useResourceIndex } from '@/composables/useResourceIndex';
-import CreateForm from './CreateIncome.vue';
+import CreateIncome from './CreateIncome.vue';
+import EditIncome from './EditIncome.vue';
 
 export default {
   components: {
-    CreateForm
+    CreateIncome,
+    EditIncome
   },
   setup() {
 
@@ -69,14 +82,12 @@ export default {
     const loading = ref(false);
     const filter = ref('');
 
+
     const showCreateDialog = ref(false);
-
-
-    // const selected = ref([]);
 
     const amount = ref(null);
     const from = ref('');
-    const to = ref('');
+    // const to = ref('');
     const category = ref('');
     const note = ref('');
 
@@ -85,7 +96,7 @@ export default {
       { name: 'amount', label: 'Amount', align: 'left', field: 'amount', sortable: true },
       { name: 'date', label: 'Date', align: 'left', field: 'date', sortable: true },
       { name: 'from', label: 'From', align: 'left', field: (row) => row.sourceAccount?.name ?? 'N/A', sortable: true },
-      { name: 'to', label: 'To', align: 'left', field: (row) => row.destinationAccount?.name ?? "N/A", sortable: true },
+      // { name: 'to', label: 'To', align: 'left', field: (row) => row.destinationAccount?.name ?? "N/A", sortable: true },
       { name: 'note', label: 'Note', align: 'left', field: 'note' },
       { name: 'transaction_category', label: 'Transaction Category', align: 'center', field: (row) => row.category?.name ?? 'N/A', sortable: false },
       // { name: "created_at", label: "Created At", field: "created_at", sortable: true },
@@ -102,6 +113,10 @@ export default {
     })
 
     const handleCreated = () => {
+      fetch();
+    }
+
+    const handleUpdated = () => {
       fetch();
     }
 
@@ -122,12 +137,8 @@ export default {
     const showEditDialog = ref(false);
 
     function editRow(transaction) {
-      // createForm.fields.amount = transaction.amount;
-      // createForm.fields.source_account_id = transaction.source_account_id;
-      // createForm.fields.destination_account_id = transaction.destination_account_id;
-      // createForm.fields.transaction_type = transaction.transaction_type;
-      // createForm.fields.id = transaction.id;
       itemToEdit.value = transaction;
+      console.log(itemToEdit.value);
       showEditDialog.value = true;
     }
 
@@ -137,7 +148,6 @@ export default {
       filter,
       amount,
       from,
-      to,
       category,
       note,
       showCreateDialog,
@@ -147,7 +157,8 @@ export default {
       deleteRow,
       editRow,
       handleCreated,
-
+      handleUpdated,
+      itemToEdit,
       text: ref(''),
       ph: ref(''),
       dense: ref(false),

@@ -107,26 +107,27 @@ import { useAuthStore } from '@/stores/auth';
 const linksList = [
 {
     title: 'Dashboad',
-    icon: 'sym_r_category',
-    exact: true,
-    to: { name: 'dashboard.index' }
+    icon: 'sym_r_dashboard',
+    to: { name: 'Dashboard.index' }
   },
+
+  {
+    title: 'Account',
+    icon: 'sym_r_account_balance',
+    to: { name: 'account.indexAccount' }
+  },
+
+  {
+    title: 'Transactions',
+    icon: 'sym_r_money',
+    to: { name: 'transaction.index' }
+  },
+
   {
     title: 'Categories',
     icon: 'sym_r_category',
     to: { name: 'categories.index' }
   },
-  {
-    title: 'Transactions',
-    icon: 'sym_r_category',
-    to: { name: 'transaction.index' }
-  },
-  {
-    title: 'Account',
-    icon: 'sym_r_category',
-    to: { name: 'account.indexAccount' }
-  },
-
 ]
 
 export default defineComponent({
