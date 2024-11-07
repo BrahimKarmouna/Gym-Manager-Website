@@ -287,14 +287,15 @@
                         <q-item-label>Edit</q-item-label>
                       </q-item-section>
                     </q-item>
-                    <q-item clickable
-                            class="text-negative rounded-lg"
+                    <q-item class="rounded-lg text-negative"
+                            clickable
                             v-close-popup
-                            @click="deleteItem(account)">
+                            @click="deleteAccount(account)">
                       <q-item-section class="flex-auto">
                         <q-icon name="sym_r_delete"
                                 size="xs" />
                       </q-item-section>
+
                       <q-item-section>
                         <q-item-label>Delete</q-item-label>
                       </q-item-section>
@@ -302,7 +303,6 @@
                   </q-list>
                 </q-menu>
               </q-btn>
-              <!-- <q-btn label="Remove" icon="sym_r_delete" unelevated padding="sm" size="sm" color="negative" /> -->
             </header>
 
             <!-- Body -->
@@ -344,21 +344,40 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useMoney } from '@/composables/useMoney';
 import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
+import { api } from '@/boot/axios';
+
+const $q = useQuasar();
 
 const router = useRouter();
 
 const formatter = useMoney('USD');
 
 const showCreateAccountModal = ref(false);
+const selectedAccount = ref(null); // Account to be deleted
+const confirm = ref(false); // Controls dialog visibility
 
 const accounts = ref([]);
 const loading = ref(false);
 const totalAccounts = ref(0);
 const totalBalance = ref(0);
 
+const deleteAccount = (account) => {
+  $q.dialog({
+    title: 'Confirm',
+    message: `Are you sure you want to delete ${account.name}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    api.delete(`/accounts/${account.id}`).then(() => {
+      fetchAccounts();
+    });
+  });
+
+};
 
 // Fetch accounts on component mount
-const fetchAccounts = async () => {
+async function fetchAccounts() {
   try {
     loading.value = true;
 
@@ -377,14 +396,14 @@ const fetchAccounts = async () => {
 
 const checkItem = (account) => {
   router.push({ name: "account.show", params: { id: account.id } });
-}
+};
 
 const handleCreated = () => {
   showCreateAccountModal.value = false;
   fetchAccounts();
 };
 
-
 // Fetch accounts when the component mounts
 onMounted(fetchAccounts);
 </script>
+

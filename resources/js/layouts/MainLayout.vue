@@ -3,7 +3,7 @@
 
     <q-header reveal
               bordered
-              class="bg-white text-dark dark:bg-gray-900 dark:text-white">
+              class="bg-white text-dark dark:bg-gray-900 dark:text-white h-16 ">
       <q-toolbar>
         <q-btn dense
                flat
