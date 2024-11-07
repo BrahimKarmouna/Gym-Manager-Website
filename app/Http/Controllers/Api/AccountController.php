@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
 use App\Http\Resources\AccountResource;
+use App\Http\Resources\TransactionResource;
 use App\Models\Account;
 use App\Enums\AccountType;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -46,6 +48,7 @@ class AccountController extends Controller
   // Retrieve a specific account
   public function show(Account $account)
   {
+    $account->load('incomes', 'expenses', 'transfers');
     return AccountResource::make($account);
   }
 
@@ -89,5 +92,26 @@ class AccountController extends Controller
     $account->delete();
 
     return response()->json(['message' => 'Account deleted successfully']);
+  }
+
+  public function transfers($id)
+  {
+    $transfers = Account::find($id)->transfers()->get();
+
+    return TransactionResource::collection($transfers);
+  }
+
+  public function incomes($id)
+  {
+    $incomes = Account::find($id)->incomes()->get();
+
+    return TransactionResource::collection($incomes);
+  }
+
+  public function expenses($id)
+  {
+    $expenses = Account::find($id)->expenses()->get();
+
+    return TransactionResource::collection($expenses);
   }
 }

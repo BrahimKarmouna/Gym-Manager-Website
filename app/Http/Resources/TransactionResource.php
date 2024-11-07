@@ -20,6 +20,7 @@ class TransactionResource extends JsonResource
       'amount' => $this->whenHas('amount'),
       'sourceAccount' => AccountResource::make($this->whenLoaded('sourceAccount')),
       'destinationAccount' => AccountResource::make($this->whenLoaded('destinationAccount')),
+      'transaction_type' => $this->whenHas('transaction_type'),
       'note' => $this->whenHas('note'),
       'category' => CategoryResource::make($this->category),
       'user' => UserResource::make($this->user),

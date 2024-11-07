@@ -52,7 +52,8 @@ const routes = [
 
   // Main
   {
-    path: "/admin",
+    path: "",
+    alias: "/admin",
     component: () => import("../layouts/MainLayout.vue"),
 
     meta: {
@@ -60,13 +61,6 @@ const routes = [
     },
 
     children: [
-      // Index
-      {
-        path: "",
-        name: "dashboard",
-        component: () => import("../pages/IndexPage.vue"),
-      },
-
       // Profile
       {
         path: "profile",
@@ -91,8 +85,8 @@ const routes = [
 
         children: [
           {
-            path: "categories",
-            name: "Dashboard.index",
+            path: "",
+            name: "dashboard.index",
             component: () => import("../pages/dashboard/DashboardIndex.vue"),
           },
 
@@ -115,8 +109,6 @@ const routes = [
             props: true,
             component: () => import("../pages/categories/EditPage.vue"),
           },
-
-          // Transactions
 
           // Transactions
           {
@@ -176,6 +168,26 @@ const routes = [
                 props: true,
                 name: "account.show",
                 component: () => import("../pages/accounts/ShowPage.vue"),
+                children: [
+                  {
+                    path: "",
+                    props: true,
+                    name: "account.transfers",
+                    component: () => import("../pages/accounts/TransfersPage.vue"),
+                  },
+                  {
+                    props: true,
+                    path: "incomes",
+                    name: "account.incomes",
+                    component: () => import("../pages/accounts/IncomesPage.vue"),
+                  },
+                  {
+                    props: true,
+                    path: "expenses",
+                    name: "account.expenses",
+                    component: () => import("../pages/accounts/ExpensesPage.vue"),
+                  },
+                ]
               },
             ]
           },
