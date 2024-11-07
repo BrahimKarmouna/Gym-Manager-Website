@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 
 
+
 class TransactionController extends Controller
 {
   public function index(Request $request)

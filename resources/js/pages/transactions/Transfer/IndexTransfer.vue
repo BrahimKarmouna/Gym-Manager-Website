@@ -24,7 +24,7 @@
      </template>
 
     <template v-slot:top>
-      <q-btn color="green-8"
+      <q-btn color="green-8 "
              :disable="loading"
              label="Add Transfer"
              @click="showCreateDialog = true" />

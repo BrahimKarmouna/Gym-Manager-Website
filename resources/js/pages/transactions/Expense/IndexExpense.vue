@@ -24,9 +24,10 @@
      </template>
 
     <template v-slot:top>
-      <q-btn color="green-8"
+      <q-btn color="green-8 dark:bg-green-900"
+      class=" dark:text-gray-200"
              :disable="loading"
-             label="Add Income"
+             label="Add Expense"
              @click="showCreateDialog = true" />
 
       <q-space />
@@ -54,7 +55,7 @@
         <q-btn flat
                size="sm"
                padding="sm"
-               color="red"
+               color="red "
                icon="delete"
                @click.stop="deleteRow(props.row)" />
       </q-td>
@@ -164,7 +165,7 @@ export default {
       dense: ref(false),
       date: ref(''),
       // selected,
-      
+
     };
   },
 };
