@@ -143,6 +143,7 @@ import { onMounted, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { useForm } from '@/composables/useForm';
 import { useResourceShow } from '@/composables/useResourceShow';
+import { useRouter } from 'vue-router';
 
 const emit = defineEmits(['updated']);
 
@@ -155,6 +156,7 @@ const props = defineProps({
 })
 
 const $q = useQuasar();
+const router = useRouter();
 
 const { fetch: fetchTransaction, record } = useResourceShow('transactions');
 const { data: accounts, fetch: fetchAccount } = useResourceIndex('accounts');

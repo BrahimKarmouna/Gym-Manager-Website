@@ -8,10 +8,8 @@ use App\Http\Requests\TransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Models\Account;
-use App\Models\Post;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use App\Http\Requests\PostRequest;
 
 
 
@@ -21,14 +19,32 @@ class TransactionController extends Controller
   {
     $data = Transaction::latest()
       ->with('sourceAccount', 'destinationAccount')
-      ->where('transaction_type', $request->type)
+      ->where('user_id', auth()->id())
       ->when(
         $request->filled('search'),
-        fn ($query) => $query->whereRelation('sourceAccount', 'name', 'like', '%' . $request->search . '%')
+        function ($query) use ($request) {
+          $query->where(function ($query) use ($request) {
+            $query->whereRelation('sourceAccount', 'name', 'like', '%' . $request->search . '%');
+          });
+        }
+      )
+      ->when(
+        $request->get('transaction_type'),
+        function ($query) use ($request) {
+          $query->where('transaction_type', $request->transaction_type);
+        }
       )
       ->get();
 
-    return TransactionResource::collection($data);
+    $incomes = $data->where('transaction_type', TransactionType::INCOME->value)->sum("amount");
+    $expenses = $data->where('transaction_type', TransactionType::EXPENSE->value)->sum("amount");
+    $totalBalance = $data->sum('amount');
+
+    return TransactionResource::collection($data)->additional([
+      'incomes' => $incomes,
+      'expenses' => $expenses,
+      'totalBalance' => $totalBalance
+    ]);
   }
 
   public function store(TransactionRequest $request)
@@ -95,80 +111,6 @@ class TransactionController extends Controller
     return TransactionResource::make($transaction);
   }
 
-  // public function update(UpdateTransactionRequest $request, Transaction $transaction)
-  // {
-  //   $sourceAccount = Account::find($transaction->source_account_id);
-  //   $destinationAccount = Account::find($transaction->destination_account_id);
-
-  //   // Calculate the difference between the old amount and the new amount
-  //   $oldAmount = $transaction->amount;
-  //   $newAmount = $request->amount;
-  //   $difference = $newAmount - $oldAmount;
-
-  //   switch ($transaction->transaction_type) {
-  //     case TransactionType::TRANSFER->value:
-
-  //       // Adjust balances based on the difference
-  //       if ($difference > 0) {
-  //           // New amount is greater, so deduct from source and add to destination
-  //           $sourceAccount->balance -= $difference;
-  //           $destinationAccount->balance += $difference;
-  //       } elseif ($difference < 0) {
-  //           // New amount is lesser, so add to source and deduct from destination
-  //           $sourceAccount->balance += abs($difference);
-  //           $destinationAccount->balance -= abs($difference);
-  //       }
-
-  //       // Save updated balances to the database
-  //       $sourceAccount->save();
-  //       $destinationAccount->save();
-
-  //       $transaction->update([
-  //         'date' => $request->date('date'),
-  //         'amount' => $newAmount,
-  //         'source_account_id' => $request->source_account_id ?? $transaction->source_account_id,
-  //         'destination_account_id' => $request->destination_account_id ?? $transaction->destination_account_id,
-  //         'category_id' => $request->category_id,
-  //         'transaction_type' => $transaction->transaction_type,
-  //         'note' => $request->note,
-  //         'user_id' => auth()->id()
-  //       ]);
-
-  //       break;
-  //     case TransactionType::INCOME->value:
-  //       $transaction->update([
-  //         'date' => $request->date('date'),
-  //         'amount' => $request->amount,
-  //         'category_id' => $request->category_id,
-  //         'note' => $request->note,
-  //         'source_account_id' => $request->source_account_id,
-  //         'transaction_type' => $transaction->transaction_type,
-  //         'user_id' => auth()->id()
-  //       ]);
-
-  //       break;
-  //     case TransactionType::EXPENSE->value:
-  //       $transaction->update([
-  //         'date' => $request->date('date'),
-  //         'amount' => $request->amount,
-  //         'category_id' => $request->category_id,
-  //         'note' => $request->note,
-  //         'source_account_id' => $request->source_account_id,
-  //         'transaction_type' => $transaction->transaction_type,
-  //         'user_id' => auth()->id()
-  //       ]);
-
-  //       break;
-  //   }
-
-  //   return TransactionResource::make($transaction);
-  // }
-
-
-
-
-
-
   public function update(UpdateTransactionRequest $request, Transaction $transaction)
   {
     $sourceAccount = Account::find($transaction->source_account_id);
@@ -231,11 +173,6 @@ class TransactionController extends Controller
     return TransactionResource::make($transaction);
   }
 
-
-
-
-
-
   public function destroy(Transaction $transaction)
   {
     $transaction->delete();
@@ -243,4 +180,16 @@ class TransactionController extends Controller
     return response()->noContent();
   }
 
+  public function dashboard(Request $request)
+  {
+    $expenses = Transaction::where('user_id', auth()->id())->where('transaction_type', TransactionType::EXPENSE)->sum('amount');
+    $incomes = Transaction::where('user_id', auth()->id())->where('transaction_type', TransactionType::INCOME)->sum('amount');
+    $totalBalance = Account::where('user_id', auth()->id())->sum('balance');
+
+    return response()->json([
+      'expenses' => $expenses,
+      'incomes' => $incomes,
+      'total_balance' => $totalBalance
+    ]);
+  }
 }

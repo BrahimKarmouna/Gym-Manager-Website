@@ -1,11 +1,11 @@
 <template>
 
   <CreateIncome v-model:visible="showCreateDialog"
-              @created="handleCreated" />
+                @created="handleCreated" />
 
   <EditIncome v-model:visible="showEditDialog"
-            @updated="handleUpdated"
-            :id="itemToEdit?.id" />
+              @updated="handleUpdated"
+              :id="itemToEdit?.id" />
 
   <!-- income  -->
   <q-table flat
@@ -16,24 +16,23 @@
            :filter="filter"
            :pagination="{ rowsPerPage: 15 }"
            :loading="loadingTransfer"
-           @request="onRequest"
-          >
+           @request="onRequest">
 
-     <template v-slot:header-selection="scope">
-              <q-checkbox v-model="scope.selected" />
-     </template>
+    <template v-slot:header-selection="scope">
+      <q-checkbox v-model="scope.selected" />
+    </template>
 
     <template v-slot:top>
       <q-btn color="green-8 dark:bg-green-900 "
-      class=" dark:text-gray-200"
+             class=" dark:text-gray-200"
              :disable="loading"
              label="Add Income"
              @click="showCreateDialog = true" />
 
       <q-space />
 
-      <q-input v-model="search"
-
+      <q-input outlined v-model="search"
+               label="Search..."
                type="search"
                dense>
         <template v-slot:append>
@@ -106,7 +105,7 @@ export default {
 
 
 
-    const { data, fetch, loading: loadingTransfer } = useResourceIndex('transactions?type=income');
+    const { data, fetch, loading: loadingTransfer } = useResourceIndex('transactions?transaction_type=income');
 
     onMounted(() => {
       fetch();

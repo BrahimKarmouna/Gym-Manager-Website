@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\CurrentUserController;
 use App\Http\Controllers\Api\OtherBrowserSessionsController;
-use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfilePhotoController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TransactionController;
@@ -43,8 +42,6 @@ Route::get('accounts/{account}/transfers', [AccountController::class, 'transfers
 Route::get('accounts/{account}/incomes', [AccountController::class, 'incomes'])->name('accounts.incomes');
 Route::get('accounts/{account}/expenses', [AccountController::class, 'expenses'])->name('accounts.expenses');
 
-//! POSTS
-Route::apiResource('posts', PostController::class);
-
 //! Transactions
+Route::get('transactions/dashboard', [TransactionController::class, 'dashboard']);
 Route::apiResource('transactions', TransactionController::class);

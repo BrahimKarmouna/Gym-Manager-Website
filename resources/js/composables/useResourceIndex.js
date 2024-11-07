@@ -1,54 +1,112 @@
-import { api } from "../boot/axios";
-import { ref, toValue, watchEffect } from "vue";
+import { useQuasar } from "quasar";
+import { reactive, ref, toValue } from "vue";
+import { useFetch } from "./useFetch";
 
-export function useResourceIndex(resource) {
+export function useResourceIndex(
+  resource,
+  initOptions = {},
+  { onSuccess, onError, onFinally, config } = {}
+) {
+  const $q = useQuasar();
+
+  const options = reactive({
+    search: null,
+    pagination: {
+      sortBy: null,
+      descending: false,
+      page: 1,
+      rowsNumber: 0,
+      rowsPerPage: initOptions.pagination?.rowsPerPage ?? 10,
+      from: 0,
+      to: 0,
+    },
+
+    filters: initOptions.filters ?? {},
+
+    meta: {},
+  });
+
   const data = ref(null);
 
-  const loading = ref(false);
+  const { loading, initialLoading, execute } = useFetch({
+    config,
 
-  const pagination = ref({
-    rowsPerPage: 10,
-    rowsNumber: 0,
-    page: 1,
-  });
+    onSuccess(resp) {
+      data.value = resp.data.data;
 
-  const filter = ref("");
+      if (onSuccess) onSuccess(resp);
 
-  async function fetch() {
-    loading.value = true;
+      if (!resp.data.meta) return;
 
-    return await api
-      .get(toValue(resource))
-      .then((response) => {
-        data.value = response.data.data;
+      // Extract pagination
+      options.pagination.rowsPerPage = resp.data.meta.per_page;
+      options.pagination.page = resp.data.meta.current_page;
+      options.pagination.from = resp.data.meta.from;
+      options.pagination.to = resp.data.meta.to;
+      options.pagination.rowsNumber = resp.data.meta.total;
 
-        if (!response.data.meta) {
-          return;
-        }
+      // Extract meta
+      options.meta = resp.data.meta;
+    },
 
-        pagination.value.rowsNumber = response.data.meta.total;
-        pagination.value.page = response.data.meta.current_page;
-        pagination.value.rowsPerPage = response.data.meta.per_page;
-      })
-      .catch((error) => {
-        throw error;
-      })
-      .finally(() => {
-        loading.value = false;
+    onError(err) {
+      $q.notify({
+        type: "negative",
+        message: "Error",
+        caption:
+          err.response.data.message ??
+          "Something went wrong. Please try again.",
+        closeBtn: true,
+        timeout: 3000,
       });
-  }
 
-  watchEffect(() => {
-    const _ = toValue(resource);
+      if (onError) onError(err);
+    },
 
-    data.value = null;
+    onFinally() {
+      if (onFinally) onFinally();
+    },
   });
+
+  const getSortBy = () => {
+    if (!options.pagination.sortBy) return null;
+
+    return `${options.pagination.descending ? "-" : ""}${
+      options.pagination.sortBy
+    }`;
+  };
+
+  const fetch = async () => {
+    return await execute({
+      config: {
+        url: toValue(resource),
+        params: {
+          page: options.pagination.page,
+          search: options.search,
+          per_page: options.pagination.rowsPerPage,
+          sort: getSortBy(),
+          filter: options.filters,
+        },
+      },
+    });
+  };
+
+  const onRequest = ({ pagination, filter }) => {
+    options.filters = filter;
+    options.pagination.page = pagination.page;
+    options.pagination.rowsPerPage = pagination.rowsPerPage;
+    options.pagination.sortBy = pagination.sortBy;
+    options.pagination.descending = pagination.descending;
+
+    fetch();
+  };
 
   return {
-    data,
-    pagination,
-    filter,
+    options,
     loading,
+    initialLoading,
+    data,
+    onRequest,
     fetch,
   };
 }

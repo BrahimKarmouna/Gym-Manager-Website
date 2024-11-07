@@ -1,36 +1,29 @@
 <template>
   <q-page padding>
 
-    <div class="grid w-full grid-cols-2 gap-5 sm:grid-cols-2 xl:grid-cols-4 mb-5">
-      <div
-           class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="w-full">
-          <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Transfer</h3>
-          <span
-                class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">$1,340</span>
-        </div>
-      </div>
+
+    <div class="grid w-full grid-cols-1 md:grid-cols-3 gap-5 mb-5">
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
           <span
-                class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">$2,340</span>
+                class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ formatter.format(transactions.incomes) }}</span>
         </div>
       </div>
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expense</h3>
-          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">$2,340</span>
+          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ formatter.format(transactions.expenses) }}</span>
 
         </div>
       </div>
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
-          <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total</h3>
-          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">$2,340</span>
+          <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Balance</h3>
+          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ formatter.format(transactions.total_balance) }}</span>
 
         </div>
       </div>
@@ -62,25 +55,28 @@
   </q-page>
 </template>
 
-<script>
+<script setup>
+import { useResourceIndex } from '../../composables/useResourceIndex';
+import { onMounted } from 'vue';
 import { ref } from 'vue';
-import { useQuasar } from 'quasar';
+import { useMoney } from '../../composables/useMoney';
 
-export default {
-  setup() {
-    const $q = useQuasar();
-    const loading = ref(false);
-    const filter = ref('');
-    const rows = ref([]);
-    const dialog = ref(false);
-    const totalTransfers = ref(0);
+const tab = ref('Transfer');
 
-    // call Account, transaction_categories
-    return {
-      tab: ref('Transfer'),
-    }
-  },
+const transactions = ref({});
+
+const formatter = useMoney('USD');
+
+async function fetchTransactions() {
+  try {
+    const response = await axios.get('/api/transactions/dashboard');
+
+    transactions.value = response.data;
+
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+  }
 };
 
-
+onMounted(fetchTransactions);
 </script>

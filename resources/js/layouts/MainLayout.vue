@@ -11,10 +11,10 @@
                icon="sym_r_menu"
                @click="toggleLeftDrawer" />
 
-        <q-toolbar-title>
+        <q-toolbar-title class="flex items-center">
           <q-avatar>
-            <q-icon name="svguse:/icons.svg#logo"
-                    size="1.8em"
+            <q-icon name="sym_r_currency_exchange"
+                    size="sm"
                     class="text-dark dark:text-white" />
           </q-avatar>
           Money Manager
@@ -108,21 +108,19 @@ const linksList = [
 {
     title: 'Dashboad',
     icon: 'sym_r_dashboard',
-    to: { name: 'Dashboard.index' }
+    to: { name: 'dashboard.index' },
+    exact: true
   },
-
   {
     title: 'Account',
     icon: 'sym_r_account_balance',
-    to: { name: 'account.indexAccount' }
+    to: { name: 'account.index-account' }
   },
-
   {
     title: 'Transactions',
     icon: 'sym_r_money',
     to: { name: 'transaction.index' }
   },
-
   {
     title: 'Categories',
     icon: 'sym_r_category',

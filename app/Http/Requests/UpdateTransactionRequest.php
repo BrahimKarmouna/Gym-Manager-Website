@@ -34,7 +34,7 @@ class UpdateTransactionRequest extends FormRequest
         'exists:accounts,id',
         'different:destination_account_id',
       ],
-      'destination_account_id' => ['nullable', 'integer', 'exists:accounts,id', 'different:source_account_id', 'required_if:transaction_type,' . TransactionType::TRANSFER->value],
+      'destination_account_id' => ['nullable', 'integer', 'exists:accounts,id', 'different:source_account_id'],
       'note' => ['nullable', 'string', 'max:255'],
       'category_id' => ['required', 'integer', 'exists:categories,id'],
     ];

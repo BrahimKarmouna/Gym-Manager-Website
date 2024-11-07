@@ -38,26 +38,30 @@
     </q-dialog>
 
     <section class="py-8 antialiased md:py-16">
-      <q-btn @click="openCreateModal" color="primary" icon="sym_r_add" label="Create" />
       <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
-        <div class="mb-4 flex items-center justify-between gap-4 md:mb-8">
+        <div class="mb-4 flex items-center justify-between md:mb-8">
           <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Shop by category</h2>
+          <q-btn @click="openCreateModal" color="primary" icon="sym_r_add" label="Create" />
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div v-for="transactionCategory in data" :key="transactionCategory.id"
-            class="flex items-center rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+            class="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
 
-            <img v-if="transactionCategory.emoji"
-              :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${transactionCategory.emoji}.png`"
-              class="me-2 w-6">
+            <div class="flex items-center">
+              <img v-if="transactionCategory.emoji"
+                :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${transactionCategory.emoji}.png`"
+                class="me-2 w-6">
 
-            <span class="text-sm font-medium text-gray-900 ">
-              {{ transactionCategory.name }}
-            </span>
+              <span class="text-sm font-medium text-gray-900">
+                {{ transactionCategory.name.length > 17 ? transactionCategory.name.substring(0, 17) + '...' : transactionCategory.name }}
+              </span>
+            </div>
 
-            <q-btn flat class="pe-0 ms-2" color="primary" icon="edit" @click.stop="editeItem(transactionCategory)" />
-            <q-btn flat class="ps-0" color="primary" icon="delete" @click.stop="deleteItem(transactionCategory)" />
+            <div>
+              <q-btn flat class=" p-2" color="primary" icon="edit" @click.stop="editeItem(transactionCategory)" />
+              <q-btn flat class="p-2 text-negative" icon="delete" @click.stop="deleteItem(transactionCategory)" />
+            </div>
           </div>
 
         </div>

@@ -20,6 +20,7 @@ class AccountResource extends JsonResource
         'email' => $this->whenHas('email'),
         'rib'=> $this->whenHas('rib'),
         'balance' => $this->whenHas('balance'),
+        'account_type' => $this->whenHas('account_type'),
         'expenses' => TransactionResource::collection($this->expenses),
         'incomes' => TransactionResource::collection($this->incomes),
         'transfers' => TransactionResource::collection($this->transfers),

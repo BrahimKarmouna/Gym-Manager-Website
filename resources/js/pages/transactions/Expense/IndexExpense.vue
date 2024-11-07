@@ -106,7 +106,7 @@ export default {
 
 
 
-    const { data, fetch, loading: loadingTransfer } = useResourceIndex('transactions?type=expense');
+    const { data, fetch, loading: loadingTransfer } = useResourceIndex('transactions?transaction_type=expense');
 
     onMounted(() => {
       fetch();

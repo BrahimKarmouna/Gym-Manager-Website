@@ -3,6 +3,10 @@
   <CreateAccount v-model:visible="showCreateAccountModal"
                  @created="handleCreated" />
 
+  <EditForm v-model:visible="showEditDialog"
+            @updated="handleUpdated"
+            :id="selectedAccount?.id" />
+
   <q-page :class="{ 'overflow-hidden': loading }"
           :style-fn="(offset) => ({ height: `calc(100vh - ${offset}px)` })">
 
@@ -12,8 +16,9 @@
         <div
              class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div class="w-full">
-            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400   ">Accounts number</h3>
-            <span class=" pt-4 m-4 mt-3text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ totalAccounts }}</span>
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Accounts number</h3>
+            <span class=" pt-4 m-4 mt-3text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
+              totalAccounts }}</span>
           </div>
           <div class="w-full"
                id="new-products-chart"></div>
@@ -22,7 +27,8 @@
              class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div class="w-full">
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
-            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">$2,340</span>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
+              formatter.format(totalIncome) }}</span>
             <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
               <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
                 <svg class="w-4 h-4"
@@ -47,7 +53,8 @@
              class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div class="w-full">
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expenses</h3>
-            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">$2,340</span>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
+              formatter.format(totalExpense) }}</span>
             <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
               <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
                 <svg class="w-4 h-4"
@@ -77,7 +84,8 @@
 
         <div class="flex items-center justify-between mb-4">
           <div class="flex-shrink-0">
-            <span class="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">{{ formatter.format(totalBalance) }}</span>
+            <span class="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">{{
+              formatter.format(totalBalance) }}</span>
             <h3 class="text-base font-light text-gray-500 dark:text-gray-400">Total accounts Balance</h3>
           </div>
           <div class="flex items-center justify-end flex-1 text-base font-medium text-green-500 dark:text-green-400">
@@ -155,8 +163,8 @@
             </div>
           </div>
           <div class="flex-shrink-0">
-            <a href="#"
-               class="inline-flex items-center p-2 text-xs font-medium  rounded-lg text-primary-700 sm:text-sm hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700">
+            <q-btn :to="{ name: 'transaction.index' }"
+                   class="inline-flex items-center p-2 text-xs font-medium  rounded-lg text-primary-700 sm:text-sm hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700">
               See all transactions
               <svg class="w-4 h-4 ml-1"
                    fill="none"
@@ -168,27 +176,16 @@
                       stroke-width="2"
                       d="M9 5l7 7-7 7"></path>
               </svg>
-            </a>
+            </q-btn>
           </div>
         </div>
       </div>
 
-      <div class=" py-5 bg-gray-100 rounded-xl dark:bg-gray-800">
-        <h1 class="font-semibold text-2xl text-gray-700 dark:text-white">Add New Bank Account</h1>
 
-        <div class="grid grid-cols-4 gap-4">
+      <h1 class="font-semibold text-2xl text-gray-700 dark:text-white py-6 ">Add New Bank Account</h1>
 
 
-          <!-- <div v-for="account in accounts" :key="account.id" class="bg-white rounded-lg shadow p-4">
-          <h2 class="text-xl font-semibold">{{ account.name }}</h2>
-          <p>RIB: {{ account.rib }}</p>
-          <p>Balance: {{ account.balance }}</p>
-          <p>Type: {{ account.account_type }}</p>
-        </div> -->
-        </div>
-      </div>
-
-      <div class="grid relative grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-stretch gap-4">
+      <div class="grid relative grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-stretch gap-4 h-60 ">
         <q-btn unelevated
                label="+"
                padding="0"
@@ -240,11 +237,6 @@
                 </div>
               </div>
 
-              <!-- <q-btn unelevated
-         class="bg-green-500 whitespace-nowrap rounded-lg">
-    Check it Now
-  </q-btn> -->
-
               <q-skeleton type="QBtn" />
 
             </div>
@@ -277,7 +269,7 @@
                     <q-item class="rounded-lg"
                             clickable
                             v-close-popup
-                            @click="editeItem(account)">
+                            @click="editItem(account)">
                       <q-item-section class="flex-auto">
                         <q-icon name="sym_r_edit"
                                 size="xs" />
@@ -323,7 +315,10 @@
 
 
               <q-btn unelevated
-              class="bg-green-500 whitespace-nowrap text-white rounded-lg font-semibold text-xs" @click="checkItem(account)">Check it Now</q-btn>
+                     class="bg-green-500 whitespace-nowrap text-white rounded-lg font-semibold text-xs"
+                     :to="{ name: 'account.transfers', params: { id: account.id } }">
+                Check it Now
+              </q-btn>
 
             </div>
             <span class="text-gray-200 text-sm flex-nowrap">Added {{ account.created_at }}</span>
@@ -334,12 +329,11 @@
     </div>
   </q-page>
 
-
-
 </template>
 
 <script setup>
 import CreateAccount from './CreateAccount.vue';
+import EditForm from './EditForm.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useMoney } from '@/composables/useMoney';
@@ -354,6 +348,7 @@ const router = useRouter();
 const formatter = useMoney('USD');
 
 const showCreateAccountModal = ref(false);
+const showEditDialog = ref(false);
 const selectedAccount = ref(null); // Account to be deleted
 const confirm = ref(false); // Controls dialog visibility
 
@@ -361,6 +356,8 @@ const accounts = ref([]);
 const loading = ref(false);
 const totalAccounts = ref(0);
 const totalBalance = ref(0);
+const totalExpense = ref(0);
+const totalIncome = ref(0);
 
 const deleteAccount = (account) => {
   $q.dialog({
@@ -386,6 +383,8 @@ async function fetchAccounts() {
     accounts.value = response.data.data;
     totalAccounts.value = response.data.total;
     totalBalance.value = response.data.totalBalance;
+    totalExpense.value = response.data.totalExpense;
+    totalIncome.value = response.data.totalIncome;
 
   } catch (error) {
     console.error('Error fetching accounts:', error);
@@ -394,8 +393,9 @@ async function fetchAccounts() {
   }
 };
 
-const checkItem = (account) => {
-  router.push({ name: "account.show", params: { id: account.id } });
+const editItem = (account) => {
+  selectedAccount.value = account;
+  showEditDialog.value = true;
 };
 
 const handleCreated = () => {
@@ -403,7 +403,11 @@ const handleCreated = () => {
   fetchAccounts();
 };
 
+const handleUpdated = () => {
+  showEditDialog.value = false;
+  fetchAccounts();
+};
+
 // Fetch accounts when the component mounts
 onMounted(fetchAccounts);
 </script>
-

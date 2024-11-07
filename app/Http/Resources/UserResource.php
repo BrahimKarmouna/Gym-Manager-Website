@@ -18,7 +18,7 @@ class UserResource extends JsonResource
       'id' => $this->whenHas('id'),
       'name' => $this->whenHas('name'),
       'email' => $this->whenHas('email'),
-
+      'profile_photo_url' => $this->whenAppended('profile_photo_url'),
     ];
   }
 }

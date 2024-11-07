@@ -161,6 +161,7 @@ const onSubmit = () => {
         timeout: 3000
       });
 
+      visible.value = false;
       onReset();
       emit('created');
     }

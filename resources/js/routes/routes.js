@@ -136,22 +136,6 @@ const routes = [
             ],
           },
 
-
-          // Posts
-          {
-            path: "posts",
-            name: "posts.index",
-            props: true,
-            component: () => import("../pages/posts/IndexPage.vue"),
-          },
-
-          {
-            path: "posts/:id",
-            name: "posts.show",
-            props: true,
-            component: () => import("../pages/posts/ShowPage.vue"),
-          },
-
           //account
           {
             path: "account",
@@ -159,10 +143,9 @@ const routes = [
             children: [
               {
                 path: "",
-                name: "account.indexAccount",
+                name: "account.index-account",
                 component: () => import("../pages/accounts/IndexAccount.vue"),
               },
-
               {
                 path: "show/:id",
                 props: true,
