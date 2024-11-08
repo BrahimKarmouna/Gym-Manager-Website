@@ -58,9 +58,15 @@ class AccountController extends Controller
   public function show(Account $account)
   {
     $account->load('incomes', 'expenses', 'transfers');
+    $account->loadSum(['incomes', 'expenses'], 'amount');
+    // $account->loadSum('expenses', 'amount');
+
+    // $accountIncome = $account->incomes->sum('amount');
+    // $accountExpense = $account->expenses->sum('amount');
 
     return AccountResource::make($account);
   }
+
 
   // Update a specific account
   public function update(UpdateAccountRequest $request, $id)

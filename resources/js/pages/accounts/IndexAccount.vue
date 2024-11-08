@@ -66,287 +66,35 @@
       </div>
 
 
-      <!-- 2 columns -->
-      <div
-           class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex-shrink-0">
-            <span class="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">{{
-              formatter.format(totalBalance) }}</span>
-            <h3 class="text-base font-light text-gray-500 dark:text-gray-400">Total accounts Balance</h3>
-          </div>
-          <div class="flex items-center justify-end flex-1 text-base font-medium text-green-500 dark:text-green-400">
-            <path fill-rule="evenodd"
-                  d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
-                  clip-rule="evenodd"></path>
-          </div>
-        </div>
-
-        <!-- Card Footer -->
-        <div class="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
-          <div>
-            <button class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                    type="button"
-                    data-dropdown-toggle="weekly-sales-dropdown">Last 7 days transactions <svg class="w-4 h-4 ml-2"
-                   fill="none"
-                   stroke="currentColor"
-                   viewBox="0 0 24 24"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 9l-7 7-7-7"></path>
-              </svg></button>
-            <!-- Dropdown menu -->
-            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
-                 id="weekly-sales-dropdown">
-              <div class="px-4 py-3"
-                   role="none">
-                <p class="text-sm font-medium text-gray-900 truncate dark:text-white"
-                   role="none">
-                  Sep 16, 2021 - Sep 22, 2021
-                </p>
-              </div>
-              <ul class="py-1"
-                  role="none">
-                <li>
-                  <a href="#"
-                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                     role="menuitem">Yesterday</a>
-                </li>
-                <li>
-                  <a href="#"
-                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                     role="menuitem">Today</a>
-                </li>
-                <li>
-                  <a href="#"
-                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                     role="menuitem">Last 7 days</a>
-                </li>
-                <li>
-                  <a href="#"
-                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                     role="menuitem">Last 30 days</a>
-                </li>
-                <li>
-                  <a href="#"
-                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                     role="menuitem">Last 90 days</a>
-                </li>
-              </ul>
-              <div class="py-1"
-                   role="none">
-                <a href="#"
-                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-                   role="menuitem">Custom...</a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <!-- <div v-for="account in accounts"
-             :key="account.id">
-          <h3>{{ account.name }}</h3>
-
-
-        </div> -->
-        <div
-             class="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
-          <div>
-            <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white mt-5">Last Transactions</h3>
-            <div class="max-h-72 px-6 overflow-y-auto">
-              <div v-if="transactions.length > 0"
-                   v-for="transaction in transactions"
-                   class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
-
-                <dl class="w-1/2 sm:w-48">
-                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction ID:</dt>
-                  <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                    <a href="#"
-                       class="hover:underline">#{{ transaction.id }}</a>
-                  </dd>
-                </dl>
-
-                <dl class="w-1/2 sm:w-48">
-                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">From:</dt>
-                  <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                    {{ transaction.sourceAccount?.name ?? "N/A" }}
-                  </dd>
-                </dl>
-
-                <dl class="w-1/2 sm:w-48">
-                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">to:</dt>
-                  <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                    {{ transaction.destinationAccount?.name ?? "N/A" }}
-                  </dd>
-                </dl>
-
-                <dl class="w-1/2 sm:w-1/4 md:flex-1 lg:w-auto">
-                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Date:</dt>
-                  <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transaction.date }}</dd>
-                </dl>
-
-                <dl class="w-1/2 sm:w-1/5 md:flex-1 lg:w-auto">
-                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Amount:</dt>
-                  <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">${{ transaction.amount }}
-                  </dd>
-                </dl>
-
-                <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
-                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction:</dt>
-                  <dd
-                      class="mt-1.5 inline-flex items-center rounded bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
-                    <svg class="me-1 h-3 w-3"
-                         aria-hidden="true"
-                         xmlns="http://www.w3.org/2000/svg"
-                         width="24"
-                         height="24"
-                         fill="none"
-                         viewBox="0 0 24 24">
-                      <path stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 18 17.94 6M18 18 6.06 6"></path>
-                    </svg>
-                    {{ transaction.transaction_type }}
-                  </dd>
-                </dl>
-
-                <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
-                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Note:</dt>
-                  <dd class="">
-
-                    {{ transaction.note }}
-                  </dd>
-                </dl>
-
-                <!-- <div class="w-full sm:flex sm:w-32 sm:items-center sm:justify-end sm:gap-4">
-                  <button id="actionsMenuDropdownModal11"
-                          data-dropdown-toggle="dropdownOrderModal11"
-                          type="button"
-                          class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 md:w-auto">
-                    Actions
-                    <svg class="-me-0.5 ms-1.5 h-4 w-4"
-                         aria-hidden="true"
-                         xmlns="http://www.w3.org/2000/svg"
-                         width="24"
-                         height="24"
-                         fill="none"
-                         viewBox="0 0 24 24">
-                      <path stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m19 9-7 7-7-7"></path>
-                    </svg>
-                  </button>
-                  <div id="dropdownOrderModal11"
-                       class="z-10 hidden w-40 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
-                       data-popper-reference-hidden=""
-                       data-popper-escaped=""
-                       data-popper-placement="bottom">
-                    <ul class="p-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400"
-                        aria-labelledby="actionsMenuDropdown11">
-                      <li>
-                        <a href="#"
-                           class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
-                          <svg class="me-1.5 h-4 w-4 text-gray-400 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                               aria-hidden="true"
-                               xmlns="http://www.w3.org/2000/svg"
-                               width="24"
-                               height="24"
-                               fill="none"
-                               viewBox="0 0 24 24">
-                            <path stroke="currentColor"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4">
-                            </path>
-                          </svg>
-                          <span>Order again</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#"
-                           class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
-                          <svg class="me-1.5 h-4 w-4 text-gray-400 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                               aria-hidden="true"
-                               xmlns="http://www.w3.org/2000/svg"
-                               width="24"
-                               height="24"
-                               fill="none"
-                               viewBox="0 0 24 24">
-                            <path stroke="currentColor"
-                                  stroke-width="2"
-                                  d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"></path>
-                            <path stroke="currentColor"
-                                  stroke-width="2"
-                                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
-                          </svg>
-                          Order details
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div> -->
-              </div>
-              <div v-else>No incomes found</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex justify-end my-3 ">
-
-          <q-btn :to="{ name: 'transaction.index' }"
-                 class="inline-flex items-center p-2 text-xs font-medium  rounded-lg text-primary-700 sm:text-sm hover:bg-gray-100 dark:text-primary-500 dark:hover:bg-gray-700">
-            See all transactions
-            <svg class="w-4 h-4 ml-1"
-                 fill="none"
-                 stroke="currentColor"
-                 viewBox="0 0 24 24"
-                 xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5l7 7-7 7"></path>
-            </svg>
-          </q-btn>
-
-        </div>
-
+      <!-- Accounts list -->
+      <div class="font-semibold text-md text-2xl text-gray-700 dark:text-white mb-3">
+        Add new account :
       </div>
 
+      <div class="grid grid-cols-1 relative md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-start gap-4"
+           style="grid-auto-rows: 240px !important;">
 
-      <h1 class="font-semibold text-2xl text-gray-700 dark:text-white py-6 ">Add new account :</h1>
-
-
-      <div class="grid relative grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-stretch gap-4">
         <q-btn unelevated
                label="+"
                padding="0"
-               class="bg-gray-300 text-8xl font-bold text-gray-700 rounded-2xl border"
+               class="bg-gray-300 self-stretch text-8xl font-bold text-gray-700 rounded-2xl border"
                @click="showCreateAccountModal = true" />
 
         <template v-if="loading">
 
           <section v-for="(_, index) in Array.from({ length: 20 })"
                    :key="index"
-                   class="h-full p-4 rounded-2xl shadow-lg overflow-hidden bg-gradient-to-tl from-gray-400 to-gray-600">
+                   class="p-4 rounded-2xl self-stretch bg-green-500 shadow-lg overflow-hidden bg-gradient-to-tl from-gray-400 to-gray-600">
 
             <!-- Header -->
             <header class="flex text-white z-20 mb-4">
               <q-icon name="sym_r_account_balance"
                       size="md" />
 
-              <q-btn icon="sym_r_more_vert"
-                     unelevated
-                     padding="sm"
-                     size="sm"
-                     class="ms-auto" />
+
+              <q-skeleton type="QBtn"
+                          class="w-10 ms-auto" />
+
             </header>
 
             <!-- Body -->
@@ -387,7 +135,7 @@
         <template v-else>
           <section v-for="account in accounts"
                    :key="account.id"
-                   class="h-full p-4 rounded-2xl shadow-lg overflow-hidden bg-gradient-to-tl from-gray-400 to-gray-600">
+                   class="p-4 rounded-2xl self-stretch shadow-lg overflow-hidden bg-gradient-to-tl from-gray-400 to-gray-600">
 
             <!-- Header -->
             <header class="flex text-white z-20 mb-4">
@@ -466,7 +214,240 @@
 
           </section>
         </template>
+
+        <!-- Latest transactions -->
+        <div
+             class="flex flex-col flex-nowrap row-span-3 self-stretch md:col-end-3 md:col-span-2 xl:col-end-4 2xl:col-end-5 col-span-1 2xl:col-span-2 row-end-1 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex-shrink-0">
+              <span class="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">{{
+                formatter.format(totalBalance) }}</span>
+              <h3 class="text-base font-light text-gray-500 dark:text-gray-400">Total accounts Balance</h3>
+            </div>
+            <div class="flex items-center justify-end flex-1 text-base font-medium text-green-500 dark:text-green-400">
+              <path fill-rule="evenodd"
+                    d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"></path>
+            </div>
+          </div>
+
+          <!-- Card Header -->
+          <div class="flex items-center justify-between border-t my-2 border-gray-200 dark:border-gray-700">
+            <div>
+              <button class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                      type="button"
+                      data-dropdown-toggle="weekly-sales-dropdown">Last 7 days transactions <svg class="w-4 h-4 ml-2"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"></path>
+                </svg></button>
+              <!-- Dropdown menu -->
+              <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                   id="weekly-sales-dropdown">
+                <div class="px-4 py-3"
+                     role="none">
+                  <p class="text-sm font-medium text-gray-900 truncate dark:text-white"
+                     role="none">
+                    Sep 16, 2021 - Sep 22, 2021
+                  </p>
+                </div>
+                <ul class="py-1"
+                    role="none">
+                  <li>
+                    <a href="#"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                       role="menuitem">Yesterday</a>
+                  </li>
+                  <li>
+                    <a href="#"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                       role="menuitem">Today</a>
+                  </li>
+                  <li>
+                    <a href="#"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                       role="menuitem">Last 7 days</a>
+                  </li>
+                  <li>
+                    <a href="#"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                       role="menuitem">Last 30 days</a>
+                  </li>
+                  <li>
+                    <a href="#"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                       role="menuitem">Last 90 days</a>
+                  </li>
+                </ul>
+                <div class="py-1"
+                     role="none">
+                  <a href="#"
+                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+                     role="menuitem">Custom...</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Card Body -->
+          <div
+               class="rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last Transactions</h3>
+            <div v-if="transactions.length > 0"
+                 v-for="transaction in transactions"
+                 class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
+
+              <dl class="w-1/2 sm:w-48">
+                <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction ID:</dt>
+                <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                  <a href="#"
+                     class="hover:underline">#{{ transaction.id }}</a>
+                </dd>
+              </dl>
+
+              <dl class="w-1/2 sm:w-48">
+                <dt class="text-base font-medium text-gray-500 dark:text-gray-400">From:</dt>
+                <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                  {{ transaction.sourceAccount?.name ?? "N/A" }}
+                </dd>
+              </dl>
+
+              <dl class="w-1/2 sm:w-48">
+                <dt class="text-base font-medium text-gray-500 dark:text-gray-400">to:</dt>
+                <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                  {{ transaction.destinationAccount?.name ?? "N/A" }}
+                </dd>
+              </dl>
+
+              <dl class="w-1/2 sm:w-1/4 md:flex-1 lg:w-auto">
+                <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Date:</dt>
+                <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transaction.date }}</dd>
+              </dl>
+
+              <dl class="w-1/2 sm:w-1/5 md:flex-1 lg:w-auto">
+                <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Amount:</dt>
+                <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">${{ transaction.amount }}
+                </dd>
+              </dl>
+
+              <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
+                <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction:</dt>
+                <dd
+                    class="mt-1.5 inline-flex items-center rounded bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
+                  <svg class="me-1 h-3 w-3"
+                       aria-hidden="true"
+                       xmlns="http://www.w3.org/2000/svg"
+                       width="24"
+                       height="24"
+                       fill="none"
+                       viewBox="0 0 24 24">
+                    <path stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18 17.94 6M18 18 6.06 6"></path>
+                  </svg>
+                  {{ transaction.transaction_type }}
+                </dd>
+              </dl>
+
+              <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
+                <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Note:</dt>
+                <dd class="">
+
+                  {{ transaction.note }}
+                </dd>
+              </dl>
+
+              <!-- <div class="w-full sm:flex sm:w-32 sm:items-center sm:justify-end sm:gap-4">
+                  <button id="actionsMenuDropdownModal11"
+                          data-dropdown-toggle="dropdownOrderModal11"
+                          type="button"
+                          class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 md:w-auto">
+                    Actions
+                    <svg class="-me-0.5 ms-1.5 h-4 w-4"
+                         aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="24"
+                         height="24"
+                         fill="none"
+                         viewBox="0 0 24 24">
+                      <path stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m19 9-7 7-7-7"></path>
+                    </svg>
+                  </button>
+                  <div id="dropdownOrderModal11"
+                       class="z-10 hidden w-40 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"
+                       data-popper-reference-hidden=""
+                       data-popper-escaped=""
+                       data-popper-placement="bottom">
+                    <ul class="p-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400"
+                        aria-labelledby="actionsMenuDropdown11">
+                      <li>
+                        <a href="#"
+                           class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
+                          <svg class="me-1.5 h-4 w-4 text-gray-400 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                               aria-hidden="true"
+                               xmlns="http://www.w3.org/2000/svg"
+                               width="24"
+                               height="24"
+                               fill="none"
+                               viewBox="0 0 24 24">
+                            <path stroke="currentColor"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4">
+                            </path>
+                          </svg>
+                          <span>Order again</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#"
+                           class="group inline-flex w-full items-center rounded-md px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">
+                          <svg class="me-1.5 h-4 w-4 text-gray-400 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                               aria-hidden="true"
+                               xmlns="http://www.w3.org/2000/svg"
+                               width="24"
+                               height="24"
+                               fill="none"
+                               viewBox="0 0 24 24">
+                            <path stroke="currentColor"
+                                  stroke-width="2"
+                                  d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"></path>
+                            <path stroke="currentColor"
+                                  stroke-width="2"
+                                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
+                          </svg>
+                          Order details
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div> -->
+            </div>
+            <div v-else>No incomes found</div>
+          </div>
+
+          <q-btn :to="{ name: 'transaction.index' }"
+                 unelevated
+                 label="See all transactions"
+                 icon-right="chevron_right"
+                 class="rounded-lg sm:text-sm ms-auto mt-3" />
+        </div>
       </div>
+
     </div>
   </q-page>
 
