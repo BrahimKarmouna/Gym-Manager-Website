@@ -26,7 +26,7 @@
             </svg>
           </div>
           <div>
-            <span class="block text-2xl font-bold dark:text-white">62</span>
+            <span class="block text-2xl font-bold dark:text-white">{{ data.transfers }}</span>
             <span class="block text-gray-500 dark:text-gray-400">Transfers</span>
           </div>
         </div>
@@ -45,7 +45,7 @@
             </svg>
           </div>
           <div>
-            <span class="block text-2xl font-bold  dark:text-white">6.8</span>
+            <span class="block text-2xl font-bold  dark:text-white">{{ data.incomes }}</span>
             <span class="block  dark:text-gray-400">Income</span>
           </div>
         </div>
@@ -64,7 +64,7 @@
             </svg>
           </div>
           <div>
-            <span class="inline-block text-2xl font-bold dark:text-white">9</span>
+            <span class="inline-block text-2xl font-bold dark:text-white">{{ data.expenses }}</span>
             <span class="inline-block text-xl text-gray-500 font-semibold dark:text-gray-400">(14%)</span>
             <span class="block text-gray-500">Expense</span>
           </div>
@@ -119,4 +119,28 @@
 </template>
 
 <script setup>
+import axios from "axios";
+import { ref, onMounted } from "vue";
+import { useFetch } from "../../composables/useFetch.js"
+
+const data = ref(null);
+
+const { execute: fetchData, loading } = useFetch({
+  config: {
+    url: 'dashboard'
+  },
+
+  onSuccess: (response) => {
+    data.value = response.data;
+  },
+
+  onError: (err) => {
+    console.log({ err });
+  }
+})
+
+onMounted(() => {
+  fetchData()
+})
+
 </script>
