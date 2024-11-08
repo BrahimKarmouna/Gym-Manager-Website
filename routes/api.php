@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\CurrentUserController;
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OtherBrowserSessionsController;
 use App\Http\Controllers\Api\ProfilePhotoController;
 use App\Http\Controllers\Api\CategoryController;
@@ -45,3 +46,6 @@ Route::get('accounts/{account}/expenses', [AccountController::class, 'expenses']
 //! Transactions
 Route::get('transactions/dashboard', [TransactionController::class, 'dashboard']);
 Route::apiResource('transactions', TransactionController::class);
+
+//! Dashboard
+Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
