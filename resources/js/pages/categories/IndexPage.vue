@@ -40,6 +40,145 @@
     <section class="py-8 antialiased md:py-16">
       <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <div class="mb-4 flex items-center justify-between md:mb-8">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add a Transfer category</h2>
+
+          <div><q-btn @click="openCreateModal" color="green-500 dark:bg-blue-900 " icon="sym_r_add" c label="Create" /></div>
+
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div v-for="transactionCategory in data" :key="transactionCategory.id"
+            class="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+
+            <div class="flex items-center">
+              <img v-if="transactionCategory.emoji"
+                :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${transactionCategory.emoji}.png`"
+                class="me-2 w-6">
+
+              <span class="text-sm font-medium text-gray-900 dark:text-white">
+                {{ transactionCategory.name.length > 17 ? transactionCategory.name.substring(0, 17) + '...' : transactionCategory.name }}
+              </span>
+            </div>
+
+            <div>
+              <q-btn flat class=" p-2" color="primary dark:text-gray-400" icon="edit" @click.stop="editeItem(transactionCategory)" />
+              <q-btn flat class="p-2 text-negative" icon="delete" color="red dark:text-red-800" @click.stop="deleteItem(transactionCategory)" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <q-dialog v-model="showCreateDialog" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="flex justify-between items-center">
+            <div class="text-h6">
+              {{ isEditing ? 'Edit Category' : 'New Category' }}
+            </div>
+            <q-btn flat size="sm" padding="xs" dense icon="sym_r_close" v-close-popup />
+          </div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <div class="flex flex-col gap-3">
+            <q-input dense :error="'name' in createForm.errors" hide-bottom-space label="Name"
+              :error-message="createForm.errors.name?.[0]" v-model="createForm.fields.name" autofocus>
+              <template v-if="createForm.fields.emoji" v-slot:prepend>
+                <img
+                  :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${createForm.fields.emoji}.png`"
+                  alt="" style="width: 20px;">
+              </template>
+              <template v-slot:append>
+                <q-icon name="mood" class="cursor-pointer">
+                  <q-popup-proxy cover :breakpoint="600">
+                    <EmojiPicker :native="false" @select="createForm.fields.emoji = $event.u" />
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" @click="resetForm" class="dark: text-gray-500" />
+          <q-btn flat label="Save" @click="isEditing ? updateItem() : createItem()" :loading="createForm.processing" class="dark: text-gray-400" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <section class="py-8 antialiased md:py-16">
+      <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+        <div class="mb-4 flex items-center justify-between md:mb-8">
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add an Income category</h2>
+
+          <div><q-btn @click="openCreateModal" color="green-500 dark:bg-blue-900 " icon="sym_r_add" c label="Create" /></div>
+
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div v-for="transactionCategory in data" :key="transactionCategory.id"
+            class="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-2 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+
+            <div class="flex items-center">
+              <img v-if="transactionCategory.emoji"
+                :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${transactionCategory.emoji}.png`"
+                class="me-2 w-6">
+
+              <span class="text-sm font-medium text-gray-900 dark:text-white">
+                {{ transactionCategory.name.length > 17 ? transactionCategory.name.substring(0, 17) + '...' : transactionCategory.name }}
+              </span>
+            </div>
+
+            <div>
+              <q-btn flat class=" p-2" color="primary dark:text-gray-400" icon="edit" @click.stop="editeItem(transactionCategory)" />
+              <q-btn flat class="p-2 text-negative" icon="delete" color="red dark:text-red-800" @click.stop="deleteItem(transactionCategory)" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <q-dialog v-model="showCreateDialog" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="flex justify-between items-center">
+            <div class="text-h6">
+              {{ isEditing ? 'Edit Category' : 'New Category' }}
+            </div>
+            <q-btn flat size="sm" padding="xs" dense icon="sym_r_close" v-close-popup />
+          </div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <div class="flex flex-col gap-3">
+            <q-input dense :error="'name' in createForm.errors" hide-bottom-space label="Name"
+              :error-message="createForm.errors.name?.[0]" v-model="createForm.fields.name" autofocus>
+              <template v-if="createForm.fields.emoji" v-slot:prepend>
+                <img
+                  :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${createForm.fields.emoji}.png`"
+                  alt="" style="width: 20px;">
+              </template>
+              <template v-slot:append>
+                <q-icon name="mood" class="cursor-pointer">
+                  <q-popup-proxy cover :breakpoint="600">
+                    <EmojiPicker :native="false" @select="createForm.fields.emoji = $event.u" />
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" @click="resetForm" class="dark: text-gray-500" />
+          <q-btn flat label="Save" @click="isEditing ? updateItem() : createItem()" :loading="createForm.processing" class="dark: text-gray-400" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <section class="py-8 antialiased md:py-16">
+      <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+        <div class="mb-4 flex items-center justify-between md:mb-8">
           <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add a category</h2>
 
           <div><q-btn @click="openCreateModal" color="green-500 dark:bg-blue-900 " icon="sym_r_add" c label="Create" /></div>

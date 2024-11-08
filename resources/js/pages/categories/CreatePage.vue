@@ -4,15 +4,6 @@
     <q-input outlined dense v-model="form.fields.name" :error="'name' in form.errors"
       :error-message="form.errors.name?.[0]" label="Category Name" />
 
-    <!-- <q-select
-      outlined
-      dense
-      v-model="form.fields.icon"
-      :options="iconOptions"
-      label="Select an Icon"
-      :error="'icon' in form.errors"
-      :error-message="form.errors.icon?.[0]"
-    /> -->
 
     <q-input outlined dense v-model="form.fields.emoji" label="Select an Emoji">
       <template v-slot:prepend>
