@@ -65,7 +65,7 @@ const tab = ref('Transfer');
 
 const transactions = ref({});
 
-const formatter = useMoney('USD');
+const formatter = useMoney('MAD');
 
 async function fetchTransactions() {
   try {

@@ -7,7 +7,7 @@
         <q-card-section>
           <div class="flex justify-between items-center">
             <div class="text-h6">
-              {{ isEditing ? 'Edit Category' : 'Create Category' }}
+              {{ isEditing ? 'Edit Category' : 'New Category' }}
             </div>
             <q-btn flat
                    size="sm"
@@ -17,6 +17,7 @@
                    v-close-popup />
           </div>
         </q-card-section>
+
         <q-card-section class="q-pt-none">
           <div class="flex flex-col gap-3">
             <q-input dense
@@ -45,6 +46,8 @@
             </q-input>
           </div>
         </q-card-section>
+
+        <!-- Only one q-card-actions section -->
         <q-card-actions align="right"
                         class="text-primary">
           <q-btn flat
@@ -55,17 +58,21 @@
                  @click="isEditing ? updateItem() : createItem()"
                  :loading="createForm.processing" />
         </q-card-actions>
+
       </q-card>
     </q-dialog>
 
     <section class="py-8 antialiased md:py-16">
       <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <div class="mb-4 flex items-center justify-between md:mb-8">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Transaction categorys</h2>
-          <q-btn @click="openCreateModal"
-                 color="primary"
-                 icon="sym_r_add"
-                 label="Create" />
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add a category</h2>
+
+          <div><q-btn @click="openCreateModal"
+                   color="green-500 dark:bg-blue-900"
+                   icon="sym_r_add"
+                   label="Create" />
+          </div>
+
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -86,7 +93,7 @@
 
             <div>
               <q-btn flat
-                     class=" p-2"
+                     class="p-2"
                      color="primary"
                      icon="edit"
                      @click.stop="editeItem(transactionCategory)" />
@@ -96,7 +103,6 @@
                      @click.stop="deleteItem(transactionCategory)" />
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -110,7 +116,6 @@ import { useResourceIndex } from '@/composables/useResourceIndex';
 import { useQuasar } from 'quasar';
 import { onMounted, ref } from 'vue';
 import EmojiPicker from 'vue3-emoji-picker';
-
 import 'vue3-emoji-picker/css';
 
 const $q = useQuasar();
@@ -124,10 +129,7 @@ const createForm = useForm({
   id: null, // Initialize id to null
 });
 
-const {
-  data,
-  fetch,
-} = useResourceIndex('http://localhost:8000/api/categories');
+const { data, fetch } = useResourceIndex('http://localhost:8000/api/categories');
 
 onMounted(() => {
   fetch();
@@ -187,13 +189,4 @@ function resetForm() {
   isEditing.value = false;
   showCreateDialog.value = false;
 }
-
-// const types = [
-//   { label: 'Checking', value: 'checking' },
-//   { label: 'Savings', value: 'savings' },
-//   { label: 'Credit', value: 'credit' },
-//   { label: 'Investment', value: 'investment' },
-//   { label: 'Cash', value: 'cash' },
-//   { label: 'Retirement', value: 'retirement' },
-// ];
 </script>

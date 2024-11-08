@@ -48,15 +48,17 @@
           </div>
         </div>
       </q-card-section>
-
       <q-card-section align="right"
-                      class="text-primary pt-0">
+                      class="text-primary pt-0 ">
         <q-btn flat
                label="Cancel"
-               v-close-popup />
-        <q-btn color="primary"
+               color="dark: text-gray-500"
+               v-close-popup
+               class="me-1" />
+        <q-btn color="green-500 dark: bg-blue-900"
                label="Add New Account"
-               @click="handleCreate" />
+               @click="handleCreate"
+               />
       </q-card-section>
     </q-card>
   </q-dialog>
