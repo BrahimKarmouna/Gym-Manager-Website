@@ -77,9 +77,9 @@
             <h3 class="text-base font-light text-gray-500 dark:text-gray-400">Total accounts Balance</h3>
           </div>
           <div class="flex items-center justify-end flex-1 text-base font-medium text-green-500 dark:text-green-400">
-              <path fill-rule="evenodd"
-                    d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd"></path>
+            <path fill-rule="evenodd"
+                  d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"></path>
           </div>
         </div>
 
@@ -88,7 +88,7 @@
           <div>
             <button class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                     type="button"
-                    data-dropdown-toggle="weekly-sales-dropdown">Last 7 days <svg class="w-4 h-4 ml-2"
+                    data-dropdown-toggle="weekly-sales-dropdown">Last 7 days transactions <svg class="w-4 h-4 ml-2"
                    fill="none"
                    stroke="currentColor"
                    viewBox="0 0 24 24"
@@ -160,11 +160,26 @@
               <div v-if="transactions.length > 0"
                    v-for="transaction in transactions"
                    class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
+
                 <dl class="w-1/2 sm:w-48">
                   <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction ID:</dt>
                   <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
                     <a href="#"
                        class="hover:underline">#{{ transaction.id }}</a>
+                  </dd>
+                </dl>
+
+                <dl class="w-1/2 sm:w-48">
+                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">From:</dt>
+                  <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                    {{ transaction.sourceAccount?.name ?? "N/A" }}
+                  </dd>
+                </dl>
+
+                <dl class="w-1/2 sm:w-48">
+                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">to:</dt>
+                  <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                    {{ transaction.destinationAccount?.name ?? "N/A" }}
                   </dd>
                 </dl>
 
@@ -174,7 +189,7 @@
                 </dl>
 
                 <dl class="w-1/2 sm:w-1/5 md:flex-1 lg:w-auto">
-                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Price:</dt>
+                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Amount:</dt>
                   <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">${{ transaction.amount }}
                   </dd>
                 </dl>
@@ -200,7 +215,15 @@
                   </dd>
                 </dl>
 
-                <div class="w-full sm:flex sm:w-32 sm:items-center sm:justify-end sm:gap-4">
+                <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
+                  <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Note:</dt>
+                  <dd class="">
+
+                    {{ transaction.note }}
+                  </dd>
+                </dl>
+
+                <!-- <div class="w-full sm:flex sm:w-32 sm:items-center sm:justify-end sm:gap-4">
                   <button id="actionsMenuDropdownModal11"
                           data-dropdown-toggle="dropdownOrderModal11"
                           type="button"
@@ -269,7 +292,7 @@
                       </li>
                     </ul>
                   </div>
-                </div>
+                </div> -->
               </div>
               <div v-else>No incomes found</div>
             </div>
@@ -298,7 +321,7 @@
       </div>
 
 
-      <h1 class="font-semibold text-2xl text-gray-700 dark:text-white py-6 ">Add New Account</h1>
+      <h1 class="font-semibold text-2xl text-gray-700 dark:text-white py-6 ">Add new account :</h1>
 
 
       <div class="grid relative grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-stretch gap-4">
@@ -392,7 +415,7 @@
                                 color="dark: text-gray-400" />
                       </q-item-section>
 
-                      <q-item-section >
+                      <q-item-section>
                         <q-item-label class="dark: text-gray-400">Edit</q-item-label>
                       </q-item-section>
                     </q-item>
@@ -403,7 +426,7 @@
                       <q-item-section class="flex-auto">
                         <q-icon name="sym_r_delete"
                                 size="xs"
-                                color="dark: text-red-800"/>
+                                color="dark: text-red-800" />
                       </q-item-section>
 
                       <q-item-section>
