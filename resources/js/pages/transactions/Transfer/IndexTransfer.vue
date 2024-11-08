@@ -9,8 +9,7 @@
 
   <!-- transfer  -->
   <!-- Copy table properties from q-table -->
-  <q-table
-          flat
+  <q-table flat
            title="Transfer Records"
            :rows="data ?? []"
            :columns="transferColumns"
@@ -89,12 +88,6 @@ const tableRef = ref(null);
 
 const showCreateDialog = ref(false);
 
-const amount = ref(null);
-const from = ref('');
-const to = ref('');
-const category = ref('');
-const note = ref('');
-
 const transferColumns = [
   { name: 'user', label: 'User', align: 'left', field: (row) => row.user.name ?? 'N/A' },
   { name: 'amount', label: 'Amount', align: 'left', field: 'amount', sortable: true },
@@ -102,7 +95,6 @@ const transferColumns = [
   { name: 'from', label: 'From', align: 'left', field: (row) => row.sourceAccount?.name ?? 'N/A', sortable: true },
   { name: 'to', label: 'To', align: 'left', field: (row) => row.destinationAccount?.name ?? "N/A", sortable: true },
   { name: 'note', label: 'Note', align: 'left', field: 'note' },
-  { name: 'transaction_category', label: 'Transaction Category', align: 'center', field: (row) => row.category?.name ?? 'N/A', sortable: false },
   // { name: "created_at", label: "Created At", field: "created_at", sortable: true },
   // { name: "updated_at", label: "Updated At", field: "updated_at", sortable: true },
   { name: 'actions', label: '', align: 'right', field: 'actions' },

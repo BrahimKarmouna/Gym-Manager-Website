@@ -37,7 +37,7 @@ class TransactionRequest extends FormRequest
       'destination_account_id' => ['nullable', 'integer', 'exists:accounts,id', 'different:source_account_id', 'required_if:transaction_type,' . TransactionType::TRANSFER->value],
       'note' => ['nullable', 'string', 'max:255'],
       'transaction_type' => ['required', 'string', Rule::enum(TransactionType::class)],
-      'category_id' => ['required', 'integer', 'exists:categories,id'],
+      'category_id' => ['nullable', 'integer', 'exists:categories,id'],
     ];
   }
 

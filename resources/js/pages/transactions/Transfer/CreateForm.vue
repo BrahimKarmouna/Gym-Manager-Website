@@ -91,53 +91,6 @@
                         hide-bottom-space />
             </div>
 
-
-            <!-- Select a category -->
-            <div class="col-12">
-              <q-select v-model="form.fields.category"
-                        :options="transaction_categories"
-                        option-value="id"
-                        outlined
-                        dense
-                        label="Category"
-                        :error="'category_id' in form.errors"
-                        :error-message="form.errors.category_id?.[0]"
-                        hide-bottom-space>
-
-                <template #option="scope">
-                  <q-item v-bind="scope.itemProps">
-                    <q-item-section>
-                      <q-item-label class="flex items-center flex-nowrap overflow-hidden">
-                        <img v-if="scope.opt.emoji"
-                             :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${scope.opt.emoji}.png`"
-                             class="me-2 w-6">
-                        <span class="truncate">
-                          {{ scope.opt.name }}
-                        </span>
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </template>
-                <template v-slot:selected-item="scope">
-                  <div class="flex items-center flex-nowrap overflow-hidden">
-                    <img v-if="scope.opt.emoji"
-                             :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${scope.opt.emoji}.png`"
-                             class="me-2 w-6">
-                        <span class="truncate">
-                          {{ scope.opt.name }}
-                        </span>
-                  </div>
-                </template>
-                <template v-slot:no-option>
-                  <q-item>
-                    <q-item-section class="text-grey">
-                      No results
-                    </q-item-section>
-                  </q-item>
-                </template>
-              </q-select>
-            </div>
-
             <div class="col-12">
 
               <q-input v-model="form.fields.note"
@@ -187,7 +140,6 @@ const form = useForm({
   amount: '',
   source_account: null,
   destination_account: null,
-  category: '',
   note: '',
   transaction_type: {
     'label': 'Transfer',
@@ -220,10 +172,8 @@ const onReset = () => {
 };
 
 const { data: accounts, fetch: fetchAccount } = useResourceIndex('accounts');
-const { data: transaction_categories, fetch: fetchTransactionCategories, loading: transaction_categories_loading } = useResourceIndex('categories');
 
 onMounted(() => {
   fetchAccount();
-  fetchTransactionCategories();
 });
 </script>

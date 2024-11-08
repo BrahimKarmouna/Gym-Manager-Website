@@ -91,20 +91,6 @@
                         hide-bottom-space />
             </div>
 
-            <!-- Select a category -->
-            <div class="col-12">
-              <q-select v-model="form.fields.category"
-                        :options="transaction_categories"
-                        option-value="id"
-                        outlined
-                        dense
-                        option-label="name"
-                        label="Category"
-                        :error="'category_id' in form.errors"
-                        :error-message="form.errors.category_id?.[0]"
-                        hide-bottom-space />
-            </div>
-
             <div class="col-12">
 
               <q-input v-model="form.fields.note"
@@ -160,7 +146,6 @@ const router = useRouter();
 
 const { fetch: fetchTransaction, record } = useResourceShow('transactions');
 const { data: accounts, fetch: fetchAccount } = useResourceIndex('accounts');
-const { data: transaction_categories, fetch: fetchTransactionCategories, loading: transaction_categories_loading } = useResourceIndex('categories');
 
 const form = useForm(() => record.value)
 
@@ -191,7 +176,6 @@ const onReset = () => {
 
 onMounted(() => {
   fetchAccount();
-  fetchTransactionCategories();
 });
 
 watch([() => props.id, visible], async ([newId, visible]) => {

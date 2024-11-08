@@ -83,6 +83,7 @@
                         :options="transaction_categories"
                         option-value="id"
                         outlined
+                        :loading="transaction_categories_loading"
                         dense
                         option-label="name"
                         label="Category"
@@ -113,7 +114,7 @@
 
               <q-btn label="Submit"
                      type="submit"
-                     color="green-7" />
+                     color="green-7 dark: bg-blue-900" />
             </div>
           </div>
 
@@ -174,7 +175,7 @@ const onReset = () => {
 };
 
 const { data: accounts, fetch: fetchAccount } = useResourceIndex('accounts');
-const { data: transaction_categories, fetch: fetchTransactionCategories, loading: transaction_categories_loading } = useResourceIndex('categories');
+const { data: transaction_categories, fetch: fetchTransactionCategories, loading: transaction_categories_loading } = useResourceIndex('categories?transaction_type=expense');
 
 onMounted(() => {
   fetchAccount();
