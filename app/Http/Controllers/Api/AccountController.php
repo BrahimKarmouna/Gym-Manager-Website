@@ -58,6 +58,7 @@ class AccountController extends Controller
   public function show(Account $account)
   {
     $account->load('incomes', 'expenses', 'transfers');
+
     return AccountResource::make($account);
   }
 
