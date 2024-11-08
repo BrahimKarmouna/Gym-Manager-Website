@@ -28,7 +28,7 @@
     </template>
 
     <template v-slot:top>
-      <q-btn color="green-8 "
+      <q-btn color="green-500 dark:bg-blue-900 "
              :disable="loading"
              label="Add Transfer"
              @click="showCreateDialog = true" />
@@ -57,14 +57,14 @@
         <q-btn flat
                size="sm"
                padding="sm"
-               color="primary"
+               color="primary dark:text-gray-400"
                icon="edit"
                @click.stop="editRow(props.row)" />
 
         <q-btn flat
                size="sm"
                padding="sm"
-               color="red"
+               color="red dark:text-red-800"
                icon="delete"
                @click.stop="deleteRow(props.row)" />
       </q-td>

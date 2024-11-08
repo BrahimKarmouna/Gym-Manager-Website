@@ -36,14 +36,8 @@
                      viewBox="0 0 20 20"
                      xmlns="http://www.w3.org/2000/svg"
                      aria-hidden="true">
-                  <path clip-rule="evenodd"
-                        fill-rule="evenodd"
-                        d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z">
-                  </path>
                 </svg>
-                12.5%
               </span>
-              Since last month
             </p>
           </div>
           <div class="w-full"
@@ -62,14 +56,8 @@
                      viewBox="0 0 20 20"
                      xmlns="http://www.w3.org/2000/svg"
                      aria-hidden="true">
-                  <path clip-rule="evenodd"
-                        fill-rule="evenodd"
-                        d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z">
-                  </path>
                 </svg>
-                3.4%
               </span>
-              Since last month
             </p>
           </div>
           <div class="w-full"
@@ -89,15 +77,9 @@
             <h3 class="text-base font-light text-gray-500 dark:text-gray-400">Total accounts Balance</h3>
           </div>
           <div class="flex items-center justify-end flex-1 text-base font-medium text-green-500 dark:text-green-400">
-            12.5%
-            <svg class="w-5 h-5"
-                 fill="currentColor"
-                 viewBox="0 0 20 20"
-                 xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd"
                     d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"
                     clip-rule="evenodd"></path>
-            </svg>
           </div>
         </div>
 
@@ -272,11 +254,12 @@
                             @click="editItem(account)">
                       <q-item-section class="flex-auto">
                         <q-icon name="sym_r_edit"
-                                size="xs" />
+                                size="xs"
+                                color="dark: text-gray-400" />
                       </q-item-section>
 
-                      <q-item-section>
-                        <q-item-label>Edit</q-item-label>
+                      <q-item-section >
+                        <q-item-label class="dark: text-gray-400">Edit</q-item-label>
                       </q-item-section>
                     </q-item>
                     <q-item class="rounded-lg text-negative"
@@ -285,11 +268,12 @@
                             @click="deleteAccount(account)">
                       <q-item-section class="flex-auto">
                         <q-icon name="sym_r_delete"
-                                size="xs" />
+                                size="xs"
+                                color="dark: text-red-800"/>
                       </q-item-section>
 
                       <q-item-section>
-                        <q-item-label>Delete</q-item-label>
+                        <q-item-label class="dark: text-red-800">Delete</q-item-label>
                       </q-item-section>
                     </q-item>
                   </q-list>
@@ -315,7 +299,7 @@
 
 
               <q-btn unelevated
-                     class="bg-green-500 whitespace-nowrap text-white rounded-lg font-semibold text-xs"
+                     class="bg-green-500 whitespace-nowrap text-white rounded-lg font-semibold text-xs  dark:bg-blue-900"
                      :to="{ name: 'account.transfers', params: { id: account.id } }">
                 Check it Now
               </q-btn>
@@ -345,7 +329,7 @@ const $q = useQuasar();
 
 const router = useRouter();
 
-const formatter = useMoney('USD');
+const formatter = useMoney('MAD');
 
 const showCreateAccountModal = ref(false);
 const showEditDialog = ref(false);

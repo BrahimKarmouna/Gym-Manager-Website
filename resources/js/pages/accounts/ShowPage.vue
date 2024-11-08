@@ -74,13 +74,16 @@
       </q-card>
     </q-dialog>
 
+
         <q-card>
+
           <q-tabs
-                  class="text-primary"
-                  active-color="primary"
-                  indicator-color="primary"
+                  class="text-primary dark: text-gray-500"
+                  active-color="primary dark:text-white"
+                  indicator-color="primary dark:text-white"
                   align="justify"
                   >
+
             <q-route-tab name="Transfer"
                          :to="{ name: 'account.transfers' }"
                          label="Transfer" />
@@ -98,6 +101,7 @@
 
           <RouterView />
         </q-card>
+
       </div>
 
       <!-- Account Information Modal -->

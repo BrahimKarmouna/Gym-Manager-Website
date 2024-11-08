@@ -6,7 +6,7 @@
         <q-card-section>
           <div class="flex justify-between items-center">
             <div class="text-h6">
-              {{ isEditing ? 'Edit Category' : 'Create Category' }}
+              {{ isEditing ? 'Edit Category' : 'New Category' }}
             </div>
             <q-btn flat size="sm" padding="xs" dense icon="sym_r_close" v-close-popup />
           </div>
@@ -31,8 +31,8 @@
           </div>
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" @click="resetForm" />
-          <q-btn flat label="Save" @click="isEditing ? updateItem() : createItem()" :loading="createForm.processing" />
+          <q-btn flat label="Cancel" @click="resetForm" class="dark: text-gray-500" />
+          <q-btn flat label="Save" @click="isEditing ? updateItem() : createItem()" :loading="createForm.processing" class="dark: text-gray-400" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -40,8 +40,10 @@
     <section class="py-8 antialiased md:py-16">
       <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <div class="mb-4 flex items-center justify-between md:mb-8">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Shop by category</h2>
-          <q-btn @click="openCreateModal" color="primary" icon="sym_r_add" label="Create" />
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add a category</h2>
+
+          <div><q-btn @click="openCreateModal" color="green-500 dark:bg-blue-900 " icon="sym_r_add" c label="Create" /></div>
+
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -53,14 +55,14 @@
                 :src="`https://cdn.jsdelivr.net/npm/emoji-datasource-apple@6.0.1/img/apple/64/${transactionCategory.emoji}.png`"
                 class="me-2 w-6">
 
-              <span class="text-sm font-medium text-gray-900">
+              <span class="text-sm font-medium text-gray-900 dark:text-white">
                 {{ transactionCategory.name.length > 17 ? transactionCategory.name.substring(0, 17) + '...' : transactionCategory.name }}
               </span>
             </div>
 
             <div>
-              <q-btn flat class=" p-2" color="primary" icon="edit" @click.stop="editeItem(transactionCategory)" />
-              <q-btn flat class="p-2 text-negative" icon="delete" @click.stop="deleteItem(transactionCategory)" />
+              <q-btn flat class=" p-2" color="primary dark:text-gray-400" icon="edit" @click.stop="editeItem(transactionCategory)" />
+              <q-btn flat class="p-2 text-negative" icon="delete" color="red dark:text-red-800" @click.stop="deleteItem(transactionCategory)" />
             </div>
           </div>
 
