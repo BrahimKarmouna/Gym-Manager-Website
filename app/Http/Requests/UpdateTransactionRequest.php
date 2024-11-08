@@ -26,7 +26,7 @@ class UpdateTransactionRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'date' => ['required', 'date', 'date_format:Y/m/d'],
+      'date' => ['required', 'date'],
       'amount' => ['required', 'numeric', 'gt:0'],
       'source_account_id' => [
         'nullable',
