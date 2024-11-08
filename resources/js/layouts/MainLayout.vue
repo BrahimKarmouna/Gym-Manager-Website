@@ -14,9 +14,7 @@
 
         <q-toolbar-title class="flex items-center">
           <q-avatar>
-            <q-icon name="sym_r_currency_exchange"
-                    size="sm"
-                    class="text-dark dark:text-white mr-4 " />
+
           </q-avatar>
           Money Manager
         </q-toolbar-title>
