@@ -36,6 +36,8 @@ class TransactionController extends Controller
       )
       ->get();
 
+
+
     $incomes = $data->where('transaction_type', TransactionType::INCOME->value)->sum("amount");
     $expenses = $data->where('transaction_type', TransactionType::EXPENSE->value)->sum("amount");
     $totalBalance = $data->sum('amount');
@@ -59,7 +61,6 @@ class TransactionController extends Controller
           'amount' => $request->amount,
           'source_account_id' => $request->source_account_id,
           'destination_account_id' => $request->destination_account_id,
-          'category_id' => $request->category_id,
           'note' => $request->note,
           'transaction_type' => $request->transaction_type,
           'user_id' => auth()->id()
@@ -164,7 +165,7 @@ class TransactionController extends Controller
       'amount' => $newAmount,
       'source_account_id' => $request->sourceAccount['id'] ?? $transaction->source_account_id,
       'destination_account_id' => $request->destinationAccount['id'] ?? $transaction->destination_account_id,
-      'category_id' => $request->category_id,
+      'category_id' => $request->category_id ?? null,
       'transaction_type' => $transaction->transaction_type,
       'note' => $request->note,
       'user_id' => auth()->id(),

@@ -1,12 +1,12 @@
 <template>
-  <q-item clickable
-          tag="a"
+  <q-item v-if="!children"
+          clickable
           :target="internalTarget"
           :href="href"
           :to="to"
           :exact="exact"
           dense
-          class="rounded-md q-px-sm">
+          class="rounded-md q-px-sm my-3">
     <q-item-section v-if="icon"
                     style="min-width: 8px"
                     avatar>
@@ -23,6 +23,39 @@
       </q-item-label>
     </q-item-section>
   </q-item>
+
+  <q-expansion-item v-else
+                    :icon="icon"
+                    :label="title"
+                    :caption="caption"
+                    :default-opened="false"
+                    dense
+                    header-class="rounded-md q-px-sm">
+    <template #header>
+      <q-item-section v-if="icon"
+                      style="min-width: 8px"
+                      avatar>
+        <q-icon :name="icon"
+                size="xs" />
+      </q-item-section>
+
+      <q-item-section>
+        <q-item-label>{{ title }}</q-item-label>
+
+        <q-item-label v-if="caption"
+                      caption>
+          {{ caption }}
+        </q-item-label>
+      </q-item-section>
+    </template>
+
+    <q-list class="q-py-sm text-gray-500 q-gutter-xs">
+      <EssentialLink v-for="child in children"
+                     :key="child.title"
+                     class="ps-8"
+                     v-bind="child" />
+    </q-list>
+  </q-expansion-item>
 </template>
 
 <script>
@@ -43,6 +76,10 @@ export default defineComponent({
 
     href: {
       type: String,
+    },
+
+    children: {
+      type: Array,
     },
 
     to: {

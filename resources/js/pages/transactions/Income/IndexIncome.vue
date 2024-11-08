@@ -1,16 +1,15 @@
 <template>
 
   <CreateIncome v-model:visible="showCreateDialog"
-              @created="handleCreated" />
+                @created="handleCreated" />
 
   <EditIncome v-model:visible="showEditDialog"
-            @updated="handleUpdated"
-            :id="itemToEdit?.id" />
+              @updated="handleUpdated"
+              :id="itemToEdit?.id" />
 
   <!-- income  -->
   <!-- Copy table properties from q-table -->
-  <q-table
-          flat
+  <q-table flat
            title="Income Records"
            :rows="data ?? []"
            :columns="incomeColumns"
@@ -89,12 +88,6 @@ const tableRef = ref(null);
 
 const showCreateDialog = ref(false);
 
-const amount = ref(null);
-const from = ref('');
-const to = ref('');
-const category = ref('');
-const note = ref('');
-
 const incomeColumns = [
   { name: 'user', label: 'User', align: 'left', field: (row) => row.user.name ?? 'N/A' },
   { name: 'amount', label: 'Amount', align: 'left', field: 'amount', sortable: true },
@@ -107,7 +100,6 @@ const incomeColumns = [
   // { name: "updated_at", label: "Updated At", field: "updated_at", sortable: true },
   { name: 'actions', label: '', align: 'right', field: 'actions' },
 ];
-
 
 
 const { data, fetch, loading: loadingTransfer, onRequest, options } = useResourceIndex('transactions?transaction_type=income');

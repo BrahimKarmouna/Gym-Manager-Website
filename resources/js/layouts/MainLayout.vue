@@ -9,13 +9,14 @@
                flat
                round
                icon="sym_r_menu"
-               @click="toggleLeftDrawer" />
+               @click="toggleLeftDrawer"
+               class="mr-4" />
 
         <q-toolbar-title class="flex items-center">
           <q-avatar>
             <q-icon name="sym_r_currency_exchange"
                     size="sm"
-                    class="text-dark dark:text-white" />
+                    class="text-dark dark:text-white mr-4 " />
           </q-avatar>
           Money Manager
         </q-toolbar-title>
@@ -74,7 +75,9 @@
 
         <EssentialLink v-for="link in essentialLinks"
                        :key="link.title"
-                       v-bind="link" />
+                       v-bind="link"
+                       class="mb-5test@" />
+
       </q-list>
     </q-drawer>
 
@@ -89,7 +92,7 @@
           </q-page>
         </template>
 
-        <RouterView  />
+        <RouterView />
       </Suspense>
     </q-page-container>
 
@@ -105,7 +108,7 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
 const linksList = [
-{
+  {
     title: 'Dashboad',
     icon: 'sym_r_dashboard',
     to: { name: 'dashboard.index' },
@@ -124,7 +127,17 @@ const linksList = [
   {
     title: 'Categories',
     icon: 'sym_r_category',
-    to: { name: 'categories.index' }
+    children: [
+
+      {
+        title: 'Income',
+        to: { name: 'incomes.index' }
+      },
+      {
+        title: 'Expense',
+        to: { name: 'expenses.index' }
+      }
+    ]
   },
 ]
 
@@ -143,6 +156,7 @@ export default defineComponent({
     const $q = useQuasar();
 
     const router = useRouter();
+
 
     function confirmLogout() {
       $q.dialog({
@@ -183,6 +197,7 @@ export default defineComponent({
       toggleLeftDrawer() {
         layoutStore.sidebar.opened = !layoutStore.sidebar.opened;
       },
+
     }
   }
 });

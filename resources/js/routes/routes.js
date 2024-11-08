@@ -87,28 +87,40 @@ const routes = [
           {
             path: "",
             name: "dashboard.index",
-            component: () => import("../pages/dashboard/DashboardIndex.vue"),
+            component: () => import("../pages/Dashboard/DashboardIndex.vue"),
           },
 
           // Transaction Categories
           {
             path: "categories",
             name: "categories.index",
-            component: () => import("../pages/categories/IndexPage.vue"),
+            // component: () => import("../pages/categories/IndexPage.vue"),
+            children: [
+              {
+                path: "income",
+                name: "incomes.index",
+                component: () => import("../pages/incomes/IndexView.vue"),
+              },
+              {
+                path: "expense",
+                name: "expenses.index",
+                component: () => import("../pages/expenses/IndexView.vue"),
+              },
+            ],
           },
 
-          {
-            path: "categories/create",
-            name: "categories.create",
-            component: () => import("../pages/categories/CreatePage.vue"),
-          },
+          // {
+          //   path: "categories/create",
+          //   name: "categories.create",
+          //   component: () => import("../pages/categories/CreatePage.vue"),
+          // },
 
-          {
-            path: "categories/:id/edit",
-            name: "categories.edit",
-            props: true,
-            component: () => import("../pages/categories/EditPage.vue"),
-          },
+          // {
+          //   path: "categories/:id/edit",
+          //   name: "categories.edit",
+          //   props: true,
+          //   component: () => import("../pages/categories/EditPage.vue"),
+          // },
 
           // Transactions
           {

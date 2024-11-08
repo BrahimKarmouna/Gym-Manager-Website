@@ -22,7 +22,7 @@ class AccountController extends Controller
     $totalBalance = $accounts->sum('balance');
 
     // Calculate total income and total expense across all accounts
-    $totalIncome = $accounts->sum(function ($account) {
+    $totalIncome = $accounts->sum(function (Account $account) {
       return $account->incomes->sum('amount');  // Sum of all incomes for each account
     });
 
@@ -59,10 +59,6 @@ class AccountController extends Controller
   {
     $account->load('incomes', 'expenses', 'transfers');
     $account->loadSum(['incomes', 'expenses'], 'amount');
-    // $account->loadSum('expenses', 'amount');
-
-    // $accountIncome = $account->incomes->sum('amount');
-    // $accountExpense = $account->expenses->sum('amount');
 
     return AccountResource::make($account);
   }
