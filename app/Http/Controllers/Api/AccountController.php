@@ -7,6 +7,7 @@ use App\Http\Requests\AccountRequest;
 use App\Http\Requests\UpdateAccountRequest;
 use App\Http\Resources\AccountResource;
 use App\Http\Resources\TransactionResource;
+
 use App\Models\Account;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,7 @@ class AccountController extends Controller
 
     $total = $accounts->count();
 
+    $total = $accounts->count();
     $totalBalance = $accounts->sum('balance');
 
     // Calculate total income and total expense across all accounts
