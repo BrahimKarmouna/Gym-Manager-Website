@@ -149,7 +149,7 @@
       <!-- Card Body -->
       <div
            class="rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last Transactions</h3>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last 7 days Transactions</h3>
         <div v-if="transactions.length > 0"
              v-for="transaction in transactions"
              class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
