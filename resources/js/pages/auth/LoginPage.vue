@@ -52,7 +52,7 @@
                     size="xs" />
 
         <div class="mt-4">
-          <q-btn color="primary"
+          <q-btn color="green-500 dark:bg-blue-900"
                  no-caps
                  type="submit"
                  unelevated

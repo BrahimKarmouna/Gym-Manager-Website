@@ -14,9 +14,7 @@
 
         <q-toolbar-title class="flex items-center">
           <q-avatar>
-            <q-icon name="sym_r_currency_exchange"
-                    size="sm"
-                    class="text-dark dark:text-white mr-4 " />
+
           </q-avatar>
           Money Manager
         </q-toolbar-title>
@@ -26,7 +24,7 @@
                   @update:model-value="toggleDarkMode"
                   checked-icon="sym_r_dark_mode"
                   unchecked-icon="sym_r_light_mode" />
-
+        <AiFillDashboard />
         <q-btn flat
                round
                class="ms-2"
@@ -47,6 +45,7 @@
               <q-separator />
 
               <q-item clickable
+                      class="dark:text-white"
                       :to="{ name: 'profile.index' }">
                 <q-item-section>Your profile</q-item-section>
               </q-item>
@@ -70,6 +69,10 @@
 
         <q-item-label header>
           Navigation
+
+
+
+
         </q-item-label>
 
 
@@ -98,7 +101,7 @@
 
   </q-layout>
 </template>
-
+<style></style>
 <script>
 import EssentialLink from '@/components/EssentialLink.vue'
 import { computed, defineComponent } from 'vue'
@@ -106,6 +109,7 @@ import { useQuasar } from 'quasar';
 import { useLayoutStore } from '@/stores/layout';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+
 const linksList = [
   {
     title: 'Dashboad',
@@ -164,13 +168,14 @@ export default defineComponent({
         persistent: true,
         ok: {
           label: 'Yes',
-          color: 'primary',
+          color: 'green-500 dark:bg-blue-900',
           unelevated: true,
         },
 
         cancel: {
           label: 'No',
           flat: true,
+          color: 'red-500 ',
           handler: () => {
             // Do nothing
           }

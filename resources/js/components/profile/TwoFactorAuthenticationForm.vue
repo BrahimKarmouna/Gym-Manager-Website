@@ -103,7 +103,7 @@
               <q-btn type="button"
                      class="me-3"
                      unelevated
-                     color="primary"
+                     color="green-500 dark:bg-blue-900"
                      @click="startConfirmingPassword"
                      :disable="enabling">
                 Enable

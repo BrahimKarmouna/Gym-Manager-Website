@@ -6,16 +6,41 @@
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
+          <svg aria-hidden="true"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke="green"
+               class="h-7 w-10 mr-4">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
-          <span
-                class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ formatter.format(transactions.incomes) }}</span>
+
+          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">
+            {{
+              formatter.format(transactions.incomes) }}</span>
         </div>
+
       </div>
+
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
+          <svg aria-hidden="true"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke="red"
+               class="h-7 w-10 mr-4">
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+          </svg>
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expense</h3>
-          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ formatter.format(transactions.expenses) }}</span>
+          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
+            formatter.format(transactions.expenses) }}</span>
 
         </div>
       </div>
@@ -23,7 +48,8 @@
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Balance</h3>
-          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ formatter.format(transactions.total_balance) }}</span>
+          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
+            formatter.format(transactions.total_balance) }}</span>
 
         </div>
       </div>
@@ -34,7 +60,7 @@
               class="text-primary dark:text-gray-400"
               active-color="primary dark:text-white"
               indicator-color="primary "
-              align="start"             >
+              align="start">
         <q-route-tab name="Transfer"
                      :to="{ name: 'transaction.index' }"
                      label="Transfer" />

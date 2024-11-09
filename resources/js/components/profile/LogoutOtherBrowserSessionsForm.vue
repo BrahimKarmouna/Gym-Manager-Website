@@ -117,7 +117,7 @@
           <q-btn @click="confirmLogout"
                  unelevated
                  padding="sm md"
-                 color="primary">
+                 color="green-500 dark:bg-blue-900">
             Log Out Other Browser Sessions
           </q-btn>
         </q-card-section>

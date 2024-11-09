@@ -1,16 +1,15 @@
 <template>
 
   <CreateExpense v-model:visible="showCreateDialog"
-              @created="handleCreated" />
+                 @created="handleCreated" />
 
   <EditExpense v-model:visible="showEditDialog"
-            @updated="handleUpdated"
-            :id="itemToEdit?.id" />
+               @updated="handleUpdated"
+               :id="itemToEdit?.id" />
 
   <!-- expense  -->
   <!-- Copy table properties from q-table -->
-  <q-table
-          flat
+  <q-table flat
            title="Expense Records"
            :rows="data ?? []"
            :columns="expenseColumns"
@@ -57,7 +56,7 @@
         <q-btn flat
                size="sm"
                padding="sm"
-               color="primary dark:text-gray-400"
+               color="blue dark:text-blue-600"
                icon="edit"
                @click.stop="editRow(props.row)" />
 
