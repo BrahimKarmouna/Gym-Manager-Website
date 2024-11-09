@@ -100,9 +100,9 @@
           </q-card-section>
 
           <q-card-actions align="right"
-                          class="bg-gray-50 dark:bg-gray-700">
+                          class="bg-gray-50 dark:bg-gray-800">
             <q-btn class="q-ml-md"
-                   color="primary"
+                   color="green-500 dark:bg-blue-900"
                    label="Save"
                    padding="sm md"
                    :loading="submitting"

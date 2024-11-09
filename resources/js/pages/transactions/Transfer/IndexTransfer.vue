@@ -56,7 +56,7 @@
         <q-btn flat
                size="sm"
                padding="sm"
-               color="primary dark:text-gray-400"
+               color="blue dark:text-blue-600"
                icon="edit"
                @click.stop="editRow(props.row)" />
 

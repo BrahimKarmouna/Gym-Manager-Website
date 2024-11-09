@@ -113,7 +113,7 @@
 
               <q-btn label="Submit"
                      type="submit"
-                     color="green-7 dark: bg-blue-900" />
+                     color="green-7 dark:bg-blue-900" />
             </div>
           </div>
 

@@ -87,7 +87,7 @@ const routes = [
           {
             path: "",
             name: "dashboard.index",
-            component: () => import("../pages/Dashboard/DashboardIndex.vue"),
+            component: () => import("../pages/dashboard/DashboardIndex.vue"),
           },
 
           // Transaction Categories
