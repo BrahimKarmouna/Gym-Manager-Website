@@ -300,61 +300,56 @@
           <div
                class="rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last Account transers</h3>
-            <div v-if="transaction_type = 'transfer'"
-                 v-for="transaction in transactions"
+            <div v-if="lastTransfers.length > 0"
+                 v-for="transfer in lastTransfers"
                  class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
-
               <dl class="w-1/2 sm:w-48">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction ID:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
                   <a href="#"
-                     class="hover:underline">#{{ transaction.id }}</a>
+                     class="hover:underline">#{{ transfer.id }}</a>
                 </dd>
               </dl>
 
               <dl class="w-1/2 sm:w-48">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">From:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                  {{ transaction.sourceAccount?.name ?? "N/A" }}
+                  {{ transfer.source_account?.name ?? "N/A" }}
                 </dd>
               </dl>
 
               <dl class="w-1/2 sm:w-48">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">to:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                  {{ transaction.destinationAccount?.name ?? "N/A" }}
+                  {{ transfer.destination_account?.name ?? "N/A" }}
                 </dd>
               </dl>
 
               <dl class="w-1/2 sm:w-1/4 md:flex-1 lg:w-auto">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Date:</dt>
-                <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transaction.date }}</dd>
+                <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transfer.date }}</dd>
               </dl>
 
               <dl class="w-1/2 sm:w-1/5 md:flex-1 lg:w-auto">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Amount:</dt>
-                <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">${{ transaction.amount }}
+                <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">${{ transfer.amount }}
                 </dd>
               </dl>
 
               <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction:</dt>
-                <dd
-                    class="mt-1.5 inline-flex items-center rounded bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
-                  <svg class="me-1 h-3 w-3"
-                       aria-hidden="true"
-                       xmlns="http://www.w3.org/2000/svg"
-                       width="24"
-                       height="24"
-                       fill="none"
-                       viewBox="0 0 24 24">
-                    <path stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M6 18 17.94 6M18 18 6.06 6"></path>
-                  </svg>
-                  {{ transaction.transaction_type }}
+                <dd :class="{
+                  'mt-1.5 inline-flex items-center rounded': true,
+                  [`bg-${transfer.transaction_type?.bgColor} dark:bg-${transfer.transaction_type?.bgColor}`]: true,
+                  [`text-${transfer.transaction_type?.textColor} dark:text-${transfer.transaction_type?.textColor}`]: true,
+                  'px-2.5 py-0.5 text-xs font-medium': true
+                }">
+
+                  <q-icon :name="transfer.transaction_type?.icon"
+                          class="pr-2" />
+                  {{
+                    transfer.transaction_type?.value
+                  }}
                 </dd>
               </dl>
 
@@ -362,13 +357,13 @@
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Note:</dt>
                 <dd class="">
 
-                  {{ transaction.note }}
+                  {{ transfer.note }}
                 </dd>
               </dl>
 
 
             </div>
-            <div v-else>No incomes found</div>
+            <div v-else>No transfers found</div>
           </div>
 
           <q-btn :to="{ name: 'transaction.index' }"
@@ -402,8 +397,7 @@ const formatter = useMoney('MAD');
 
 const showCreateAccountModal = ref(false);
 const showEditDialog = ref(false);
-const selectedAccount = ref(null); // Account to be deleted
-const confirm = ref(false); // Controls dialog visibility
+const selectedAccount = ref(null); // A_acount to be deleted
 const transactions = ref([]);
 const accounts = ref([]);
 const loading = ref(false);
@@ -412,20 +406,18 @@ const totalBalance = ref(0);
 const totalExpense = ref(0);
 const totalIncome = ref(0);
 
+const lastTransfers = ref({});
+
 async function fetchTransactions() {
   try {
     loading.value = true;
 
-    const response = await axios.get('/api/transactions/');
+    const response = await axios.get('/api/transactions');
 
     // Assuming the response contains 'data' and 'lastTransfers'
     transactions.value = response.data.data;  // Regular transactions
-    lastTransfers.value = response.data.lastTransfers;  // Last transfers from the API
-
-    // Optionally, you can also handle additional data like 'incomes', 'expenses', etc.
-    incomes.value = response.data.incomes;
-    expenses.value = response.data.expenses;
-    totalBalance.value = response.data.totalBalance;
+    lastTransfers.value = response.data.last_transfers;  // Last transfers from the API
+    totalBalance.value = response.data.total_balance;
 
   } catch (error) {
     console.error('Error fetching transactions:', error);

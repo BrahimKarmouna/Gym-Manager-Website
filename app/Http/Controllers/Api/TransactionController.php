@@ -19,7 +19,7 @@ class TransactionController extends Controller
   public function index(Request $request)
   {
     $data = Transaction::latest()
-      ->with('sourceAccount', 'destinationAccount')
+      ->with('sourceAccount', 'destinationAccount', 'user')
       ->where('user_id', auth()->id())
       ->when(
         $request->filled('search'),
@@ -54,11 +54,10 @@ class TransactionController extends Controller
     return TransactionResource::collection($data)->additional([
       'incomes' => $incomes,
       'expenses' => $expenses,
-      'totalBalance' => $totalBalance,
-      'lastTransfers' => $lastTransfers, // Include lastTransfers here
+      'total_balance' => $totalBalance,
+      'last_transfers' => $lastTransfers, // Include lastTransfers here
     ]);
   }
-
 
   public function store(TransactionRequest $request)
   {

@@ -157,16 +157,7 @@
         </q-card>
 
       </div>
-
-      <!-- Account Information Modal -->
-
-
-
     </section>
-
-    <!--
-    <pre>Account: {{ account }}</pre>
-    <pre>Transaction Data:  {{ transactionsData }}</pre> -->
 
     <div v-if="loading">Loading...</div>
   </div>
@@ -197,21 +188,6 @@ const getAccount = async () => {
     loading.value = false;
   }
 }
-
-
-
-// const fetchTransactions = async () => {
-//   try {
-//     loading.value = true;
-//     const response = await axios.get(`/api/transactions`);
-//     console.log(response.data);
-//     transactionsData.value = response.data.data;
-//   } catch (error) {
-//     console.error(error);
-//   } finally {
-//     loading.value = false;
-//   }
-// }
 
 onMounted(async () => {
   await getAccount();

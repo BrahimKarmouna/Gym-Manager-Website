@@ -16,13 +16,17 @@ class HomeController extends Controller
     $incomes = Transaction::where('user_id', auth()->user()->id)->where('transaction_type', 'income')->count();
     $expenses = Transaction::where('user_id', auth()->user()->id)->where('transaction_type', 'expense')->count();
 
-    // expenses total percentage
-
+    $lastTransactions = Transaction::where('user_id', auth()->id())
+      ->where('created_at', '>=', now()->subDays(7)) // Last 7 days
+      ->latest()
+      ->with('sourceAccount', 'destinationAccount')
+      ->get();
 
     return response()->json([
       'transfers' => $transfers,
       'incomes' => $incomes,
-      'expenses' => $expenses
+      'expenses' => $expenses,
+      'last_transactions' => $lastTransactions
     ]);
   }
 }
