@@ -19,7 +19,7 @@ class TransactionController extends Controller
   public function index(Request $request)
   {
     $data = Transaction::latest()
-      ->with('sourceAccount', 'destinationAccount', 'user')
+      ->with('sourceAccount', 'destinationAccount', 'user', 'category')
       ->where('user_id', auth()->id())
       ->when(
         $request->filled('search'),
@@ -119,7 +119,7 @@ class TransactionController extends Controller
 
   public function show(Transaction $transaction)
   {
-    $transaction->load('sourceAccount', 'destinationAccount');
+    $transaction->load('sourceAccount', 'destinationAccount', 'category');
     return TransactionResource::make($transaction);
   }
 
@@ -176,7 +176,7 @@ class TransactionController extends Controller
       'amount' => $newAmount,
       'source_account_id' => $request->source_account_id,
       'destination_account_id' => $request->destination_account_id,
-      'category_id' => $request->category_id ?? null,
+      'category_id' => $request->category_id,
       'transaction_type' => $transaction->transaction_type,
       'note' => $request->note,
       'user_id' => auth()->id(),

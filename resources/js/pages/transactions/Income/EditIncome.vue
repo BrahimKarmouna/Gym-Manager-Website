@@ -143,7 +143,7 @@ const $q = useQuasar();
 
 const { fetch: fetchTransaction, record } = useResourceShow('transactions');
 const { data: accounts, fetch: fetchAccount } = useResourceIndex('accounts');
-const { data: transaction_categories, fetch: fetchTransactionCategories, loading: transaction_categories_loading } = useResourceIndex('categories');
+const { data: transaction_categories, fetch: fetchTransactionCategories, loading: transaction_categories_loading } = useResourceIndex('categories?transaction_type=income');
 
 const form = useForm(() => record.value)
 

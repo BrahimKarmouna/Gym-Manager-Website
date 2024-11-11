@@ -27,22 +27,23 @@
 
 
   <q-expansion-item v-else
-                    :icon="icon"
                     :label="title"
                     :caption="caption"
                     :default-opened="false"
                     dense
-                    header-class="rounded-md q-px-sm">
+                    header-class="rounded-md q-px-sm dark:text-blue-400"
+                    class="dark:text-blue-400">
     <template #header>
       <q-item-section v-if="icon"
                       style="min-width: 8px"
-                      avatar>
+                      avatar
+                      class="dark:text-blue-400">
         <q-icon :name="icon"
                 size="25px" />
       </q-item-section>
 
       <q-item-section>
-        <q-item-label>{{ title }}</q-item-label>
+        <q-item-label class="dark:text-blue-400">{{ title }}</q-item-label>
 
         <q-item-label v-if="caption"
                       caption>
@@ -54,13 +55,14 @@
     <q-list class="q-py-sm text-gray-500 q-gutter-xs">
       <EssentialLink v-for="child in children"
                      :key="child.title"
-                     class="ps-8"
+                     class="ps-8 dark:text-blue-200"
                      v-bind="child" />
     </q-list>
   </q-expansion-item>
 </template>
 
 <script>
+import { useQuasar } from 'quasar';
 import { defineComponent, computed } from 'vue'
 
 export default defineComponent({

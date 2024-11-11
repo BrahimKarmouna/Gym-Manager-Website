@@ -72,6 +72,9 @@
           <div
                class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <div class="w-full">
+              <q-icon name="account_balance_wallet"
+                      class="text-blue-600"
+                      size="md" />
               <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Account Balance</h3>
               <span class=" pt-4 m-4 mt-3text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">
                 {{ account.balance }} MAD
@@ -83,25 +86,13 @@
           <div
                class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <div class="w-full">
+              <q-icon name="trending_up"
+                      class="text-emerald-600"
+                      size="md" />
               <h3 class="text-base font-normal text-gray-500 dark:text-gray-400"> Account Income</h3>
               <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
                 account.incomes_sum }} MAD</span>
-              <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
-                <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
-                  <svg class="w-4 h-4"
-                       fill="currentColor"
-                       viewBox="0 0 20 20"
-                       xmlns="http://www.w3.org/2000/svg"
-                       aria-hidden="true">
-                    <path clip-rule="evenodd"
-                          fill-rule="evenodd"
-                          d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z">
-                    </path>
-                  </svg>
-                  12.5%
-                </span>
-                Since last month
-              </p>
+
             </div>
             <div class="w-full"
                  id="new-products-chart"></div>
@@ -109,34 +100,22 @@
           <div
                class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
             <div class="w-full">
+              <q-icon name="trending_down"
+                      class="text-red-600"
+                      size="md" />
               <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Account Expenses</h3>
               <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">
                 {{ account.expenses_sum }} MAD </span>
-              <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
-                <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
-                  <svg class="w-4 h-4"
-                       fill="currentColor"
-                       viewBox="0 0 20 20"
-                       xmlns="http://www.w3.org/2000/svg"
-                       aria-hidden="true">
-                    <path clip-rule="evenodd"
-                          fill-rule="evenodd"
-                          d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z">
-                    </path>
-                  </svg>
-                  3.4%
-                </span>
-                Since last month
-              </p>
+
             </div>
             <div class="w-full"
                  id="week-signups-chart"></div>
           </div>
         </div>
         <q-card>
-          <q-tabs class="text-primary"
-                  active-color="primary"
-                  indicator-color="primary"
+          <q-tabs class="text-primary dark:text-gray-400"
+                  active-color="primary dark:text-white"
+                  indicator-color="primary dark:gray-700"
                   align="justify">
             <q-route-tab name="Transfer"
                          :to="{ name: 'account.transfers' }"

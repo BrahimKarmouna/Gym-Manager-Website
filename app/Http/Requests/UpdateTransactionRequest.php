@@ -35,6 +35,7 @@ class UpdateTransactionRequest extends FormRequest
         'different:destination_account_id',
       ],
       'destination_account_id' => ['nullable', 'integer', 'exists:accounts,id', 'different:source_account_id'],
+      'category_id' => ['nullable', 'integer', 'exists:categories,id'],
       'note' => ['nullable', 'string', 'max:255'],
     ];
   }
@@ -44,6 +45,7 @@ class UpdateTransactionRequest extends FormRequest
     $this->merge([
 
       'source_account_id' => $this->input('source_account.id'),
+      'category_id' => $this->input('category.id'),
       'destination_account_id' => $this->input('destination_account.id'),
       'date' => $this->input('date'),
     ]);

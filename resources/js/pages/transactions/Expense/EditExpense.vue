@@ -83,6 +83,7 @@
                         option-value="id"
                         outlined
                         dense
+                        :loading="transaction_categories_loading"
                         option-label="name"
                         label="Category"
                         :error="'category_id' in form.errors"
@@ -143,7 +144,7 @@ const $q = useQuasar();
 
 const { fetch: fetchTransaction, record } = useResourceShow('transactions');
 const { data: accounts, fetch: fetchAccount } = useResourceIndex('accounts');
-const { data: transaction_categories, fetch: fetchTransactionCategories, loading: transaction_categories_loading } = useResourceIndex('categories');
+const { data: transaction_categories, fetch: fetchTransactionCategories, loading: transaction_categories_loading } = useResourceIndex('categories?transaction_type=expense');
 
 const form = useForm(() => record.value)
 

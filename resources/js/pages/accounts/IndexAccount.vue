@@ -16,7 +16,10 @@
         <div
              class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div class="w-full">
-            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Accounts number</h3>
+            <q-icon name="person"
+                    class="text-blue-600"
+                    size="md" />
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Number account</h3>
             <span class=" pt-4 m-4 mt-3text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
               totalAccounts }}</span>
           </div>
@@ -26,6 +29,9 @@
         <div
              class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div class="w-full">
+            <q-icon name="trending_up"
+                    class="text-emerald-600"
+                    size="md" />
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
               formatter.format(totalIncome) }}</span>
@@ -46,6 +52,9 @@
         <div
              class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div class="w-full">
+            <q-icon name="trending_down"
+                    class="text-red-600"
+                    size="md" />
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expenses</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
               formatter.format(totalExpense) }}</span>
@@ -77,7 +86,7 @@
         <q-btn unelevated
                label="+"
                padding="0"
-               class="bg-gray-300 self-stretch text-8xl font-bold text-gray-700 rounded-2xl border"
+               class="bg-gray-300 self-stretch text-8xl font-bold text-gray-700 dark:bg-gray-400 rounded-2xl border"
                @click="showCreateAccountModal = true" />
 
         <template v-if="loading">
@@ -139,7 +148,7 @@
 
             <!-- Header -->
             <header class="flex text-white z-20 mb-4">
-              <q-icon name="sym_r_account_balance"
+              <q-icon name="person"
                       size="md" />
 
               <q-btn icon="sym_r_more_vert"

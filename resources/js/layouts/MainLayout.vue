@@ -10,13 +10,12 @@
                round
                icon="sym_r_menu"
                @click="toggleLeftDrawer"
-               class="mr-4" />
-
+               class=" text-blue-900 dark:text-blue-300 mr-1" />
         <q-toolbar-title class="flex items-center">
-          <q-avatar>
-
-          </q-avatar>
-          Money Manager
+          <q-icon name="account_balance"
+                  size="sm"
+                  class="text-blue-900 dark:text-blue-400 pr-2" />
+          <span class="text-blue-900 dark:text-blue-400">Money Manager</span>
         </q-toolbar-title>
 
         <!-- Dark mode toggler -->
@@ -65,21 +64,17 @@
               :width="250"
               :mini="layoutStore.sidebar.mini"
               bordered>
-      <q-list class="q-pa-sm q-gutter-xs">
+      <q-list class="q-pa-sm q-gutter-xs ">
 
         <q-item-label header>
-          Navigation
-
-
-
+          <span class="text-bold">Navigation</span>
 
         </q-item-label>
-
 
         <EssentialLink v-for="link in essentialLinks"
                        :key="link.title"
                        v-bind="link"
-                       class="mb-5test@" />
+                       class="mb-5test@ text-blue-900 dark:text-blue-400 " />
 
       </q-list>
     </q-drawer>
@@ -88,7 +83,7 @@
       <Suspense>
         <template #fallback>
           <q-page :style-fn="(offset) => ({ height: `calc(100vh - ${offset}px)` })">
-            <div class="flex items-center justify-center fit">
+            <div class="flex items-center justify-center fit ">
               <q-inner-loading :showing="true"
                                label="Loading..." />
             </div>
@@ -120,7 +115,7 @@ const linksList = [
   },
   {
     title: 'Account',
-    icon: 'sym_r_account_balance',
+    icon: 'sym_r_person',
     to: { name: 'account.index-account' }
   },
   {

@@ -27,13 +27,14 @@ class TransactionResource extends JsonResource
         return AccountResource::make($this->destinationAccount);  // Eager loaded relationship
       }),
       'transaction_type' => $this->whenHas('transaction_type', fn() => $this->transaction_type?->toArray()),  // Handle enum properly
-      'note' => $this->note,  // Direct attribute access
-      'category' => $this->whenLoaded('category', function () {
-        return CategoryResource::make($this->category);  // Eager loaded relationship
-      }),
+      'note' => $this->note,
+      'category' => CategoryResource::make($this->whenLoaded("category"))
+      ,
       'user' => $this->whenLoaded('user', function () {
         return UserResource::make($this->user);  // Eager loaded relationship
       }),
+      'created_at' => $this->whenHas('created_at', fn() => $this->created_at->diffForHumans()),
+      'updated_at' => $this->whenHas('updated_at', fn() => $this->updated_at->diffForHumans())
     ];
   }
 
