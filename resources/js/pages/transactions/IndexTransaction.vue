@@ -6,16 +6,11 @@
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
-          <svg aria-hidden="true"
-               fill="none"
-               viewBox="0 0 24 24"
-               stroke="green"
-               class="h-7 w-10 mr-4">
-            <path stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
+          <q-icon name="trending_up"
+                  class="text-emerald-600"
+                  size="md" />
+
+
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
 
           <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">
@@ -28,16 +23,9 @@
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
-          <svg aria-hidden="true"
-               fill="none"
-               viewBox="0 0 24 24"
-               stroke="red"
-               class="h-7 w-10 mr-4">
-            <path stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
-          </svg>
+          <q-icon name="trending_down"
+                  class="text-red-600"
+                  size="md" />
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expense</h3>
           <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
             formatter.format(transactions.expenses) }}</span>
@@ -47,6 +35,9 @@
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
+          <q-icon name="account_balance_wallet"
+                  class="text-blue-600"
+                  size="md" />
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Balance</h3>
           <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
             formatter.format(transactions.total_balance) }}</span>

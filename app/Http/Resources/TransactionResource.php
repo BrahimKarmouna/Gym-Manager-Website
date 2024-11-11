@@ -20,10 +20,10 @@ class TransactionResource extends JsonResource
       'id' => $this->id,  // Direct attribute access without `whenHas`
       'date' => $this->date,  // Direct attribute access
       'amount' => $this->amount,  // Direct attribute access
-      'sourceAccount' => $this->whenLoaded('sourceAccount', function () {
+      'source_account' => $this->whenLoaded('sourceAccount', function () {
         return AccountResource::make($this->sourceAccount);  // Eager loaded relationship
       }),
-      'destinationAccount' => $this->whenLoaded('destinationAccount', function () {
+      'destination_account' => $this->whenLoaded('destinationAccount', function () {
         return AccountResource::make($this->destinationAccount);  // Eager loaded relationship
       }),
       'transaction_type' => $this->whenHas('transaction_type', fn() => $this->transaction_type?->toArray()),  // Handle enum properly
