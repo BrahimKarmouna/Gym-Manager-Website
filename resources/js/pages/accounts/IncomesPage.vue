@@ -59,8 +59,6 @@
             <a href="#"
                class="hover:underline">#{{ transaction.id }}</a>
           </dd>
-
-
         </dl>
 
         <dl class="w-1/2 sm:w-1/4 md:flex-1 lg:w-auto">
@@ -78,28 +76,21 @@
 
         <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
           <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction:</dt>
-          <dd :class="{
-            'mt-1.5 inline-flex items-center rounded': true,
-            [`bg-${transaction.transaction_type?.bgColor} dark:bg-${transaction.transaction_type?.bgColor}`]: true,
-            [`text-${transaction.transaction_type?.textColor} dark:text-${transaction.transaction_type?.textColor}`]: true,
-            'px-2.5 py-0.5 text-xs font-medium': true
-          }">
-
+          <dd
+              :class="{
+                'mt-1.5 inline-flex items-center rounded': true,
+                [`bg-${transaction.transaction_type?.bgColor} dark:bg-${transaction.transaction_type?.bgColor}`]: true,
+                [`text-${transaction.transaction_type?.textColor} dark:text-${transaction.transaction_type?.textColor}`]: true,
+              }">
             <q-icon :name="transaction.transaction_type?.icon"
                     class="pr-2" />
-            {{
-              transaction.transaction_type?.value
-            }}
+            {{ transaction.transaction_type?.value }}
           </dd>
         </dl>
-
-
       </div>
       <div v-else>No incomes found</div>
     </div>
   </div>
-
-
 </template>
 
 <script setup>

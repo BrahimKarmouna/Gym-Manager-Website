@@ -96,8 +96,8 @@ const incomeColumns = [
   // { name: 'to', label: 'To', align: 'left', field: (row) => row.destinationAccount?.name ?? "N/A", sortable: true },
   { name: 'note', label: 'Note', align: 'left', field: 'note' },
   { name: 'transaction_category', label: 'Transaction Category', align: 'center', field: (row) => row.category?.name ?? 'N/A', sortable: false },
-  // { name: "created_at", label: "Created At", field: "created_at", sortable: true },
-  // { name: "updated_at", label: "Updated At", field: "updated_at", sortable: true },
+  { name: "created_at", label: "Created At", field: "created_at", sortable: true },
+  { name: "updated_at", label: "Updated At", field: "updated_at", sortable: true },
   { name: 'actions', label: '', align: 'right', field: 'actions' },
 ];
 

@@ -23,10 +23,6 @@
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
-
-
-
-
           <div>
             <q-icon name="trending_up"
                     class="text-emerald-600"
@@ -34,13 +30,9 @@
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.incomes
               }}</span>
-
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
-
-
-
           <div>
             <q-icon name="trending_down"
                     class="text-red-600"
@@ -48,19 +40,8 @@
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expense</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.expenses
               }}</span>
-
           </div>
         </div>
-
-
-
-
-
-
-
-
-
-
       </section>
 
       <!-- Card Body -->
@@ -70,7 +51,6 @@
         <div v-if="transactions.length > 0"
              v-for="transaction in transactions"
              class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
-
           <dl class="w-1/2 sm:w-48">
             <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction ID:</dt>
             <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
