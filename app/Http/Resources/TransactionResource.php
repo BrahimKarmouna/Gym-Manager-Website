@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\TransactionType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,20 +13,28 @@ class TransactionResource extends JsonResource
    *
    * @return array<string, mixed>
    */
+
   public function toArray(Request $request): array
   {
     return [
-      'id' => $this->whenHas('id'),
-      'date' => $this->whenHas('date'),
-      'amount' => $this->whenHas('amount'),
-      'source_account' => AccountResource::make($this->whenLoaded('sourceAccount')),
-      'destination_account' => AccountResource::make($this->whenLoaded('destinationAccount')),
-      'transaction_type' => $this->whenHas('transaction_type'),
-      'note' => $this->whenHas('note'),
-      'category' => CategoryResource::make($this->category),
-      'user' => UserResource::make($this->user),
-      // 'created_at' => $this->when($this->created_at, $this->created_at->diffForHumans()),
-      // 'updated_at' => $this->when($this->updated_at, $this->updated_at->diffForHumans()),
+      'id' => $this->id,  // Direct attribute access without `whenHas`
+      'date' => $this->date,  // Direct attribute access
+      'amount' => $this->amount,  // Direct attribute access
+      'source_account' => $this->whenLoaded('sourceAccount', function () {
+        return AccountResource::make($this->sourceAccount);  // Eager loaded relationship
+      }),
+      'destination_account' => $this->whenLoaded('destinationAccount', function () {
+        return AccountResource::make($this->destinationAccount);  // Eager loaded relationship
+      }),
+      'transaction_type' => $this->whenHas('transaction_type', fn() => $this->transaction_type?->toArray()),  // Handle enum properly
+      'note' => $this->note,  // Direct attribute access
+      'category' => $this->whenLoaded('category', function () {
+        return CategoryResource::make($this->category);  // Eager loaded relationship
+      }),
+      'user' => $this->whenLoaded('user', function () {
+        return UserResource::make($this->user);  // Eager loaded relationship
+      }),
     ];
   }
+
 }

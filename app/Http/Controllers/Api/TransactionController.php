@@ -10,6 +10,7 @@ use App\Http\Resources\TransactionResource;
 use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Http\Resources\LastTransferResource;
 
 
 
@@ -18,7 +19,7 @@ class TransactionController extends Controller
   public function index(Request $request)
   {
     $data = Transaction::latest()
-      ->with('sourceAccount', 'destinationAccount')
+      ->with('sourceAccount', 'destinationAccount', 'user')
       ->where('user_id', auth()->id())
       ->when(
         $request->filled('search'),
@@ -36,16 +37,25 @@ class TransactionController extends Controller
       )
       ->get();
 
+    // Last 7 days transfer transactions
+    $lastTransfers = Transaction::where('user_id', auth()->id())
+      ->where('transaction_type', TransactionType::TRANSFER->value)
+      ->where('created_at', '>=', now()->subDays(7)) // Last 7 days
+      ->latest()
+      ->with('sourceAccount', 'destinationAccount')
+      ->get();
 
-
+    // Calculate totals
     $incomes = $data->where('transaction_type', TransactionType::INCOME->value)->sum("amount");
     $expenses = $data->where('transaction_type', TransactionType::EXPENSE->value)->sum("amount");
     $totalBalance = $data->sum('amount');
 
+    // Return both transaction data and lastTransfers in the response
     return TransactionResource::collection($data)->additional([
       'incomes' => $incomes,
       'expenses' => $expenses,
-      'totalBalance' => $totalBalance
+      'total_balance' => $totalBalance,
+      'last_transfers' => $lastTransfers, // Include lastTransfers here
     ]);
   }
 
@@ -104,6 +114,7 @@ class TransactionController extends Controller
     }
 
     return TransactionResource::make($transaction);
+
   }
 
   public function show(Transaction $transaction)

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory; // Add this import
 
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,10 @@ class Transaction extends Model
     'transaction_type',
   ];
 
+  protected $casts = [
+    'transaction_type' => TransactionType::class,
+  ];
+
   public function user()
   {
     return $this->belongsTo(User::class);
@@ -33,7 +38,8 @@ class Transaction extends Model
   {
     return $this->belongsTo(Account::class, 'destination_account_id');
   }
-  public function category(){
+  public function category()
+  {
     return $this->belongsTo(Category::class);
   }
 }

@@ -51,7 +51,7 @@
     <div>
       <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white mt-5">Account Incomes</h3>
       <div v-if="data.length > 0"
-           v-for="(transaction, index) in account"
+           v-for="(transaction, index) in data"
            class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
         <dl class="w-1/2 sm:w-48">
           <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction ID:</dt>
@@ -73,22 +73,18 @@
 
         <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
           <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction:</dt>
-          <dd
-              class="mt-1.5 inline-flex items-center rounded bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
-            <svg class="me-1 h-3 w-3"
-                 aria-hidden="true"
-                 xmlns="http://www.w3.org/2000/svg"
-                 width="24"
-                 height="24"
-                 fill="none"
-                 viewBox="0 0 24 24">
-              <path stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18 17.94 6M18 18 6.06 6"></path>
-            </svg>
-            {{ transaction.transaction_type }}
+          <dd :class="{
+            'mt-1.5 inline-flex items-center rounded': true,
+            [`bg-${transaction.transaction_type?.bgColor} dark:bg-${transaction.transaction_type?.bgColor}`]: true,
+            [`text-${transaction.transaction_type?.textColor} dark:text-${transaction.transaction_type?.textColor}`]: true,
+            'px-2.5 py-0.5 text-xs font-medium': true
+          }">
+
+            <q-icon :name="transaction.transaction_type?.icon"
+                    class="pr-2" />
+            {{
+              transaction.transaction_type?.value
+            }}
           </dd>
         </dl>
 

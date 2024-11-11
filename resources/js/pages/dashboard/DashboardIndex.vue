@@ -2,66 +2,53 @@
 
   <div class="flex-grow text-gray-800">
 
-    <main class="p-6 sm:p-10 space-y-6">
+    <main class="p-6 sm:p-9 space-y-3">
       <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
         <div class="mr-6">
-          <h1 class="text-4xl font-semibold mb-2 text-black dark:text-white">Dashboard</h1>
+          <h1 class="text-4xl font-mono text-bold mb-2 text-black dark:text-white">Dashboard</h1>
 
         </div>
 
       </div>
       <section class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
-
-          <svg aria-hidden="true"
-               fill="none"
-               viewBox="0 0 24 24"
-               stroke="blue"
-               class="h-7 w-10 mr-4">
-            <path stroke-width="2"
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
-
           <div>
-            <span class="block text-2xl font-bold dark:text-white">{{ data.transfers }}</span>
-            <span class="block text-gray-500 dark:text-gray-400">Transfers</span>
+            <q-icon name="move_up"
+                    class="text-blue-600"
+                    size="md" />
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Transfer</h3>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.transfers
+              }}</span>
+
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
 
-          <svg aria-hidden="true"
-               fill="none"
-               viewBox="0 0 24 24"
-               stroke="green"
-               class="h-7 w-10 mr-4">
-            <path stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
+
+
 
           <div>
-            <span class="block text-2xl font-bold  dark:text-white">{{ data.incomes }}</span>
-            <span class="block  dark:text-gray-400">Income</span>
+            <q-icon name="trending_up"
+                    class="text-emerald-600"
+                    size="md" />
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.incomes
+              }}</span>
+
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
 
-          <svg aria-hidden="true"
-               fill="none"
-               viewBox="0 0 24 24"
-               stroke="red"
-               class="h-7 w-10 mr-4">
-            <path stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
-          </svg>
+
 
           <div>
-            <span class="inline-block text-2xl font-bold dark:text-white">{{ data.expenses }}</span>
+            <q-icon name="trending_down"
+                    class="text-red-600"
+                    size="md" />
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expense</h3>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.expenses
+              }}</span>
 
-            <span class="block text-gray-400">Expense</span>
           </div>
         </div>
 
@@ -79,7 +66,7 @@
       <!-- Card Body -->
       <div
            class="rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last Transactions</h3>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last 7 days Transactions</h3>
         <div v-if="transactions.length > 0"
              v-for="transaction in transactions"
              class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
@@ -119,22 +106,17 @@
 
           <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
             <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction:</dt>
-            <dd
-                class="mt-1.5 inline-flex items-center rounded bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300">
-              <svg class="me-1 h-3 w-3"
-                   aria-hidden="true"
-                   xmlns="http://www.w3.org/2000/svg"
-                   width="24"
-                   height="24"
-                   fill="none"
-                   viewBox="0 0 24 24">
-                <path stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18 17.94 6M18 18 6.06 6"></path>
-              </svg>
-              {{ transaction.transaction_type }}
+            <dd :class="{
+              'mt-1.5 inline-flex items-center rounded': true,
+              [`bg-${transaction.transaction_type?.bgColor} dark:bg-${transaction.transaction_type?.textColor}`]: true,
+              [`text-${transaction.transaction_type?.textColor} dark:text-${transaction.transaction_type?.textColor}`]: true,
+              'px-2.5 py-0.5 text-xs font-medium dark:bg-red-900 dark:text-red-300': true
+            }">
+              <q-icon :name="transaction.transaction_type?.icon"
+                      class="pr-2" />
+              {{
+                transaction.transaction_type?.value
+              }}
             </dd>
           </dl>
 
@@ -171,7 +153,7 @@ const fetchTransactions = async () => {
   try {
     loading.value = true;
     const response = await axios.get('/api/transactions');
-    transactions.value = response.data.data;
+    // transactions.value = response.data.data;
   } catch (error) {
     console.error('Error fetching transactions:', error);
   } finally {
@@ -185,6 +167,8 @@ const { execute: fetchData } = useFetch({
   },
   onSuccess: (response) => {
     data.value = response.data;
+    transactions.value = response.data.last_transactions
+    console.log("transactions: ", response.data.last_transactions);
   },
   onError: (err) => {
     console.log({ err });

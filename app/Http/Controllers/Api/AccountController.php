@@ -7,6 +7,7 @@ use App\Http\Requests\AccountRequest;
 use App\Http\Requests\UpdateAccountRequest;
 use App\Http\Resources\AccountResource;
 use App\Http\Resources\TransactionResource;
+
 use App\Models\Account;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,7 @@ class AccountController extends Controller
 
     $total = $accounts->count();
 
+    $total = $accounts->count();
     $totalBalance = $accounts->sum('balance');
 
     // Calculate total income and total expense across all accounts
@@ -51,8 +53,6 @@ class AccountController extends Controller
 
     return AccountResource::make($account);
   }
-
-  // Retrieve all accounts
 
   // Retrieve a specific account
   public function show(Account $account)
@@ -100,21 +100,21 @@ class AccountController extends Controller
 
   public function transfers($id)
   {
-    $transfers = Account::find($id)->transfers()->get();
+    $transfers = Account::find($id)->transfers()->with(['sourceAccount', 'destinationAccount'])->get();
 
     return TransactionResource::collection($transfers);
   }
 
   public function incomes($id)
   {
-    $incomes = Account::find($id)->incomes()->get();
+    $incomes = Account::find($id)->incomes()->with(['sourceAccount'])->get();
 
     return TransactionResource::collection($incomes);
   }
 
   public function expenses($id)
   {
-    $expenses = Account::find($id)->expenses()->get();
+    $expenses = Account::find($id)->expenses()->with(['sourceAccount'])->get();
 
     return TransactionResource::collection($expenses);
   }
