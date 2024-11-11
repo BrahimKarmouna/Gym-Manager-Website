@@ -16,7 +16,7 @@
         <div
              class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div class="w-full">
-            <q-icon name="person"
+            <q-icon name="payments"
                     class="text-blue-600"
                     size="md" />
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Number account</h3>
@@ -148,7 +148,7 @@
 
             <!-- Header -->
             <header class="flex text-white z-20 mb-4">
-              <q-icon name="person"
+              <q-icon name="sym_r_payments"
                       size="md" />
 
               <q-btn icon="sym_r_more_vert"

@@ -6,7 +6,7 @@ export async function GuestMiddleware({ store, to, next }) {
   await authStore.fetchProfile();
 
   if (authStore.authenticated) {
-    return next({ name: "dashboard" });
+    return next({ name: "dashboard.index" });
   }
 
   return next();

@@ -21,10 +21,11 @@
               </div>
             </div>
             <div class="space-y-4">
-              <dl>
+              <dl v-if="account.rib">
                 <dt class="font-semibold text-gray-900 dark:text-white">Account RIB:</dt>
-                <dd class="text-gray-500 dark:text-gray-400 text-bold ">{{ account.rib }}</dd>
+                <dd class="text-gray-500 dark:text-gray-400 text-bold">{{ account.rib }}</dd>
               </dl>
+
               <dl>
                 <dt class="font-semibold text-gray-900 dark:text-white"> Account Type:</dt>
                 <dd class="flex items-center gap-1 text-gray-500 dark:text-gray-400">

@@ -49,3 +49,6 @@ Route::apiResource('transactions', TransactionController::class);
 
 //! Dashboard
 Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
+
+Route::get('get-incomes', [HomeController::class, 'incomes'])->name('get-incomes');
+Route::get('get-expenses', [HomeController::class, 'expenses'])->name('get-expenses');
