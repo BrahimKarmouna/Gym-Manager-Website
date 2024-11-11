@@ -36,14 +36,13 @@ class UpdateTransactionRequest extends FormRequest
       ],
       'destination_account_id' => ['nullable', 'integer', 'exists:accounts,id', 'different:source_account_id'],
       'note' => ['nullable', 'string', 'max:255'],
-      'category_id' => ['required', 'integer', 'exists:categories,id'],
     ];
   }
 
   public function prepareForValidation()
   {
     $this->merge([
-      'category_id' => $this->input('category.id'),
+
       'source_account_id' => $this->input('source_account.id'),
       'destination_account_id' => $this->input('destination_account.id'),
       'date' => $this->input('date'),

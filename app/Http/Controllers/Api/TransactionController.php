@@ -163,8 +163,8 @@ class TransactionController extends Controller
     $transaction->update([
       'date' => $request->date('date'),
       'amount' => $newAmount,
-      'source_account_id' => $request->sourceAccount['id'] ?? $transaction->source_account_id,
-      'destination_account_id' => $request->destinationAccount['id'] ?? $transaction->destination_account_id,
+      'source_account_id' => $request->source_account_id,
+      'destination_account_id' => $request->destination_account_id,
       'category_id' => $request->category_id ?? null,
       'transaction_type' => $transaction->transaction_type,
       'note' => $request->note,

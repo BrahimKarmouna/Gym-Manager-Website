@@ -315,14 +315,14 @@
               <dl class="w-1/2 sm:w-48">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">From:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                  {{ transaction.sourceAccount?.name ?? "N/A" }}
+                  {{ transaction.source_account?.name ?? "N/A" }}
                 </dd>
               </dl>
 
               <dl class="w-1/2 sm:w-48">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">to:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                  {{ transaction.destinationAccount?.name ?? "N/A" }}
+                  {{ transaction.destination_account?.name ?? "N/A" }}
                 </dd>
               </dl>
 
