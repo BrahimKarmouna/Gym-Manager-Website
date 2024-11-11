@@ -11,7 +11,7 @@
                     style="min-width: 8px"
                     avatar>
       <q-icon :name="icon"
-              size="xs" />
+              size="25px" />
     </q-item-section>
 
     <q-item-section>
@@ -38,7 +38,7 @@
                       style="min-width: 8px"
                       avatar>
         <q-icon :name="icon"
-                size="xs" />
+                size="25px" />
       </q-item-section>
 
       <q-item-section>

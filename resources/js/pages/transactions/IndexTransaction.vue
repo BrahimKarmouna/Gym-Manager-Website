@@ -91,7 +91,7 @@ const tab = ref('Transfer');
 
 const transactions = ref({});
 
-const formatter = useMoney('MAD');
+const formatter = useMoney('MAD', 'fr-FR');
 
 async function fetchTransactions() {
   try {

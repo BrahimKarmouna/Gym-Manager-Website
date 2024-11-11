@@ -26,5 +26,14 @@ export default {
       },
     },
   },
+  safelist: [
+    {
+      pattern: /bg-/,
+    },
+
+    {
+      pattern: /text-/,
+    },
+  ],
   plugins: [],
 };

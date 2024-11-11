@@ -23,7 +23,7 @@ enum TransactionType: string implements Arrayable
   public function textColor(): string
   {
     return match ($this) {
-      TransactionType::TRANSFER => 'blue-500', // Return yellow for text color
+      TransactionType::TRANSFER => 'blue-500',
       TransactionType::INCOME => 'green-500',
       TransactionType::EXPENSE => 'red-500',
     };
@@ -32,7 +32,7 @@ enum TransactionType: string implements Arrayable
   public function bgColor(): string
   {
     return match ($this) {
-      TransactionType::TRANSFER => 'blue-100', // Return yellow for background color
+      TransactionType::TRANSFER => 'blue-100',
       TransactionType::INCOME => 'green-100',
       TransactionType::EXPENSE => 'red-100',
     };

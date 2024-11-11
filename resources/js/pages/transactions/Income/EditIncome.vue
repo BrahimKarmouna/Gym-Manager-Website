@@ -164,7 +164,7 @@ async function onSubmit() {
     }
   });
 
-  router.push({ name: 'transactions.index' });
+  router.push({ name: 'transaction.index' });
 }
 
 const onReset = () => {

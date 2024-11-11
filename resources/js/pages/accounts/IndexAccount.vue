@@ -191,8 +191,11 @@
               <div class="font-thin">ACCOUNT NAME</div>
               <div class="tracking-widest font-semibold">{{ account.name }}</div>
 
-              <div class="font-thin">RIB</div>
-              <div class="tracking-widest font-semibold">{{ account.rib }}</div>
+              <div class="font-thin"
+                   v-if="account.rib">RIB</div>
+              <div class="font-thin"
+                   v-else>ACCOUNT TYPE</div>
+              <div class="tracking-widest font-semibold">{{ account.rib ?? account.account_type }}</div>
             </div>
 
             <!-- Footer -->
@@ -237,7 +240,7 @@
             <div>
               <button class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                       type="button"
-                      data-dropdown-toggle="weekly-sales-dropdown">Last 7 days transactions <svg class="w-4 h-4 ml-2"
+                      data-dropdown-toggle="weekly-sales-dropdown">Last 7 days transfers <svg class="w-4 h-4 ml-2"
                      fill="none"
                      stroke="currentColor"
                      viewBox="0 0 24 24"
@@ -303,6 +306,7 @@
             <div v-if="lastTransfers.length > 0"
                  v-for="transfer in lastTransfers"
                  class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
+              {{ console.log(transfer.transaction_type) }}
               <dl class="w-1/2 sm:w-48">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction ID:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
@@ -393,7 +397,7 @@ const $q = useQuasar();
 
 const router = useRouter();
 
-const formatter = useMoney('MAD');
+const formatter = useMoney('MAD', 'fr-FR');
 
 const showCreateAccountModal = ref(false);
 const showEditDialog = ref(false);

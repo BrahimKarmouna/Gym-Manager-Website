@@ -189,11 +189,12 @@
 
           <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
             <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction:</dt>
+            {{ console.log("Transaction: ", transaction.transaction_type) }}
             <dd :class="{
               'mt-1.5 inline-flex items-center rounded': true,
-              [`bg-${transaction.transaction_type?.bgColor} dark:bg-${transaction.transaction_type?.textColor}`]: true,
+              [`bg-${transaction.transaction_type?.bgColor} dark:bg-${transaction.transaction_type?.bgColor}`]: true,
               [`text-${transaction.transaction_type?.textColor} dark:text-${transaction.transaction_type?.textColor}`]: true,
-              'px-2.5 py-0.5 text-xs font-medium dark:bg-red-900 dark:text-red-300': true
+              'px-2.5 py-0.5 text-xs font-medium': true
             }">
               <q-icon :name="transaction.transaction_type?.icon"
                       class="pr-2" />
