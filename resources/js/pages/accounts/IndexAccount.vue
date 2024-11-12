@@ -10,7 +10,7 @@
   <q-page :class="{ 'overflow-hidden': loading }"
           :style-fn="(offset) => ({ height: `calc(100vh - ${offset}px)` })">
 
-    <div class="mx-auto p-6">
+    <div class="mx-auto p-3">
 
       <div class="grid w-full grid-cols-1 gap-4 mt-4 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 mb-5">
         <div
@@ -231,8 +231,8 @@
         <div
              class="flex flex-col flex-nowrap row-span-3 self-stretch md:col-end-3 md:col-span-2 xl:col-end-4 2xl:col-end-5 col-span-1 2xl:col-span-2 row-end-1 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
 
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex-shrink-0">
+          <div class="flex items-center justify-between mb-2 Xs: bg-red-600 ">
+            <div class="flex-shrink-0 ">
               <span class="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">{{
                 formatter.format(totalBalance) }}</span>
               <h3 class="text-base font-light text-gray-500 dark:text-gray-400">Total accounts Balance</h3>
@@ -310,7 +310,7 @@
 
           <!-- Card Body -->
           <div
-               class="rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
+               class=" rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50  dark:border-gray-700 dark:bg-gray-800 md:p-5 w-3/3">
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last Account transers</h3>
             <div v-if="lastTransfers.length > 0"
                  v-for="transfer in lastTransfers"
