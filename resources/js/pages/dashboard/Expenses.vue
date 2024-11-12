@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[49%]">
+  <div class="w-[49%] ">
     <!-- Best Sellers -->
     <q-card class=" dark:bg-gray-800">
       <q-card-section>

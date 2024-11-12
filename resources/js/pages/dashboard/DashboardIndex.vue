@@ -12,31 +12,34 @@
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800   ">
           <div>
             <q-icon name="move_up"
-                    class="text-blue-600"
+                    class="text-blue-600 ms-5"
                     size="md" />
-            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Transfers</h3>
-            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.transfers
-              }}</span>
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Transfers</h3>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
+              data.transfers
+            }}</span>
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
           <div>
             <q-icon name="trending_up"
-                    class="text-emerald-600"
+                    class="text-emerald-600 ms-5"
                     size="md" />
-            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Incomes</h3>
-            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.incomes
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Incomes</h3>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
+              data.incomes
               }}</span>
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
           <div>
             <q-icon name="trending_down"
-                    class="text-red-600"
+                    class="text-red-600 ms-5"
                     size="md" />
-            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expenses</h3>
-            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.expenses
-              }}</span>
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Expenses</h3>
+            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
+              data.expenses
+            }}</span>
           </div>
         </div>
       </section>
