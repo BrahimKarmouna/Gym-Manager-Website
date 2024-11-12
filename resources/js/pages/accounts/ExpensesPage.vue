@@ -89,14 +89,10 @@
             }}
           </dd>
         </dl>
-
-
       </div>
       <div v-else>No expenses found</div>
     </div>
   </div>
-
-
 </template>
 
 <script setup>

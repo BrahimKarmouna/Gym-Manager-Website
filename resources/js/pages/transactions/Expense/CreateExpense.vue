@@ -6,14 +6,12 @@
       <q-card-section>
         <div class="flex justify-between items-center">
           <div class="text-h6">New Expense</div>
-
           <q-btn icon="close"
                  flat
                  dense
                  v-close-popup />
         </div>
       </q-card-section>
-
       <q-card-section class="pt-0">
         <q-form @submit.prevent="onSubmit"
                 @reset="onReset"
@@ -48,9 +46,7 @@
                 </template>
               </q-input>
             </div>
-
             <div class="col-12">
-
               <q-input v-model="form.fields.amount"
                        type="number"
                        label="Amount"
@@ -76,7 +72,6 @@
                         hide-bottom-space />
             </div>
 
-
             <!-- Select a category -->
             <div class="col-md-6">
               <q-select v-model="form.fields.category"
@@ -91,9 +86,7 @@
                         :error-message="form.errors.category_id?.[0]"
                         hide-bottom-space />
             </div>
-
             <div class="col-12">
-
               <q-input v-model="form.fields.note"
                        label="Note"
                        type="textarea"
@@ -104,7 +97,6 @@
                        :error-message="form.errors.note?.[0]"
                        hide-bottom-space />
             </div>
-
             <div class="col-12 text-end">
               <q-btn label="Reset"
                      type="reset"
@@ -117,7 +109,6 @@
                      color="green-7 dark:bg-blue-900" />
             </div>
           </div>
-
         </q-form>
       </q-card-section>
     </q-card>

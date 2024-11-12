@@ -130,11 +130,9 @@ import { useQuasar } from 'quasar';
 import { useForm } from '@/composables/useForm';
 
 const emit = defineEmits(['created']);
-
 const visible = defineModel('visible', { type: Boolean, default: false });
 
 const $q = useQuasar();
-
 const form = useForm({
   date: '',
   amount: '',

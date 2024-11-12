@@ -6,14 +6,12 @@
       <q-card-section>
         <div class="flex justify-between items-center">
           <div class="text-h6">Edit Expense</div>
-
           <q-btn icon="close"
                  flat
                  dense
                  v-close-popup />
         </div>
       </q-card-section>
-
       <q-card-section class="pt-0">
         <q-form @submit.prevent="onSubmit"
                 @reset="onReset"

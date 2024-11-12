@@ -45,8 +45,6 @@
       </q-td>
     </template>
 </q-table> -->
-
-
   <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
     <div>
       <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white mt-5">Account Incomes</h3>
@@ -59,8 +57,6 @@
             <a href="#"
                class="hover:underline">#{{ transaction.id }}</a>
           </dd>
-
-
         </dl>
 
         <dl class="w-1/2 sm:w-1/4 md:flex-1 lg:w-auto">
@@ -82,24 +78,16 @@
             'mt-1.5 inline-flex items-center rounded': true,
             [`bg-${transaction.transaction_type?.bgColor} dark:bg-${transaction.transaction_type?.bgColor}`]: true,
             [`text-${transaction.transaction_type?.textColor} dark:text-${transaction.transaction_type?.textColor}`]: true,
-            'px-2.5 py-0.5 text-xs font-medium': true
           }">
-
             <q-icon :name="transaction.transaction_type?.icon"
                     class="pr-2" />
-            {{
-              transaction.transaction_type?.value
-            }}
+            {{ transaction.transaction_type?.value }}
           </dd>
         </dl>
-
-
       </div>
       <div v-else>No incomes found</div>
     </div>
   </div>
-
-
 </template>
 
 <script setup>

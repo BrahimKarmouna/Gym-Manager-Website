@@ -132,15 +132,10 @@
                               class="grow" />
                 </div>
               </div>
-
               <q-skeleton type="QBtn" />
-
             </div>
-
           </section>
-
         </template>
-
         <template v-else>
           <section v-for="account in accounts"
                    :key="account.id"
@@ -213,17 +208,13 @@
                 <span>Balance: </span>
                 <span>{{ formatter.format(account.balance) }}</span>
               </span>
-
-
               <q-btn unelevated
                      class="bg-green-500 whitespace-nowrap text-white rounded-lg font-semibold text-xs  dark:bg-blue-900"
                      :to="{ name: 'account.transfers', params: { id: account.id } }">
                 Check it Now
               </q-btn>
-
             </div>
             <span class="text-gray-200 text-sm flex-nowrap">Added {{ account.created_at }}</span>
-
           </section>
         </template>
 
@@ -373,8 +364,6 @@
                   {{ transfer.note }}
                 </dd>
               </dl>
-
-
             </div>
             <div v-else>No transfers found</div>
           </div>
@@ -386,7 +375,6 @@
                  class="rounded-lg sm:text-sm ms-auto mt-3" />
         </div>
       </div>
-
     </div>
   </q-page>
 

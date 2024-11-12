@@ -2,58 +2,43 @@
 
   <div class="flex-grow text-gray-800">
 
-    <main class="p-6 sm:p-9 space-y-3">
-      <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
+    <main class="p-6 sm:p-4 space-y-2">
+      <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row ">
         <div class="mr-6">
           <!-- <h1 class="text-4xl font-mono text-bold mb-2 text-black dark:text-white">Dashboard</h1> -->
-
         </div>
-
       </div>
-      <section class="  grid md:grid-cols-2 xl:grid-cols-3 gap-3 ">
+      <section class="  grid md:grid-cols-2 xl:grid-cols-3 gap-8 ">
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800   ">
           <div>
             <q-icon name="move_up"
                     class="text-blue-600"
                     size="md" />
-            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Transfer</h3>
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Transfers</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.transfers
               }}</span>
-
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
-
-
-
-
           <div>
             <q-icon name="trending_up"
                     class="text-emerald-600"
                     size="md" />
-            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Incomes</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.incomes
               }}</span>
-
           </div>
         </div>
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
-
-
-
           <div>
             <q-icon name="trending_down"
                     class="text-red-600"
                     size="md" />
-            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expense</h3>
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expenses</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{ data.expenses
               }}</span>
-
           </div>
         </div>
-
-
-
       </section>
 
       <div class="flex items-center gap-x-3 ">
@@ -68,7 +53,6 @@
         <div v-if="transactions.length > 0"
              v-for="transaction in transactions"
              class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
-
           <dl class="w-1/2 sm:w-48">
             <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction ID:</dt>
             <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
@@ -120,25 +104,13 @@
 
           <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
             <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Note:</dt>
-            <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-
-
-              {{ transaction.note }}
-            </dd>
+            <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white"> {{ transaction.note }}</dd>
           </dl>
-
         </div>
         <div v-else>No incomes found</div>
       </div>
-
-
     </main>
-
-
-
   </div>
-
-
 </template>
 <script setup>
 import axios from "axios";
@@ -148,7 +120,6 @@ import Incomes from "./Incomes.vue";
 import Expenses from "./Expenses.vue";
 
 const transactions = ref([]);
-const accounts = ref([]);
 const data = ref(null);
 const loading = ref(false);
 
@@ -156,7 +127,6 @@ const fetchTransactions = async () => {
   try {
     loading.value = true;
     const response = await axios.get('/api/transactions');
-    // transactions.value = response.data.data;
   } catch (error) {
     console.error('Error fetching transactions:', error);
   } finally {

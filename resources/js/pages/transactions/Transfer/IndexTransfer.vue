@@ -8,7 +8,6 @@
             :id="itemToEdit?.id" />
 
   <!-- transfer  -->
-  <!-- Copy table properties from q-table -->
   <q-table flat
            title="Transfer Records"
            :rows="data ?? []"
@@ -34,7 +33,6 @@
 
       <q-space />
 
-      <!-- Copy this input -->
       <q-input v-model="options.search"
                @change="
                 $refs.tableRef.requestServerInteraction({
@@ -72,7 +70,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, toRaw, nextTick } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { api } from '@/boot/axios';
 import { useResourceIndex } from '@/composables/useResourceIndex';
@@ -81,26 +79,22 @@ import EditForm from './EditForm.vue';
 
 const $q = useQuasar();
 const loading = ref(false);
-const filter = ref('');
-
-//! Add this
 const tableRef = ref(null);
+// const formatter = useMoney('MAD', 'fr-FR');
 
 const showCreateDialog = ref(false);
 
 const transferColumns = [
   { name: 'user', label: 'User', align: 'left', field: (row) => row.user.name ?? 'N/A' },
-  { name: 'amount', label: 'Amount', align: 'left', field: 'amount', sortable: true },
+  { name: 'amount', label: 'Amount', align: 'left', field: (row) => `${row.amount ? row.amount.toFixed(2) + ' MAD' : 'N/A'}`, sortable: true },
   { name: 'date', label: 'Date', align: 'left', field: 'date', sortable: true },
   { name: 'from', label: 'From', align: 'left', field: (row) => row.source_account?.name ?? 'N/A', sortable: true },
   { name: 'to', label: 'To', align: 'left', field: (row) => row.destination_account?.name ?? "N/A", sortable: true },
   { name: 'note', label: 'Note', align: 'left', field: 'note' },
-  // { name: "created_at", label: "Created At", field: "created_at", sortable: true },
-  // { name: "updated_at", label: "Updated At", field: "updated_at", sortable: true },
+  { name: "created_at", label: "Created At", field: "created_at", sortable: true },
+  { name: "updated_at", label: "Updated At", field: "updated_at", sortable: true },
   { name: 'actions', label: '', align: 'right', field: 'actions' },
 ];
-
-
 
 const { data, fetch, loading: loadingTransfer, onRequest, options } = useResourceIndex('transactions?transaction_type=transfer');
 

@@ -3,7 +3,7 @@
     <!-- Best Sellers -->
     <q-card class=" dark:bg-gray-800">
       <q-card-section>
-        <div class="text-start mb-3 flex items-center justify-between">
+        <div class="text-start mb-2 flex items-center justify-between">
           <span class="text-xl q-ml-sm">Expenses</span>
           <!-- Filter By Year -->
           <q-select v-model="selectedYear"
@@ -12,11 +12,12 @@
                     :options="years"
                     outlined />
         </div>
-        <apexchart v-if="expenseSeries.length > 0"
+        <apexchart v-if="totalExpenses > 0"
                    height="255"
                    type="pie"
-                   :options="productOptions"
-                   :series="expenseSeries" />
+                   ref="chartRef"
+                   :series="series"
+                   :options="productOptions" />
         <div v-else
              class="text-center h-[219px] pt-20">
           <q-icon name="fa-solid fa-exclamation-circle"
@@ -32,29 +33,29 @@
 
 <script setup>
 import { useFetch } from "@/composables/useFetch";
+import { useQuasar } from "quasar";
 import { computed, ref, watch } from "vue";
 
 const currentYear = new Date().getFullYear();
 const selectedYear = ref(currentYear);
 const years = Array.from({ length: 10 }, (_, k) => currentYear - k);
 
-const expenseSeries = ref([]);
-const expenseLabels = ref([]);
+const series = ref([]);
+const labels = ref([]);
+const chartRef = ref();
+const totalExpenses = ref([]);
 
 const { execute: fetchExpenses, loading } = useFetch({
   config: {
     url: "get-expenses",
   },
   onSuccess: (response) => {
-    const data = Object.values(response.data); // Convert the object into an array of category objects
 
-    if (Array.isArray(data) && data.length > 0) {
-      // Map to percentages and labels
-      expenseSeries.value = data.map((item) => item.percentage);
-      expenseLabels.value = data.map((item) => item.label);
-    } else {
-      console.error('Invalid or empty response data:', response.data);
-    }
+    // Map to percentages and labels
+    series.value = response.data.chart_data.map((item) => item.percentage);
+    labels.value = response.data.chart_data.map((item) => item.label);
+
+    totalExpenses.value = response.data.total_expenses;
   },
   onError: (err) => {
     console.log({ err });
@@ -75,17 +76,28 @@ watch(
   { immediate: true }
 );
 
-
+const $q = useQuasar();
 
 // Best Sellers (Product) Chart
 const productOptions = computed(() => ({
+  theme: {
+    mode: $q.dark.isActive ? 'dark' : 'light',
+    // palette: 'palette1',
+  },
+  colors: [
+    '#ff0000',
+    '#ff000f',
+    '#ff00ff',
+    '#ff0fff',
+  ],
+
   chart: {
     width: 500,
     type: "pie",
-
+    background: 'transparent'
   },
   legend: {
-    position: "bottom",
+    position: "left",
 
   },
   dataLabels: {
@@ -97,6 +109,7 @@ const productOptions = computed(() => ({
       fontWeight: "bold",
     },
   },
-  labels: expenseLabels.value,
+  labels: labels.value,
+
 }));
 </script>

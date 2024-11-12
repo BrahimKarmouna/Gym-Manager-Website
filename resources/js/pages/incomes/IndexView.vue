@@ -17,7 +17,6 @@
                    v-close-popup />
           </div>
         </q-card-section>
-
         <q-card-section class="q-pt-none">
           <div class="flex flex-col gap-3">
             <q-input dense
@@ -58,7 +57,6 @@
                  @click="isEditing ? updateItem() : createItem()"
                  :loading="createForm.processing" />
         </q-card-actions>
-
       </q-card>
     </q-dialog>
 
@@ -66,16 +64,13 @@
       <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <div class="mb-4 flex items-center justify-between md:mb-8">
           <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add an Income category</h2>
-
           <div><q-btn @click="openCreateModal"
                    color="green-500 dark:bg-blue-900 "
                    icon="sym_r_add"
                    c
                    label="Create" />
           </div>
-
         </div>
-
         <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div v-for="transactionCategory in data"
                :key="transactionCategory.id"
@@ -91,7 +86,6 @@
                   transactionCategory.name }}
               </span>
             </div>
-
             <div>
               <q-btn flat
                      class=" p-2"
@@ -105,13 +99,9 @@
                      @click.stop="deleteItem(transactionCategory)" />
             </div>
           </div>
-
         </div>
       </div>
     </section>
-
-
-
   </q-page>
 </template>
 

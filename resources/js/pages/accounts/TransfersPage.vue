@@ -49,7 +49,6 @@
 
 
   <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8">
-
     <div>
       <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white mt-5">Account Transfers</h3>
       <div v-if="transfers?.length > 0"
@@ -85,15 +84,12 @@
 
             <q-icon :name="transaction.transaction_type?.icon"
                     class="pr-2" />
-            {{
-              transaction.transaction_type?.value
-            }}
+            {{ transaction.transaction_type?.value }}
           </dd>
         </dl>
       </div>
       <div v-else>No transfers found</div>
     </div>
-
   </div>
 
 
