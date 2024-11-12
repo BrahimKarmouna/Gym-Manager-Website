@@ -222,7 +222,7 @@
         <div
              class="flex flex-col flex-nowrap row-span-3 self-stretch md:col-end-3 md:col-span-2 xl:col-end-4 2xl:col-end-5 col-span-1 2xl:col-span-2 row-end-1 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
 
-          <div class="flex items-center justify-between mb-2 Xs: bg-red-600 ">
+          <div class="flex items-center justify-between mb-2 pl-4 h-28 sm:bg-white">
             <div class="flex-shrink-0 ">
               <span class="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">{{
                 formatter.format(totalBalance) }}</span>
@@ -301,7 +301,8 @@
 
           <!-- Card Body -->
           <div
-               class=" rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50  dark:border-gray-700 dark:bg-gray-800 md:p-5 w-3/3">
+               class="rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 md:p-5 sm: p-6 w-full">
+
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last Account transers</h3>
             <div v-if="lastTransfers.length > 0"
                  v-for="transfer in lastTransfers"
