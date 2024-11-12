@@ -28,7 +28,7 @@
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
-          <q-icon name="account_balance_wallet"
+          <q-icon name="attach_money"
                   class="text-blue-600"
                   size="md" />
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Balance</h3>

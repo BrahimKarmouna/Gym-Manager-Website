@@ -33,8 +33,8 @@
 
 <script setup>
 import { useFetch } from "@/composables/useFetch";
-import { computed } from "vue";
-import { ref, watch } from "vue";
+import { useQuasar } from "quasar";
+import { computed, ref, watch } from "vue";
 
 const currentYear = new Date().getFullYear();
 const selectedYear = ref(currentYear);
@@ -77,11 +77,34 @@ watch(
   { immediate: true }
 );
 
+const $q = useQuasar();
+
 // Best Sellers (Product) Chart
 const productOptions = computed(() => ({
+  theme: {
+    mode: $q.dark.isActive ? 'dark' : 'light',
+    // palette: 'palette1',
+  },
+  colors: [
+    '#ff0000',
+    '#8A2BE2',
+    '#FF7F50',
+    '#556B2F',
+    '#FF8C00',
+    '#FFE4E1',
+    '#000080',
+    '#8B4513',
+    '#800080',
+    '#7FFFD4',
+    '#00FFFF',
+    '#2F4F4F',
+    '#FF69B4',
+  ],
+
   chart: {
     width: 500,
     type: "pie",
+    background: 'transparent'
   },
   legend: {
     position: "left",
@@ -95,7 +118,6 @@ const productOptions = computed(() => ({
       fontWeight: "bold",
     },
   },
-
 
   labels: labels.value,
 }));
