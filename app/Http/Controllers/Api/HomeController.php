@@ -71,39 +71,42 @@ class HomeController extends Controller
     ]);
   }
 
+
+
   public function expenses(Request $request)
   {
-    $selectedYear = $request->query('year', Carbon::now()->year) ?? date('Y');
+    $selectedYear = $request->query('year', Carbon::now()->year);
 
-    // Assuming a relationship where `category_id` is the foreign key in the `transactions` table
-    $incomes = Transaction::where('transaction_type', TransactionType::EXPENSE)
-      ->whereYear('created_at', $selectedYear) // filter by year
+    $categories = Category::query()
+      ->select(['id', 'name'])
+      ->selectSub(
+        query: Transaction::query()
+          ->selectRaw('COALESCE(SUM(amount), 0) AS total')
+          ->where('transaction_type', TransactionType::EXPENSE)
+          ->where('user_id', auth()->id())
+          ->whereColumn('category_id', 'categories.id')
+          ->whereYear('created_at', $selectedYear),
+        as: 'total'
+      )
+
+      ->where('transaction_type', TransactionType::EXPENSE)
+      ->toBase()
       ->get();
 
-    // Now, we need to group by category and calculate the total amount per category
-    $categorySums = $incomes->groupBy('category_id')->map(function ($group) {
-      return $group->sum('amount'); // Assuming 'amount' is the field storing the transaction amount
-    });
-
     // Get total amount of all incomes
-    $totalIncome = $categorySums->sum();
+    $totalExpense = $categories->pluck('total')->sum();
 
     // Calculate percentage for each category
-    $categoryPercentages = $categorySums->map(function ($sum) use ($totalIncome) {
-      return ($sum / $totalIncome) * 100;
-    });
-
-    // Get the category names as well
-    $categories = Category::whereIn('id', $categorySums->keys())->get()->keyBy('id');
-
-    // Prepare data for chart
-    $chartData = $categoryPercentages->map(function ($percentage, $categoryId) use ($categories) {
+    $chartData = $categories->map(function ($category) use ($totalExpense) {
       return [
-        'label' => $categories[$categoryId]->name, // Assuming 'name' is the category name
-        'percentage' => round($percentage, 2)
+        'label' => $category->name,
+        'percentage' => $totalExpense === 0.0 ? $totalExpense : round(($category->total / $totalExpense) * 100, 2)
       ];
     });
 
-    return response()->json($chartData);
+    return response()->json([
+      'chart_data' => $chartData,
+      'total_expenses' => $totalExpense
+    ]);
   }
 }
