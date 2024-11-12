@@ -1,9 +1,9 @@
 <template>
   <div class="w-[49%]">
     <!-- Best Sellers -->
-    <q-card class="my-shadow w-full">
+    <q-card class=" w-full dark:bg-gray-800">
       <q-card-section>
-        <div class="text-start mb-3 flex items-center justify-between">
+        <div class="text-start mb-3 flex items-center justify-between ">
           <span class="text-xl q-ml-sm">Incomes</span>
           <!-- Filter By Year -->
           <q-select v-model="selectedYear"
@@ -16,7 +16,8 @@
                    height="255"
                    type="pie"
                    :options="productOptions"
-                   :series="incomeSeries" />
+                   :series="incomeSeries"
+                   class="" />
         <div v-else
              class="text-center h-[219px] pt-20">
           <q-icon name="fa-solid fa-exclamation-circle"

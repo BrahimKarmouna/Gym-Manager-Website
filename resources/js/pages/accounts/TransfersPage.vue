@@ -90,8 +90,6 @@
             }}
           </dd>
         </dl>
-
-
       </div>
       <div v-else>No transfers found</div>
     </div>

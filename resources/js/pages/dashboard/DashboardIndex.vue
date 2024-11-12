@@ -63,7 +63,7 @@
 
       <!-- Card body -->
       <div
-           class="rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
+           class=" max-h-96 rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last 7 days Transactions</h3>
         <div v-if="transactions.length > 0"
              v-for="transaction in transactions"
@@ -98,7 +98,7 @@
 
           <dl class="w-1/2 sm:w-1/5 md:flex-1 lg:w-auto">
             <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Amount:</dt>
-            <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">${{ transaction.amount }}
+            <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transaction.amount }} MAD
             </dd>
           </dl>
 

@@ -21,49 +21,49 @@
 
           <div class="row q-col-gutter-md">
             <q-input class="col-6"
-                   dense
-                   label="Account Name"
-                   outlined
-                   v-model="form.fields.name"
-                   autofocus
-                   :error="'name' in form.errors"
-                       :error-message="form.errors.name?.[0]"
-                   hide-bottom-space />
-          <q-input class="col-6"
-                   dense
-                   label="Account Balance"
-                   outlined
-                   type="number"
-                   v-model="form.fields.balance"
-                   :error="'balance' in form.errors"
-                       :error-message="form.errors.balance?.[0]"
-                   hide-bottom-space />
-          <q-input class="col-12"
-                   dense
-                   label="Account RIB"
-                   maxlength="24"
-                   outlined
-                   type="text"
-                   v-model="form.fields.rib"
-                   :error="'rib' in form.errors"
-                       :error-message="form.errors.rib?.[0]"
-                   hide-bottom-space />
-          <div class="col-12">
-            {{ console.log("Fields: ", form.fields) }}
-            <q-select v-model="form.fields.account_type"
-                      :options="accountTypes"
-                      label="Account Type"
-                      :error="'account_type' in form.errors"
-                       :error-message="form.errors.account_type?.[0]"
-                      outlined
-                      dense
-                      hide-bottom-space />
-          </div>
+                     dense
+                     label="Account Name"
+                     outlined
+                     v-model="form.fields.name"
+                     autofocus
+                     :error="'name' in form.errors"
+                     :error-message="form.errors.name?.[0]"
+                     hide-bottom-space />
+            <q-input class="col-6"
+                     dense
+                     label="Account Balance"
+                     outlined
+                     type="number"
+                     v-model="form.fields.balance"
+                     :error="'balance' in form.errors"
+                     :error-message="form.errors.balance?.[0]"
+                     hide-bottom-space />
+            <q-input class="col-12"
+                     dense
+                     label="Account RIB"
+                     maxlength="24"
+                     outlined
+                     type="text"
+                     v-model="form.fields.rib"
+                     :error="'rib' in form.errors"
+                     :error-message="form.errors.rib?.[0]"
+                     hide-bottom-space />
+            <div class="col-12">
+              {{ console.log("Fields: ", form.fields) }}
+              <q-select v-model="form.fields.account_type"
+                        :options="accountTypes"
+                        label="Account Type"
+                        :error="'account_type' in form.errors"
+                        :error-message="form.errors.account_type?.[0]"
+                        outlined
+                        dense
+                        hide-bottom-space />
+            </div>
 
             <div class="col-12 text-end">
               <q-btn label="Reset"
                      type="reset"
-                     color="primary"
+                     color="primary dark:text-gray-400"
                      flat
                      class="me-3" />
 
