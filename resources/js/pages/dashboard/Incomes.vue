@@ -12,12 +12,12 @@
                     :options="years"
                     outlined />
         </div>
-        <apexchart v-if="incomeSeries.length > 0"
+        <apexchart v-if="totalIncomes > 0"
                    height="255"
                    type="pie"
-                   :options="productOptions"
-                   :series="incomeSeries"
-                   class="" />
+                   ref="chartRef"
+                   :series="series"
+                   :options="productOptions" />
         <div v-else
              class="text-center h-[219px] pt-20">
           <q-icon name="fa-solid fa-exclamation-circle"
@@ -33,29 +33,29 @@
 
 <script setup>
 import { useFetch } from "@/composables/useFetch";
-import { computed, ref, watch } from "vue";
+import { computed } from "vue";
+import { ref, watch } from "vue";
 
 const currentYear = new Date().getFullYear();
 const selectedYear = ref(currentYear);
 const years = Array.from({ length: 10 }, (_, k) => currentYear - k);
 
-const incomeSeries = ref([]);
-const incomeLabels = ref([]);
+const series = ref([]);
+const labels = ref([]);
+const chartRef = ref();
+const totalIncomes = ref([]);
 
 const { execute: fetchIncomes, loading } = useFetch({
   config: {
     url: "get-incomes",
   },
   onSuccess: (response) => {
-    const data = Object.values(response.data); // Convert the object into an array of category objects
 
-    if (Array.isArray(data) && data.length > 0) {
-      // Map to percentages and labels
-      incomeSeries.value = data.map((item) => item.percentage);
-      incomeLabels.value = data.map((item) => item.label);
-    } else {
-      console.error('Invalid or empty response data:', response.data);
-    }
+    // Map to percentages and labels
+    series.value = response.data.chart_data.map((item) => item.percentage);
+    labels.value = response.data.chart_data.map((item) => item.label);
+
+    totalIncomes.value = response.data.total_incomes;
   },
   onError: (err) => {
     console.log({ err });
@@ -83,7 +83,7 @@ const productOptions = computed(() => ({
     type: "pie",
   },
   legend: {
-    position: "bottom",
+    position: "left",
   },
   dataLabels: {
     enabled: true,
@@ -94,6 +94,6 @@ const productOptions = computed(() => ({
       fontWeight: "bold",
     },
   },
-  labels: incomeLabels.value,
+  labels: labels.value,
 }));
 </script>

@@ -10,8 +10,8 @@
         </div>
 
       </div>
-      <section class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-        <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
+      <section class="  grid md:grid-cols-2 xl:grid-cols-3 gap-3 ">
+        <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800   ">
           <div>
             <q-icon name="move_up"
                     class="text-blue-600"
@@ -56,9 +56,9 @@
 
       </section>
 
-      <div class="flex items-center gap-x-2 justify-between">
+      <div class="flex items-center gap-x-3 ">
         <incomes />
-        <expenses />
+        <expenses class=" p-2 " />
       </div>
 
       <!-- Card body -->
