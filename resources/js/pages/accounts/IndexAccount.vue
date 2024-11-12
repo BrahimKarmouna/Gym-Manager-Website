@@ -74,13 +74,13 @@
         </div>
       </div>
 
-
       <!-- Accounts list -->
       <div class="font-semibold text-md text-2xl text-gray-700 dark:text-white mb-3">
         Add new account :
       </div>
 
-      <div class="grid grid-cols-1 relative md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-start gap-4"
+      <!-- bxd -->
+      <div class="grid grid-cols-1 relative md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-start gap-4 "
            style="grid-auto-rows: 240px !important;">
 
         <q-btn unelevated
@@ -93,7 +93,7 @@
 
           <section v-for="(_, index) in Array.from({ length: 20 })"
                    :key="index"
-                   class="p-4 rounded-2xl self-stretch bg-green-500 shadow-lg overflow-hidden bg-gradient-to-tl from-gray-400 to-gray-600">
+                   class="p-4 order-last rounded-2xl self-stretch bg-green-500 shadow-lg overflow-hidden bg-gradient-to-tl from-gray-400 to-gray-600">
 
             <!-- Header -->
             <header class="flex text-white z-20 mb-4">
@@ -218,9 +218,10 @@
           </section>
         </template>
 
+
         <!-- Latest transactions -->
         <div
-             class="flex flex-col flex-nowrap row-span-3 self-stretch md:col-end-3 md:col-span-2 xl:col-end-4 2xl:col-end-5 col-span-1 2xl:col-span-2 row-end-1 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+             class="flex flex-col flex-nowrap row-span-3 self-stretch md:col-end-3 md:col-span-2 xl:col-end-4 2xl:col-end-5 col-span-1 2xl:col-span-2 2xl:row-end-1 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
 
           <div class="flex items-center justify-between mb-2 pl-4 h-28 sm:bg-white">
             <div class="flex-shrink-0 ">
