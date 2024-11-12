@@ -21,6 +21,16 @@ const routes = [
       },
 
       {
+        path: "register",
+        alias: "/",
+        name: "register",
+        meta: {
+          middleware: [GuestMiddleware],
+        },
+        component: () => import("../pages/auth/SignupPage.vue"),
+      },
+
+      {
         path: "two-factor",
         name: "auth.two-factor",
         meta: {

@@ -8,7 +8,6 @@
                :id="itemToEdit?.id" />
 
   <!-- expense  -->
-  <!-- Copy table properties from q-table -->
   <q-table flat
            title="Expense Records"
            :rows="data ?? []"
@@ -34,7 +33,6 @@
 
       <q-space />
 
-      <!-- Copy this input -->
       <q-input v-model="options.search"
                @change="
                 $refs.tableRef.requestServerInteraction({
@@ -83,7 +81,6 @@ const $q = useQuasar();
 const loading = ref(false);
 const filter = ref('');
 
-//! Add this
 const tableRef = ref(null);
 
 const showCreateDialog = ref(false);

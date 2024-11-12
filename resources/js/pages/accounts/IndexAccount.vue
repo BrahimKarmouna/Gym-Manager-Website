@@ -11,12 +11,11 @@
           :style-fn="(offset) => ({ height: `calc(100vh - ${offset}px)` })">
 
     <div class="mx-auto p-6">
-
       <div class="grid w-full grid-cols-1 gap-4 mt-4 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 mb-5">
         <div
              class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div class="w-full">
-            <q-icon name="person"
+            <q-icon name="payments"
                     class="text-blue-600"
                     size="md" />
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Number account</h3>
@@ -132,15 +131,10 @@
                               class="grow" />
                 </div>
               </div>
-
               <q-skeleton type="QBtn" />
-
             </div>
-
           </section>
-
         </template>
-
         <template v-else>
           <section v-for="account in accounts"
                    :key="account.id"
@@ -148,7 +142,7 @@
 
             <!-- Header -->
             <header class="flex text-white z-20 mb-4">
-              <q-icon name="person"
+              <q-icon name="sym_r_payments"
                       size="md" />
 
               <q-btn icon="sym_r_more_vert"
@@ -213,17 +207,13 @@
                 <span>Balance: </span>
                 <span>{{ formatter.format(account.balance) }}</span>
               </span>
-
-
               <q-btn unelevated
                      class="bg-green-500 whitespace-nowrap text-white rounded-lg font-semibold text-xs  dark:bg-blue-900"
                      :to="{ name: 'account.transfers', params: { id: account.id } }">
                 Check it Now
               </q-btn>
-
             </div>
             <span class="text-gray-200 text-sm flex-nowrap">Added {{ account.created_at }}</span>
-
           </section>
         </template>
 
@@ -373,8 +363,6 @@
                   {{ transfer.note }}
                 </dd>
               </dl>
-
-
             </div>
             <div v-else>No transfers found</div>
           </div>
@@ -386,7 +374,6 @@
                  class="rounded-lg sm:text-sm ms-auto mt-3" />
         </div>
       </div>
-
     </div>
   </q-page>
 

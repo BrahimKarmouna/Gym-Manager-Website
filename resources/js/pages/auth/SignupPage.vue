@@ -11,7 +11,7 @@
                class="text-dark w-10 h-10 mx-auto mb-3" />
 
           <h3 class="text-gray-800 text-lg font-extrabold dark:text-white">
-            Sign in
+            Sign up
           </h3>
         </div>
 
@@ -19,8 +19,26 @@
                  class="mb-4"
                  dense
                  no-error-icon
-                 type="email"
+                 type="name"
                  autofocus
+                 label="Name"
+                 autocomplete="username"
+                 :error="'name' in form.errors"
+                 :error-message="form.errors.name?.[0]"
+                 hide-bottom-space
+                 v-model="form.fields.name"
+                 placeholder="Enter user name">
+          <template #append>
+            <q-icon name="sym_r_person"
+                    size="18px" />
+          </template>
+        </q-input>
+
+        <q-input outlined
+                 class="mb-4"
+                 dense
+                 no-error-icon
+                 type="email"
                  label="Email"
                  autocomplete="username"
                  :error="'email' in form.errors"
@@ -43,13 +61,19 @@
                     :error-message="form.errors.password?.[0]"
                     hide-bottom-space
                     v-model="form.fields.password"
-                    autocomplete="current-password"
+                    autocomplete="new-password"
                     placeholder="Enter password" />
 
-        <q-checkbox label="Remember me"
-                    v-model="form.fields.remember"
-                    class="inline-flex"
-                    size="xs" />
+        <q-password outlined
+                    dense
+                    class="mb-3"
+                    no-error-icon
+                    label="Password confirmation"
+                    :error="'password_confirmation' in form.errors"
+                    :error-message="form.errors.password_confirmation?.[0]"
+                    hide-bottom-space
+                    v-model="form.fields.password_confirmation"
+                    placeholder="Enter password" />
 
         <div class="mt-4">
           <q-btn color="green-500 dark:bg-blue-900"
@@ -65,11 +89,11 @@
         <!-- Forgot password -->
         <div class="text-sm mt-4">
           <span class="text-gray-800 dark:text-white">
-            Forgot your password?
+            Already have an account?
           </span>
-          <router-link :to="{ name: 'password.reset' }"
+          <router-link :to="{ name: 'login' }"
                        class="dark:text-gray-900 underline font-medium">
-            Reset it here
+            Sign in
           </router-link>
         </div>
       </form>
@@ -86,8 +110,10 @@ const router = useRouter();
 
 const form = useForm({
   email: "",
+  name: "",
   password: "",
-  remember: false,
+  password_confirmation: "",
+
 });
 
 function handleRedirect(response) {
@@ -106,7 +132,7 @@ async function login() {
   await form.submit(async (fields) => {
     await api.get("sanctum/csrf-cookie");
 
-    const response = await api.post("login", fields);
+    const response = await api.post("register", fields);
 
     handleRedirect(response);
 

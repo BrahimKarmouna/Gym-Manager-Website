@@ -2,10 +2,7 @@
   <div>
     <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-8">
       <div class="mx-auto max-w-screen-2xl px-4 3xl:px-0">
-
-
         <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl md:mb-6">Account overview</h2>
-
         <div class="py-4 md:py-8">
           <div class="mb-4 grid gap-4 sm:grid-cols-2 sm:gap-8 lg:gap-16">
             <div class="flex space-y-4 space-x-4">
@@ -21,10 +18,11 @@
               </div>
             </div>
             <div class="space-y-4">
-              <dl>
+              <dl v-if="account.rib">
                 <dt class="font-semibold text-gray-900 dark:text-white">Account RIB:</dt>
-                <dd class="text-gray-500 dark:text-gray-400 text-bold ">{{ account.rib }}</dd>
+                <dd class="text-gray-500 dark:text-gray-400 text-bold">{{ account.rib }}</dd>
               </dl>
+
               <dl>
                 <dt class="font-semibold text-gray-900 dark:text-white"> Account Type:</dt>
                 <dd class="flex items-center gap-1 text-gray-500 dark:text-gray-400">
@@ -38,9 +36,7 @@
                 </dd>
               </dl>
             </div>
-
           </div>
-
         </div>
 
         <!-- <q-dialog v-model="prompt"
@@ -92,7 +88,6 @@
               <h3 class="text-base font-normal text-gray-500 dark:text-gray-400"> Account Income</h3>
               <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
                 account.incomes_sum }} MAD</span>
-
             </div>
             <div class="w-full"
                  id="new-products-chart"></div>
@@ -129,15 +124,11 @@
                          :to="{ name: 'account.expenses' }"
                          label="Expense" />
           </q-tabs>
-
           <q-separator />
-
           <RouterView />
         </q-card>
-
       </div>
     </section>
-
     <div v-if="loading">Loading...</div>
   </div>
 </template>

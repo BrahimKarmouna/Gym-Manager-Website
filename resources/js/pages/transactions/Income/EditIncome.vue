@@ -115,7 +115,6 @@
                      color="green-7" />
             </div>
           </div>
-
         </q-form>
       </q-card-section>
     </q-card>

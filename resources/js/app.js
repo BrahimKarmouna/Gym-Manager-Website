@@ -11,6 +11,7 @@ import iconSet from 'quasar/icon-set/material-symbols-rounded'
 // Import Quasar css
 import 'quasar/src/css/index.sass'
 import '../scss/app.scss';
+import VueApexCharts from "vue3-apexcharts";
 
 // Assumes your root component is App.vue
 // and placed in same folder as main.js
@@ -33,7 +34,7 @@ app.use(Quasar, {
 });
 
 app.use(pinia);
-
+app.use(VueApexCharts);
 app.use({
   install(app) {
     const context = {

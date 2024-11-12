@@ -49,7 +49,6 @@
 
 
   <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8">
-
     <div>
       <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white mt-5">Account Transfers</h3>
       <div v-if="transfers?.length > 0"
@@ -71,7 +70,7 @@
 
         <dl class="w-1/2 sm:w-1/5 md:flex-1 lg:w-auto">
           <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Price:</dt>
-          <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">${{ transaction.amount }}</dd>
+          <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transaction.amount }} MAD</dd>
         </dl>
 
         <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
@@ -85,17 +84,12 @@
 
             <q-icon :name="transaction.transaction_type?.icon"
                     class="pr-2" />
-            {{
-              transaction.transaction_type?.value
-            }}
+            {{ transaction.transaction_type?.value }}
           </dd>
         </dl>
-
-
       </div>
       <div v-else>No transfers found</div>
     </div>
-
   </div>
 
 

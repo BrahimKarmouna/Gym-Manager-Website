@@ -5,10 +5,8 @@
     <main class="p-6 sm:p-9 space-y-3">
       <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
         <div class="mr-6">
-          <h1 class="text-4xl font-mono text-bold mb-2 text-black dark:text-white">Dashboard</h1>
-
+          <!-- <h1 class="text-4xl font-mono text-bold mb-2 text-black dark:text-white">Dashboard</h1> -->
         </div>
-
       </div>
       <section class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
         <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
@@ -44,7 +42,12 @@
         </div>
       </section>
 
-      <!-- Card Body -->
+      <div class="flex items-center gap-x-2 justify-between">
+        <incomes />
+        <expenses />
+      </div>
+
+      <!-- Card body -->
       <div
            class="rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last 7 days Transactions</h3>
@@ -86,7 +89,6 @@
 
           <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
             <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction:</dt>
-            {{ console.log("Transaction: ", transaction.transaction_type) }}
             <dd :class="{
               'mt-1.5 inline-flex items-center rounded': true,
               [`bg-${transaction.transaction_type?.bgColor} dark:bg-${transaction.transaction_type?.bgColor}`]: true,
@@ -103,27 +105,20 @@
 
           <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
             <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Note:</dt>
-            <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-
-
-              {{ transaction.note }}
-            </dd>
+            <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white"> {{ transaction.note }}</dd>
           </dl>
-
         </div>
         <div v-else>No incomes found</div>
       </div>
-
-
     </main>
   </div>
-
-
 </template>
 <script setup>
 import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useFetch } from "../../composables/useFetch.js";
+import Incomes from "./Incomes.vue";
+import Expenses from "./Expenses.vue";
 
 const transactions = ref([]);
 const accounts = ref([]);

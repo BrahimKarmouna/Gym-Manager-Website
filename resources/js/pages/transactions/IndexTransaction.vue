@@ -9,17 +9,11 @@
           <q-icon name="trending_up"
                   class="text-emerald-600"
                   size="md" />
-
-
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Income</h3>
-
           <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">
-            {{
-              formatter.format(transactions.incomes) }}</span>
+            {{ formatter.format(transactions.incomes) }}</span>
         </div>
-
       </div>
-
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
@@ -29,7 +23,6 @@
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Expense</h3>
           <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
             formatter.format(transactions.expenses) }}</span>
-
         </div>
       </div>
       <div
@@ -41,7 +34,6 @@
           <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Balance</h3>
           <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
             formatter.format(transactions.total_balance) }}</span>
-
         </div>
       </div>
     </div>
@@ -64,16 +56,13 @@
                      :to="{ name: 'transaction.expense' }"
                      label="Expense" />
       </q-tabs>
-
       <q-separator />
-
       <RouterView />
     </q-card>
   </q-page>
 </template>
 
 <script setup>
-import { useResourceIndex } from '../../composables/useResourceIndex';
 import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { useMoney } from '../../composables/useMoney';
