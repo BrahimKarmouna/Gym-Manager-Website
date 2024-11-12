@@ -1,9 +1,9 @@
 <template>
-  <div class="w-[49%] ">
+  <div class="w-full sm:w-[49%] mb-4 my-4">
     <!-- Best Sellers -->
-    <q-card class=" dark:bg-gray-800">
+    <q-card class=" dark:bg-gray-800  ">
       <q-card-section>
-        <div class="text-start mb-2 flex items-center justify-between">
+        <div class="text-start mb-2 flex items-center justify-between ">
           <span class="text-xl q-ml-sm">Expenses</span>
           <!-- Filter By Year -->
           <q-select v-model="selectedYear"

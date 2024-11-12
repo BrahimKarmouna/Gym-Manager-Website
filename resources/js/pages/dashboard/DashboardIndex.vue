@@ -2,56 +2,54 @@
 
   <div class="flex-grow text-gray-800">
 
-    <main class="p-6 sm:p-4 space-y-2">
-      <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row ">
-        <div class="mr-6">
-          <!-- <h1 class="text-4xl font-mono text-bold mb-2 text-black dark:text-white">Dashboard</h1> -->
-        </div>
+    <main class="p-4 sm:p-4 space-y-2">
+      <div class="flex flex-col  space-y-6 md:space-y-0 md:flex-row ">
+
       </div>
-      <section class="  grid md:grid-cols-2 xl:grid-cols-3 gap-8 ">
-        <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800   ">
+      <section class="  grid md:grid-cols-2 xl:grid-cols-3 gap-2 ">
+        <div class=" h-28 flex items-center p-8 py-5 bg-white shadow rounded-lg dark:bg-gray-800   ">
           <div>
             <q-icon name="move_up"
                     class="text-blue-600 ms-5"
                     size="md" />
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Transfers</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
-              data.transfers
-            }}</span>
+              data?.transfers
+              }}</span>
           </div>
         </div>
-        <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
+        <div class="h-28 flex items-center p-8 py-5 bg-white shadow rounded-lg dark:bg-gray-800 ">
           <div>
             <q-icon name="trending_up"
                     class="text-emerald-600 ms-5"
                     size="md" />
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Incomes</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
-              data.incomes
-              }}</span>
+              data?.incomes
+            }}</span>
           </div>
         </div>
-        <div class="flex items-center p-8 bg-white shadow rounded-lg dark:bg-gray-800">
+        <div class="h-28 flex items-center p-8 py-5 bg-white shadow rounded-lg dark:bg-gray-800 ">
           <div>
             <q-icon name="trending_down"
                     class="text-red-600 ms-5"
                     size="md" />
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Expenses</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
-              data.expenses
-            }}</span>
+              data?.expenses
+              }}</span>
           </div>
         </div>
       </section>
 
-      <div class="flex items-center gap-x-3 ">
-        <incomes />
-        <expenses class=" p-2 " />
+      <div class="flex flex-wrap gap-4  ">
+        <incomes class="mr-2" />
+        <expenses class=" ml-2" />
       </div>
-
+      {{ console.log(data) }}
       <!-- Card body -->
       <div
-           class=" max-h-96 rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3">
+           class=" max-h-96 rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3 ">
         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last 7 days Transactions</h3>
         <div v-if="transactions.length > 0"
              v-for="transaction in transactions"
