@@ -1,7 +1,7 @@
 <template>
   <div class="w-[49%]">
     <!-- Best Sellers -->
-    <q-card class="my-shadow w-full">
+    <q-card class=" dark:bg-gray-800">
       <q-card-section>
         <div class="text-start mb-3 flex items-center justify-between">
           <span class="text-xl q-ml-sm">Expenses</span>
@@ -75,14 +75,18 @@ watch(
   { immediate: true }
 );
 
+
+
 // Best Sellers (Product) Chart
 const productOptions = computed(() => ({
   chart: {
     width: 500,
     type: "pie",
+
   },
   legend: {
     position: "bottom",
+
   },
   dataLabels: {
     enabled: true,
