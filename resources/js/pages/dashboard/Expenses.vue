@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[49%]">
+  <div class="w-[49%] ">
     <!-- Best Sellers -->
     <q-card class=" dark:bg-gray-800">
       <q-card-section>
@@ -86,9 +86,18 @@ const productOptions = computed(() => ({
   },
   colors: [
     '#ff0000',
-    '#ff000f',
-    '#ff00ff',
-    '#ff0fff',
+    '#8A2BE2',
+    '#FF7F50',
+    '#556B2F',
+    '#FF8C00',
+    '#FFE4E1',
+    '#000080',
+    '#8B4513',
+    '#800080',
+    '#7FFFD4',
+    '#00FFFF',
+    '#2F4F4F',
+    '#FF69B4',
   ],
 
   chart: {

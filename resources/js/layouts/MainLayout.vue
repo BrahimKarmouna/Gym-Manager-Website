@@ -8,15 +8,19 @@
         <q-btn dense
                flat
                round
-               icon="sym_r_menu"
+               icon="sym_r_reorder"
                @click="toggleLeftDrawer"
-               class=" text-blue-900 dark:text-blue-300 mr-1" />
+               class=" text-blue-900 dark:text-blue-300 mr-2 ms-3 py-5" />
         <q-toolbar-title class="flex items-center">
-          <q-icon name="account_balance"
+          <q-icon name="redeem"
                   size="sm"
-                  class="text-blue-900 dark:text-blue-400 pr-2" />
-          <span class="text-blue-900 dark:text-blue-400">Money Manager</span>
+                  class="text-blue-900 dark:text-blue-400 pr-2 ms-7" />
+          <span class="text-blue-900 dark:text-blue-400 ms-2 text-2xl"
+                style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+            Money Manager
+          </span>
         </q-toolbar-title>
+
 
         <!-- Dark mode toggler -->
         <q-toggle :model-value="isDarkActive"
@@ -67,14 +71,16 @@
       <q-list class="q-pa-sm q-gutter-xs ">
 
         <q-item-label header>
-          <span class="text-bold">Navigation</span>
+          <span class="text-bold"
+                style="font-family:  'Lucida Sans'">Navigation</span>
 
         </q-item-label>
 
         <EssentialLink v-for="link in essentialLinks"
                        :key="link.title"
                        v-bind="link"
-                       class="mb-5test@ text-blue-900 dark:text-blue-400 " />
+                       class="mb-5test@ text-blue-900 dark:text-blue-400 text-bold"
+                       style="font-family: sans-serif" />
 
       </q-list>
     </q-drawer>
@@ -120,7 +126,7 @@ const linksList = [
   },
   {
     title: 'Transactions',
-    icon: 'sym_r_money',
+    icon: 'sym_r_move_down',
     to: { name: 'transaction.index' }
   },
   {
