@@ -12,7 +12,7 @@
                @click="toggleLeftDrawer"
                class=" text-blue-900 dark:text-blue-300 mr-2 ms-3 py-5" />
         <q-toolbar-title class="flex items-center">
-          <q-icon name="redeem"
+          <q-icon name="toll"
                   size="sm"
                   class="text-blue-900 dark:text-blue-400 pr-2 ms-7" />
           <span class="text-blue-900 dark:text-blue-400 ms-2 text-2xl"

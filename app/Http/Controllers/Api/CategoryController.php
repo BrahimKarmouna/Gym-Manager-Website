@@ -13,6 +13,7 @@ class CategoryController extends Controller
 {
   public function index(Request $request)
   {
+    $userId = auth()->id();
     $categories = Category::latest()
       ->when(
         $request->get('transaction_type'),
