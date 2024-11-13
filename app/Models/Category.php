@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Category extends Model
 {
@@ -12,7 +13,8 @@ class Category extends Model
   protected $fillable = [
     'name',
     'emoji',
-    'transaction_type'
+    'transaction_type',
+    'user_id',
   ];
 
   protected $casts = [
@@ -22,5 +24,10 @@ class Category extends Model
   public function transactions()
   {
     return $this->hasMany(Transaction::class);
+  }
+
+  public function user(): BelongsTo
+  {
+    return $this->belongsTo(User::class);
   }
 }

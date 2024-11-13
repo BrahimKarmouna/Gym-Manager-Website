@@ -129,7 +129,7 @@ const createForm = useForm({
   }
 });
 
-const { data, fetch } = useResourceIndex('http://localhost:8000/api/categories?transaction_type=income');
+const { data, fetch } = useResourceIndex('categories?transaction_type=income');
 
 onMounted(() => {
   fetch();

@@ -19,7 +19,6 @@
                  label="Email address"
                  dense
                  no-error-icon
-                 placeholder="Enter email"
                  hide-bottom-space
                  :error="'email' in errors"
                  :error-message="errors.email?.[0]"

@@ -11,10 +11,12 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
   public function index(Request $request)
   {
     $userId = auth()->id();
     $categories = Category::latest()
+      ->where('user_id', auth()->id())
       ->when(
         $request->get('transaction_type'),
         function ($query) use ($request) {
@@ -26,6 +28,7 @@ class CategoryController extends Controller
     return CategoryResource::collection($categories);
   }
 
+
   public function store(CategoryRequest $request)
   {
     switch ($request->transaction_type) {
@@ -33,14 +36,16 @@ class CategoryController extends Controller
         $transactionCategory = Category::create([
           'name' => $request->name,
           'emoji' => $request->emoji,
-          'transaction_type' => $request->transaction_type
+          'transaction_type' => $request->transaction_type,
+          'user_id' => auth()->id(),
         ]);
         break;
       case TransactionType::EXPENSE->value:
         $transactionCategory = Category::create([
           'name' => $request->name,
           'emoji' => $request->emoji,
-          'transaction_type' => $request->transaction_type
+          'transaction_type' => $request->transaction_type,
+          'user_id' => auth()->id(),
         ]);
         break;
       default:
@@ -55,15 +60,8 @@ class CategoryController extends Controller
     return CategoryResource::make($transactionCategory);
   }
 
-  public function update(Request $request, Category $category)
+  public function update(CategoryRequest $request, Category $category)
   {
-    \Log::info("Updating category with ID: " . $category->id);
-
-    $request->validate([
-      'name' => ['required', 'string'],
-      'emoji' => ['nullable', 'string'],
-    ]);
-
     $category->update([
       'name' => $request->name,
       'emoji' => $request->emoji

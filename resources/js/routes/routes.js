@@ -49,7 +49,7 @@ const routes = [
       },
 
       {
-        path: "password-reset/:token",
+        path: "reset-password/:token",
         name: "password.reset.token",
         meta: {
           middleware: [GuestMiddleware],

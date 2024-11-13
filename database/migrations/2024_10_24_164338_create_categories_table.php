@@ -15,6 +15,7 @@ return new class extends Migration {
       $table->string('name');
       $table->string('emoji')->nullable();
       $table->string('transaction_type')->nullable();
+      $table->foreignId('user_id')->constrained(); // Foreign key
       $table->timestamps();
     });
   }
@@ -27,4 +28,3 @@ return new class extends Migration {
     Schema::dropIfExists('categories');
   }
 };
-

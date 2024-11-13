@@ -55,10 +55,9 @@
                color="dark: text-gray-500"
                v-close-popup
                class="me-1" />
-        <q-btn color="green-500 dark: bg-blue-900"
+        <q-btn class="bg-blue-900 text-white dark:bg-blue-400 "
                label="Add New Account"
-               @click="handleCreate"
-               />
+               @click="handleCreate" />
       </q-card-section>
     </q-card>
   </q-dialog>

@@ -39,6 +39,7 @@ class HomeController extends Controller
     $selectedYear = $request->query('year', Carbon::now()->year);
 
     $categories = Category::query()
+      ->where('user_id', auth()->id())
       ->select(['id', 'name'])
       ->selectSub(
         query: Transaction::query()
@@ -78,6 +79,7 @@ class HomeController extends Controller
     $selectedYear = $request->query('year', Carbon::now()->year);
 
     $categories = Category::query()
+      ->where('user_id', auth()->id())
       ->select(['id', 'name'])
       ->selectSub(
         query: Transaction::query()
