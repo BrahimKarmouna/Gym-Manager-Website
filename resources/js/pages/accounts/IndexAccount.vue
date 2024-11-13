@@ -209,7 +209,7 @@
                 <span>{{ formatter.format(account.balance) }}</span>
               </span>
               <q-btn unelevated
-                     class="bg-green-500 whitespace-nowrap text-white rounded-lg font-semibold text-xs  dark:bg-blue-900"
+                     class="bg-blue-900 whitespace-nowrap text-white rounded-lg font-semibold text-xs dark:bg-blue-500"
                      :to="{ name: 'account.transfers', params: { id: account.id } }">
                 Check it Now
               </q-btn>
@@ -223,7 +223,7 @@
         <div
              class="flex flex-col flex-nowrap row-span-3 self-stretch md:col-end-3 md:col-span-2 xl:col-end-4 2xl:col-end-5 col-span-1 2xl:col-span-2 2xl:row-end-1 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
 
-          <div class="flex items-center justify-between mb-2 pl-4 h-28 sm:bg-white">
+          <div class="flex items-center justify-between mb-2 pl-4 h-28 sm:bg-white dark:bg-gray-800">
             <div class="flex-shrink-0 ">
               <span class="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white">{{
                 formatter.format(totalBalance) }}</span>

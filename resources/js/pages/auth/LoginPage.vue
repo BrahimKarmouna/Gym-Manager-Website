@@ -6,9 +6,9 @@
             class="flex flex-col h-full">
         <div class="mb-5 text-center">
           <!-- Logo -->
-          <img src="@/assets/logo.svg"
+          <img src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
                alt="Logo"
-               class="text-dark w-10 h-10 mx-auto mb-3" />
+               class="text-dark w-40 h-30 mx-auto mb-3" />
 
           <h3 class="text-gray-800 text-lg font-extrabold dark:text-white">
             Sign in
@@ -52,12 +52,11 @@
                     size="xs" />
 
         <div class="mt-4">
-          <q-btn color="green-500 dark:bg-blue-900"
+          <q-btn class=" w-full rounded-md text-white bg-blue-400 dark:bg-blue-500 dark:text-white "
                  no-caps
                  type="submit"
                  unelevated
-                 :loading="form.processing"
-                 class="w-full rounded-md">
+                 :loading="form.processing">
             Continue
           </q-btn>
         </div>
@@ -67,9 +66,14 @@
           <span class="text-gray-800 dark:text-white">
             Forgot your password?
           </span>
+
           <router-link :to="{ name: 'password.reset' }"
-                       class="dark:text-gray-900 underline font-medium">
+                       class="dark:text-white underline font-medium">
             Reset it here
+          </router-link><br>
+          <router-link class=" text-blue-800 underline my-1 "
+                       :to="{ name: 'register' }">
+            You dont have an account?
           </router-link>
         </div>
       </form>

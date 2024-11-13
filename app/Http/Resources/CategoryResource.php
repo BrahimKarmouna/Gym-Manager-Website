@@ -19,6 +19,7 @@ class CategoryResource extends JsonResource
       "name" => $this->name,
       "slug" => \Str::slug($this->id . '-' . $this->name),
       "emoji" => $this->emoji,
+      "user" => UserResource::make($this->whenLoaded("user")),
       "created_at" => $this->created_at->diffForHumans(),
       "updated_at" => $this->updated_at->diffForHumans(),
     ];

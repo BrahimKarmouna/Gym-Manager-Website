@@ -30,11 +30,12 @@ Route::name('api.')
     Route::delete('/user', [CurrentUserController::class, 'destroy'])
       ->name('current-user.destroy');
 
+    //! Categories
+    Route::apiResource('categories', CategoryController::class);
   });
 
 
-//! Categories
-Route::apiResource('categories', CategoryController::class);
+
 
 //! Accounts
 Route::apiResource('accounts', AccountController::class);

@@ -131,7 +131,7 @@ const createForm = useForm({
   },
 });
 
-const { data, fetch } = useResourceIndex('http://localhost:8000/api/categories?transaction_type=expense');
+const { data, fetch } = useResourceIndex('categories?transaction_type=expense');
 
 onMounted(() => {
   fetch();
