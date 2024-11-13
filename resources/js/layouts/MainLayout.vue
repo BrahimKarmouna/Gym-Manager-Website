@@ -10,15 +10,12 @@
                round
                icon="sym_r_reorder"
                @click="toggleLeftDrawer"
-               class=" text-blue-900 dark:text-blue-300 mr-2 ms-3 py-5" />
+               class=" text-blue-900 dark:text-blue-400 mr-2 ms-3 py-5" />
         <q-toolbar-title class="flex items-center">
-          <q-icon name="toll"
-                  size="sm"
-                  class="text-blue-900 dark:text-blue-400 pr-2 ms-7" />
-          <span class="text-blue-900 dark:text-blue-400 ms-2 text-2xl"
-                style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-            Money Manager
-          </span>
+          <img src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
+               alt="Logo"
+               class="text-dark w-20 h-10 mx-auto mb-1 ml-1" />
+
         </q-toolbar-title>
 
 

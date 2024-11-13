@@ -71,7 +71,7 @@
               <q-icon name="account_balance_wallet"
                       class="text-blue-600"
                       size="md" />
-              <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Account Balance</h3>
+              <h3 class="text-base font-normal text-gray-800 dark:text-gray-400">Account Balance</h3>
               <span class=" pt-4 m-4 mt-3text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">
                 {{ account.balance }} MAD
               </span>

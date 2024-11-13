@@ -27,7 +27,7 @@
     </template>
 
     <template v-slot:top>
-      <q-btn color="green-500 dark:bg-blue-900"
+      <q-btn color="blue-900 dark:bg-blue-400"
              :disable="loading"
              label="Add Income"
              @click="showCreateDialog = true" />

@@ -86,14 +86,14 @@
         <q-btn unelevated
                label="+"
                padding="0"
-               class="bg-gray-300 self-stretch text-8xl font-bold text-gray-700 dark:bg-gray-400 rounded-2xl border"
+               class="bg-gray-300 self-stretch text-8xl font-bold text-gray-700 dark:text-gray-200 dark:bg-gray-400 rounded-2xl border"
                @click="showCreateAccountModal = true" />
 
         <template v-if="loading">
 
           <section v-for="(_, index) in Array.from({ length: 20 })"
                    :key="index"
-                   class="p-4 order-last rounded-2xl self-stretch bg-green-500 shadow-lg overflow-hidden bg-gradient-to-tl from-gray-400 to-gray-600">
+                   class="p-4 order-last rounded-2xl self-stretch bg-blue-900 dark:bg-blue-400 shadow-lg overflow-hidden bg-gradient-to-tl from-gray-400 to-gray-600">
 
             <!-- Header -->
             <header class="flex text-white z-20 mb-4">
@@ -209,7 +209,7 @@
                 <span>{{ formatter.format(account.balance) }}</span>
               </span>
               <q-btn unelevated
-                     class="bg-blue-900 whitespace-nowrap text-white rounded-lg font-semibold text-xs dark:bg-blue-500"
+                     class="bg-blue-900 whitespace-nowrap text-white rounded-lg font-semibold text-xs dark:bg-blue-400"
                      :to="{ name: 'account.transfers', params: { id: account.id } }">
                 Check it Now
               </q-btn>
