@@ -107,13 +107,13 @@
             <div class="col-12 text-end">
               <q-btn label="Reset"
                      type="reset"
-                     color="primary"
+                     color="primary dark:text-gray-400"
                      flat
                      class="me-3" />
 
               <q-btn label="Submit"
                      type="submit"
-                     color="green-7" />
+                     class="bg-blue-900 dark:bg-blue-400 text-white" />
             </div>
           </div>
 

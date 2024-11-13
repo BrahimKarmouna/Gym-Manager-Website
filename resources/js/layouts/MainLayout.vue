@@ -10,11 +10,16 @@
                round
                icon="sym_r_reorder"
                @click="toggleLeftDrawer"
-               class=" text-blue-900 dark:text-blue-400 mr-2 ms-3 py-5" />
+               class=" text-blue-900 dark:text-blue-400 mr-1 ms-5 py-5" />
+        <img src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
+             alt="Logo"
+             class="text-dark w-20 h-10 mx-auto mb-1 ml-1" />
         <q-toolbar-title class="flex items-center">
-          <img src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
-               alt="Logo"
-               class="text-dark w-20 h-10 mx-auto mb-1 ml-1" />
+          <span class="text-blue-900 dark:text-blue-400  text-2xl mr-1  "
+                style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+            Money Manager
+          </span>
+
 
         </q-toolbar-title>
 
@@ -65,13 +70,13 @@
               :width="250"
               :mini="layoutStore.sidebar.mini"
               bordered>
-      <q-list class="q-pa-sm q-gutter-xs ">
+      <q-list class="q-pa-sm q-gutter-xs py-6 ">
 
-        <q-item-label header>
+        <!-- <q-item-label header>
           <span class="text-bold"
                 style="font-family:  'Lucida Sans'">Navigation</span>
 
-        </q-item-label>
+        </q-item-label> -->
 
         <EssentialLink v-for="link in essentialLinks"
                        :key="link.title"
