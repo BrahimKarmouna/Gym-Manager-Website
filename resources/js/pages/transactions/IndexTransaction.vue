@@ -6,6 +6,17 @@
       <div
            class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="w-full">
+          <q-icon name="attach_money"
+                  class="text-blue-700"
+                  size="md" />
+          <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Balance</h3>
+          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
+            formatter.format(transactions.total_balance) }}</span>
+        </div>
+      </div>
+      <div
+           class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <div class="w-full">
           <q-icon name="trending_up"
                   class="text-emerald-600"
                   size="md" />
@@ -25,17 +36,7 @@
             formatter.format(transactions.expenses) }}</span>
         </div>
       </div>
-      <div
-           class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div class="w-full">
-          <q-icon name="attach_money"
-                  class="text-blue-600"
-                  size="md" />
-          <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Balance</h3>
-          <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{{
-            formatter.format(transactions.total_balance) }}</span>
-        </div>
-      </div>
+
     </div>
 
     <q-card>

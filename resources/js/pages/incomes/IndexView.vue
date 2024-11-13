@@ -65,7 +65,7 @@
         <div class="mb-4 flex items-center justify-between md:mb-8">
           <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add an Income category</h2>
           <div><q-btn @click="openCreateModal"
-                   color="green-500 dark:bg-blue-900 "
+                   color="blue-900 dark:bg-blue-400 "
                    icon="sym_r_add"
                    c
                    label="Create" />
@@ -89,13 +89,13 @@
             <div>
               <q-btn flat
                      class=" p-2"
-                     color="primary dark:text-gray-400"
+                     color="blue dark:text-blue-700"
                      icon="edit"
                      @click.stop="editeItem(transactionCategory)" />
               <q-btn flat
                      class="p-2 text-negative"
                      icon="delete"
-                     color="red dark:text-red-800"
+                     color="red dark:text-red-700"
                      @click.stop="deleteItem(transactionCategory)" />
             </div>
           </div>
