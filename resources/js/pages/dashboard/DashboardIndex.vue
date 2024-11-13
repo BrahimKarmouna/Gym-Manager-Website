@@ -15,7 +15,7 @@
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Transfers</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
               data?.transfers
-              }}</span>
+            }}</span>
           </div>
         </div>
         <div class="h-28 flex items-center p-8 py-5 bg-white shadow rounded-lg dark:bg-gray-800 ">
@@ -26,7 +26,7 @@
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Incomes</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
               data?.incomes
-            }}</span>
+              }}</span>
           </div>
         </div>
         <div class="h-28 flex items-center p-8 py-5 bg-white shadow rounded-lg dark:bg-gray-800 ">
@@ -37,7 +37,7 @@
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Expenses</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
               data?.expenses
-              }}</span>
+            }}</span>
           </div>
         </div>
       </section>
@@ -108,7 +108,7 @@
             <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white"> {{ transaction.note }}</dd>
           </dl>
         </div>
-        <div v-else>No incomes found</div>
+        <div v-else>No transactions found</div>
       </div>
     </main>
   </div>
