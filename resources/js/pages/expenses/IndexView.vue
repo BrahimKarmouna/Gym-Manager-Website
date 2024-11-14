@@ -67,7 +67,7 @@
     <section class="py-8 antialiased md:py-16">
       <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <div class="mb-4 flex items-center justify-between md:mb-8">
-          <!-- <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add an Expense category</h2> -->
+          <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add an Expense category</h2>
           <q-btn @click="openCreateModal"
                  color="blue-900 dark:bg-blue-400 "
                  icon="sym_r_add"
