@@ -93,6 +93,7 @@ import ProfileSection from './ProfileSection.vue';
 import { ref } from 'vue';
 import { api } from '@/boot/axios';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 
 const confirmingUserDeletion = ref(false);
 
@@ -103,6 +104,8 @@ const $q = useQuasar();
 const errors = ref({});
 
 const processing = ref(false);
+
+const authStore = useAuthStore();
 
 const form = ref({
   password: '',
@@ -126,6 +129,8 @@ async function deleteUser() {
       message: 'Success!',
       caption: 'Your account has been deleted.',
     });
+
+    await authStore.logout();
 
     router.push({ name: 'login' });
   } catch (err) {

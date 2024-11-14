@@ -12,7 +12,7 @@
               <div>
                 <span
                       class="mb-2 inline-block rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300">
-                  Account Name </span>
+                  Account Name </span>0
                 <h2 class="flex items-center text-xl font-bold leading-none text-gray-900 dark:text-white sm:text-2xl">
                   {{ account.name }}</h2>
               </div>
