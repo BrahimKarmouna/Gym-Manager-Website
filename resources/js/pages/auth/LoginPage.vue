@@ -9,7 +9,6 @@
           <img src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
                alt="Logo"
                class="text-dark w-40 h-30 mx-auto mb-3" />
-
           <h3 class="text-gray-800 text-lg font-extrabold dark:text-white">
             Sign in
           </h3>

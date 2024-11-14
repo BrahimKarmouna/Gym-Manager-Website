@@ -108,7 +108,7 @@
             <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white"> {{ transaction.note }}</dd>
           </dl>
         </div>
-        <div v-else>No incomes found</div>
+        <div v-else>No transactions found</div>
       </div>
     </main>
   </div>

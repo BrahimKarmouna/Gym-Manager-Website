@@ -307,9 +307,8 @@
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last Account transers</h3>
             <div v-if="lastTransfers.length > 0"
                  v-for="transfer in lastTransfers"
-                 class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
-              {{ console.log(transfer.transaction_type) }}
-              <dl class="w-1/2 sm:w-48">
+                 class="grid grid-cols-3 items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
+              <dl>
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction ID:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
                   <a href="#"
@@ -317,32 +316,32 @@
                 </dd>
               </dl>
 
-              <dl class="w-1/2 sm:w-48">
+              <dl>
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">From:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
                   {{ transfer.source_account?.name ?? "N/A" }}
                 </dd>
               </dl>
 
-              <dl class="w-1/2 sm:w-48">
+              <dl>
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">to:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
                   {{ transfer.destination_account?.name ?? "N/A" }}
                 </dd>
               </dl>
 
-              <dl class="w-1/2 sm:w-1/4 md:flex-1 lg:w-auto">
-                <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Date:</dt>
+              <dl>
+                <dt class="text-base ml-0 font-medium text-gray-500 dark:text-gray-400">Date:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transfer.date }}</dd>
               </dl>
 
-              <dl class="w-1/2 sm:w-1/5 md:flex-1 lg:w-auto">
+              <dl>
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Amount:</dt>
                 <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">${{ transfer.amount }}
                 </dd>
               </dl>
 
-              <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
+              <dl>
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Transaction:</dt>
                 <dd :class="{
                   'mt-1.5 inline-flex items-center rounded': true,
@@ -361,7 +360,7 @@
 
               <dl class="w-1/2 sm:w-1/4 sm:flex-1 lg:w-auto">
                 <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Note:</dt>
-                <dd class="">
+                <dd class="font-bold">
 
                   {{ transfer.note }}
                 </dd>
@@ -374,7 +373,7 @@
                  unelevated
                  label="See all transactions"
                  icon-right="chevron_right"
-                 class="rounded-lg sm:text-sm ms-auto mt-3" />
+                 class="  rounded-lg sm:text-sm ms-auto mt-3" />
         </div>
       </div>
     </div>

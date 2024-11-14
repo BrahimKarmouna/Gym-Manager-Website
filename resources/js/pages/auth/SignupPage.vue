@@ -91,7 +91,7 @@
             Already have an account?
           </span>
           <router-link :to="{ name: 'login' }"
-                       class="dark:text-gray-900 underline font-medium">
+                       class="dark:text-gray-200 underline font-medium">
             Sign in
           </router-link>
         </div>

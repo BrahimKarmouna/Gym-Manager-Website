@@ -10,14 +10,26 @@
                round
                icon="sym_r_reorder"
                @click="toggleLeftDrawer"
-               class=" text-blue-900 dark:text-blue-400 mr-1 ms-5 py-5" />
-        <img src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
-             alt="Logo"
-             class="text-dark w-20 h-10 mx-auto mb-1 ml-1" />
+               class=" text-blue-900 dark:text-blue-400" />
+
+        <router-link class=" text-blue-800  my-1 "
+                     :to="{ name: 'dashboard.index' }">
+          <img src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
+               alt="Logo"
+               class="text-dark w-20 h-10 mx-auto mb-1 ml-1" />
+        </router-link>
+
         <q-toolbar-title class="flex items-center">
           <span class="text-blue-900 dark:text-blue-400  text-2xl mr-1  "
                 style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
-            Money Manager
+
+
+
+            <router-link class=" text-blue-800  my-1 "
+                         :to="{ name: 'register' }">
+              Money Manager
+            </router-link>
+
           </span>
 
 
@@ -29,7 +41,6 @@
                   @update:model-value="toggleDarkMode"
                   checked-icon="sym_r_dark_mode"
                   unchecked-icon="sym_r_light_mode" />
-        <AiFillDashboard />
         <q-btn flat
                round
                class="ms-2"
@@ -81,7 +92,7 @@
         <EssentialLink v-for="link in essentialLinks"
                        :key="link.title"
                        v-bind="link"
-                       class="mb-5test@ text-blue-900 dark:text-blue-400 text-bold "
+                       class="text-blue-900"
                        style="font-family: sans-serif" />
 
       </q-list>
