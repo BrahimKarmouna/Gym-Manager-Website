@@ -25,7 +25,7 @@
 
 
 
-            <router-link class=" text-blue-800  my-1 "
+            <router-link class=" text-blue-900 dark:text-blue-400  text-bold my-1 "
                          :to="{ name: 'register' }">
               Money Manager
             </router-link>
@@ -183,7 +183,7 @@ export default defineComponent({
         persistent: true,
         ok: {
           label: 'Yes',
-          color: 'green-500 dark:bg-blue-900',
+          color: 'blue-900 dark:bg-blue-400',
           unelevated: true,
         },
 

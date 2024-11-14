@@ -79,6 +79,8 @@ import { useResourceIndex } from '@/composables/useResourceIndex';
 import CreateIncome from './CreateIncome.vue';
 import EditIncome from './EditIncome.vue';
 
+const emit = defineEmits(['refresh']);
+
 const $q = useQuasar();
 const loading = ref(false);
 const filter = ref('');
@@ -92,7 +94,7 @@ const incomeColumns = [
   { name: 'user', label: 'User', align: 'left', field: (row) => row.user.name ?? 'N/A' },
   { name: 'amount', label: 'Amount', align: 'left', field: 'amount', sortable: true },
   { name: 'date', label: 'Date', align: 'left', field: 'date', sortable: true },
-  { name: 'from', label: 'From', align: 'left', field: (row) => row.source_account?.name ?? 'N/A', sortable: true },
+  { name: 'to', label: 'To', align: 'left', field: (row) => row.source_account?.name ?? 'N/A', sortable: true },
   // { name: 'to', label: 'To', align: 'left', field: (row) => row.destinationAccount?.name ?? "N/A", sortable: true },
   { name: 'note', label: 'Note', align: 'left', field: 'note', field: (row) => row.note ?? "N/A", sortable: true },
   { name: 'transaction_category', label: 'Transaction Category', align: 'center', field: (row) => row.category?.name ?? 'N/A', sortable: false },
@@ -111,10 +113,12 @@ onMounted(() => {
 
 const handleCreated = () => {
   fetch();
+  emit('refresh');
 }
 
 const handleUpdated = () => {
   fetch();
+  emit('refresh');
 }
 
 function deleteRow(transaction) {
@@ -126,6 +130,7 @@ function deleteRow(transaction) {
   }).onOk(() => {
     api.delete(`/transactions/${transaction.id}`).then(() => {
       fetch();
+      emit('refresh');
     });
   });
 }

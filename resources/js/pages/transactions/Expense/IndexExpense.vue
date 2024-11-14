@@ -77,6 +77,8 @@ import { useResourceIndex } from '@/composables/useResourceIndex';
 import EditExpense from './EditExpense.vue';
 import CreateExpense from './CreateExpense.vue';
 
+const emit = defineEmits(['refresh']);
+
 const $q = useQuasar();
 const loading = ref(false);
 const filter = ref('');
@@ -115,10 +117,12 @@ onMounted(() => {
 
 const handleCreated = () => {
   fetch();
+  emit('refresh');
 }
 
 const handleUpdated = () => {
   fetch();
+  emit('refresh');
 }
 
 function deleteRow(transaction) {
@@ -130,6 +134,7 @@ function deleteRow(transaction) {
   }).onOk(() => {
     api.delete(`/transactions/${transaction.id}`).then(() => {
       fetch();
+      emit('refresh');
     });
   });
 }

@@ -133,7 +133,7 @@ class TransactionController extends Controller
     $difference = $newAmount - $oldAmount;
 
     switch ($transaction->transaction_type) {
-      case TransactionType::TRANSFER->value:
+      case TransactionType::TRANSFER:
         if ($difference > 0) {
 
           $sourceAccount->balance -= $difference;
@@ -150,7 +150,7 @@ class TransactionController extends Controller
         $destinationAccount->save();
         break;
 
-      case TransactionType::INCOME->value:
+      case TransactionType::INCOME:
         if ($difference != 0) {
 
           $sourceAccount->balance += $difference;
@@ -160,7 +160,7 @@ class TransactionController extends Controller
 
         break;
 
-      case TransactionType::EXPENSE->value:
+      case TransactionType::EXPENSE:
         if ($difference != 0) {
 
           $sourceAccount->balance -= $difference;
@@ -187,6 +187,29 @@ class TransactionController extends Controller
 
   public function destroy(Transaction $transaction)
   {
+    switch ($transaction->transaction_type) {
+      case TransactionType::TRANSFER:
+        $sourceAccount = Account::find($transaction->source_account_id);
+        $destinationAccount = Account::find($transaction->destination_account_id);
+
+        $sourceAccount->balance += $transaction->amount;
+        $sourceAccount->save();
+        $destinationAccount->balance -= $transaction->amount;
+        $destinationAccount->save();
+        break;
+      case TransactionType::EXPENSE:
+        $sourceAccount = Account::find($transaction->source_account_id);
+        $sourceAccount->balance += $transaction->amount;
+        $sourceAccount->save();
+        break;
+      case TransactionType::INCOME:
+        $sourceAccount = Account::find($transaction->source_account_id);
+        $sourceAccount->balance -= $transaction->amount;
+        $sourceAccount->save();
+        break;
+    }
+    ;
+
     $transaction->delete();
 
     return response()->noContent();

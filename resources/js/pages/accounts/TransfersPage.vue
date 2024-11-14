@@ -68,6 +68,19 @@
           <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transaction.date }}</dd>
         </dl>
 
+        <dl class="w-1/2 sm:w-1/4 md:flex-1 lg:w-auto">
+          <dt class="text-base font-medium text-gray-500 dark:text-gray-400">From:</dt>
+          <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transaction.source_account.name }}
+          </dd>
+        </dl>
+
+        <dl class="w-1/2 sm:w-1/4 md:flex-1 lg:w-auto">
+          <dt class="text-base font-medium text-gray-500 dark:text-gray-400">to:</dt>
+          <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{
+            transaction.destination_account.name
+            }}
+          </dd>
+        </dl>
         <dl class="w-1/2 sm:w-1/5 md:flex-1 lg:w-auto">
           <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Price:</dt>
           <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ transaction.amount }} MAD</dd>
