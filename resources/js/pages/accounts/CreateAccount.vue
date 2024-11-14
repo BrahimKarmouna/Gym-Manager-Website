@@ -30,7 +30,7 @@
                    hide-bottom-space />
           <q-input class="col-12"
                    dense
-                   label="Account RIB"
+                   label="Account RIB (optional)"
                    maxlength="24"
                    outlined
                    type="text"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-8">
+    <section class="h-screen bg-white py-8 antialiased dark:bg-gray-900 md:py-8">
       <div class="mx-auto max-w-screen-2xl px-4 3xl:px-0">
         <h2 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl md:mb-6">Account overview</h2>
         <div class="py-4 md:py-8">

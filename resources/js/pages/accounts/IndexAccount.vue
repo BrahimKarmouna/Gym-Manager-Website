@@ -15,7 +15,7 @@
       <div class="grid w-full grid-cols-1 gap-4 mt-4 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 mb-5">
         <div
              class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 dark:bg-gray-800">
-          <div class="w-full">
+          <div class="w-full ">
             <q-icon name="sym_r_payments"
                     class="text-blue-600"
                     size="md" />
