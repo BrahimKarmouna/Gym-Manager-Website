@@ -58,7 +58,7 @@
                      label="Expense" />
       </q-tabs>
       <q-separator />
-      <RouterView />
+      <RouterView @refresh="fetchStats" />
     </q-card>
   </q-page>
 </template>
@@ -74,7 +74,7 @@ const transactions = ref({});
 
 const formatter = useMoney('MAD', 'fr-FR');
 
-async function fetchTransactions() {
+async function fetchStats() {
   try {
     const response = await axios.get('/api/transactions/dashboard');
 
@@ -85,5 +85,5 @@ async function fetchTransactions() {
   }
 };
 
-onMounted(fetchTransactions);
+onMounted(fetchStats);
 </script>

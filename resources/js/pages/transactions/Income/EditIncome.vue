@@ -70,7 +70,7 @@
                         outlined
                         dense
                         option-label="name"
-                        label="From"
+                        label="To"
                         :error="'source_account_id' in form.errors"
                         :error-message="form.errors.source_account_id?.[0]"
                         hide-bottom-space />
