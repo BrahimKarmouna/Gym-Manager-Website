@@ -6,7 +6,7 @@
       <div class="flex flex-col  space-y-6 md:space-y-0 md:flex-row ">
 
       </div>
-      <section class="  grid md:grid-cols-2 xl:grid-cols-3 gap-3  ">
+      <section class="  grid md:grid-cols-2 xl:grid-cols-3 gap-6  ">
         <div class=" h-25 flex items-center p-8 py-5 bg-white shadow rounded-lg dark:bg-gray-800 p   ">
           <div>
             <q-icon name="move_up"
@@ -23,7 +23,7 @@
             <q-icon name="trending_up"
                     class="text-emerald-600 ms-5"
                     size="md" />
-            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Incomes</h3>
+            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5 ">Incomes</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
               data?.incomes
             }}</span>
@@ -43,7 +43,7 @@
       </section>
 
       <div class="flex flex-wrap gap-4  ">
-        <incomes class="mr-2" />
+        <incomes class="mr-5" />
         <expenses class=" ml-2" />
       </div>
       {{ console.log(data) }}
