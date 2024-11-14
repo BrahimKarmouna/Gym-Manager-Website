@@ -183,7 +183,7 @@ export default defineComponent({
         persistent: true,
         ok: {
           label: 'Yes',
-          color: 'green-500 dark:bg-blue-900',
+          color: 'blue-900 dark:bg-blue-400',
           unelevated: true,
         },
 

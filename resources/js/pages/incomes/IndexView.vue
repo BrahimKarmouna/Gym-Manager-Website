@@ -63,13 +63,13 @@
     <section class="py-8 antialiased md:py-16">
       <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <div class="mb-4 flex items-center justify-between md:mb-8">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add an Income category</h2>
-          <div><q-btn @click="openCreateModal"
-                   color="blue-900 dark:bg-blue-400 "
-                   icon="sym_r_add"
-                   c
-                   label="Create" />
-          </div>
+          <!-- <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Add an Income category</h2> -->
+          <q-btn @click="openCreateModal"
+                 color="blue-900 dark:bg-blue-400 "
+                 icon="sym_r_add"
+                 class="ms-auto"
+                 label="Create" />
+
         </div>
         <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div v-for="transactionCategory in data"

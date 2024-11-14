@@ -15,7 +15,7 @@
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Transfers</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
               data?.transfers
-            }}</span>
+              }}</span>
           </div>
         </div>
         <div class="h-25 flex items-center p-8 py-5 bg-white shadow rounded-lg dark:bg-gray-800 ">
@@ -26,7 +26,7 @@
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Incomes</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
               data?.incomes
-              }}</span>
+            }}</span>
           </div>
         </div>
         <div class="h-25 flex items-center p-8 py-5 bg-white shadow rounded-lg dark:bg-gray-800 ">
@@ -37,7 +37,7 @@
             <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 ms-5">Expenses</h3>
             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white ms-5">{{
               data?.expenses
-            }}</span>
+              }}</span>
           </div>
         </div>
       </section>
@@ -50,7 +50,7 @@
       <!-- Card body -->
       <div
            class=" max-h-96 rounded-lg overflow-auto grow border min-h-0 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 md:p-8 w-3/3 ">
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Last 7 days Transactions</h3>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Most recent Transactions</h3>
         <div v-if="transactions.length > 0"
              v-for="transaction in transactions"
              class="flex flex-wrap items-center gap-y-4 border-b border-gray-200 py-4 pb-4 dark:border-gray-700 md:py-5">
