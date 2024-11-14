@@ -75,8 +75,10 @@
       </div>
 
       <!-- Accounts list -->
-      <div class="font-semibold text-md text-2xl text-gray-700 dark:text-white mb-3">
-        Add new account :
+      <div class="font-semibold text-md text-2xl text-gray-700 dark:text-white mb-3 ">
+        <h5
+            style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+          Add new account :</h5>
       </div>
 
       <!-- bxd -->
@@ -151,7 +153,7 @@
                      padding="sm"
                      size="sm"
                      class="ms-auto">
-                <q-menu class="p-2 min-w-36"
+                <q-menu class="p-2 min-w-36  dark:bg-gray-300"
                         anchor="bottom right"
                         self="top right"
                         :offset="[0, 10]">
@@ -164,11 +166,11 @@
                       <q-item-section class="flex-auto">
                         <q-icon name="sym_r_edit"
                                 size="xs"
-                                color="dark: text-gray-400" />
+                                color="blue dark:text-blue-600" />
                       </q-item-section>
 
                       <q-item-section>
-                        <q-item-label class="dark: text-gray-400">Edit</q-item-label>
+                        <q-item-label class="dark: text-blue-600">Edit</q-item-label>
                       </q-item-section>
                     </q-item>
                     <q-item class="rounded-lg text-negative"
@@ -178,11 +180,11 @@
                       <q-item-section class="flex-auto">
                         <q-icon name="sym_r_delete"
                                 size="xs"
-                                color="dark: text-red-800" />
+                                color="red dark:text-red-600" />
                       </q-item-section>
 
                       <q-item-section>
-                        <q-item-label class="dark: text-red-800">Delete</q-item-label>
+                        <q-item-label class="text-red dark:text-red-600">Delete</q-item-label>
                       </q-item-section>
                     </q-item>
                   </q-list>

@@ -5,7 +5,9 @@
     <q-card style="width: 500px;">
       <q-card-section>
         <div class="flex justify-between items-center">
-          <div class="text-h6">New Income</div>
+          <div class="text-h6"
+               style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+            New Income</div>
 
           <q-btn icon="close"
                  flat

@@ -3,7 +3,9 @@
             persistent>
     <q-card style="width: 450px;">
       <q-card-section>
-        <div class="text-h6">Enter Your Account Information</div>
+        <div class="text-h6"
+             style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+          Enter Your Account Information</div>
       </q-card-section>
 
       <q-card-section class="q-mb-md">
