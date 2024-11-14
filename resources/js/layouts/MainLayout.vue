@@ -81,7 +81,7 @@
         <EssentialLink v-for="link in essentialLinks"
                        :key="link.title"
                        v-bind="link"
-                       class="mb-5test@ text-blue-900 dark:text-blue-400 text-bold"
+                       class="mb-5test@ text-blue-900 dark:text-blue-400 text-bold "
                        style="font-family: sans-serif" />
 
       </q-list>
