@@ -20,7 +20,6 @@ class AccountController extends Controller
 
     $total = $accounts->count();
 
-    $total = $accounts->count();
     $totalBalance = $accounts->sum('balance');
 
     // Calculate total income and total expense across all accounts
