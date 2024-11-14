@@ -25,7 +25,7 @@
 
 
 
-            <router-link class=" text-blue-800  my-1 "
+            <router-link class=" text-blue-900 dark:text-blue-400  text-bold my-1 "
                          :to="{ name: 'register' }">
               Money Manager
             </router-link>
