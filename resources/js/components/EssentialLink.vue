@@ -6,16 +6,19 @@
           :to="to"
           :exact="exact"
           dense
-          class="rounded-md q-px-sm my-3">
+          class="rounded-md q-px-sm text-bold">
     <q-item-section v-if="icon"
                     style="min-width: 8px"
                     avatar>
       <q-icon :name="icon"
-              size="25px" />
+              size="25px"
+              class="dark:text-blue-400" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
+      <q-item-label class="text-blue-900 dark:text-blue-400">
+        {{ title }}
+      </q-item-label>
 
       <q-item-label v-if="caption"
                     caption>
@@ -23,8 +26,6 @@
       </q-item-label>
     </q-item-section>
   </q-item>
-
-
 
   <q-expansion-item v-else
                     :label="title"
@@ -43,7 +44,7 @@
       </q-item-section>
 
       <q-item-section>
-        <q-item-label class="dark:text-blue-400">{{ title }}</q-item-label>
+        <q-item-label class="text-bold dark:text-blue-400">{{ title }}</q-item-label>
 
         <q-item-label v-if="caption"
                       caption>
@@ -55,7 +56,7 @@
     <q-list class="q-py-sm text-gray-500 q-gutter-xs">
       <EssentialLink v-for="child in children"
                      :key="child.title"
-                     class="ps-8 dark:text-blue-200"
+                     class="ps-8  dark:text-blue-400"
                      v-bind="child" />
     </q-list>
   </q-expansion-item>
@@ -118,8 +119,9 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.q-item {
-  // height: 40px;
+.q-item,
+:deep(.q-item) {
+  height: 40px;
 
   &.q-router-link--active {
     background-color: rgba($color: $grey-4, $alpha: 0.9);

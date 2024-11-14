@@ -6,9 +6,9 @@
             class="flex flex-col h-full">
         <div class="mb-5 text-center">
           <!-- Logo -->
-          <img src="../../../js/assets/logo.svg"
+          <img src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
                alt="Logo"
-               class="text-dark w-10 h-10 mx-auto mb-3" />
+               class="text-dark w-40 h-30 mx-auto mb-3" />
 
           <h3 class="text-gray-800 text-lg font-extrabold dark:text-white">
             Reset Password
@@ -35,7 +35,7 @@
                  type="submit"
                  unelevated
                  :loading="submitting"
-                 class="w-full rounded-md">
+                 class="w-full rounded-md bg-blue-400 ">
             Send password reset link
           </q-btn>
         </div>
