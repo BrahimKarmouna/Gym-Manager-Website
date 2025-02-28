@@ -7,9 +7,9 @@ export async function VerifyMiddleware({ store, to, next }) {
 
   const user = authStore.user;
 
-  // If there is no user, redirect to the registration page
+  // If the user does not exist, redirect to the register page
   if (!user) {
-    return next({ name: "register" }); // Adjust route name based on your setup
+    return next({ name: "register" });
   }
 
   // If the user's email is not verified, redirect to profile
