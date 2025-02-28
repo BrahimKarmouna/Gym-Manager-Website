@@ -19,7 +19,6 @@ const routes = [
         },
         component: () => import("../pages/auth/LoginPage.vue"),
       },
-
       {
         path: "register",
         alias: "/",
@@ -38,7 +37,12 @@ const routes = [
         },
         component: () => import("../pages/auth/TwoFactorChallengePage.vue"),
       },
+      {
+        path: "test",
+        name: "test.page",
 
+        component: () => import("../pages/test/testView.vue"),
+      },
       {
         path: "password/reset",
         name: "password.reset",
@@ -73,9 +77,8 @@ const routes = [
     children: [
       // Profile
       {
-        path: "profile",
+        path: "/profile",
         component: RouterView,
-
         children: [
           {
             path: "",
@@ -97,24 +100,26 @@ const routes = [
           {
             path: "",
             name: "dashboard.index",
-            component: () => import("../pages/dashboard/DashboardIndex.vue"),
+            component: () =>
+              import("../../../resources/pages/Dashboard/Dashboard.vue"),
           },
 
           // Transaction Categories
           {
-            path: "categories",
+            path: "plans",
             name: "categories.index",
             // component: () => import("../pages/categories/IndexPage.vue"),
             children: [
               {
-                path: "income",
+                path: "Payment_plans",
                 name: "incomes.index",
-                component: () => import("../pages/incomes/IndexView.vue"),
+                component: () => import("../../pages/plans/index.vue"),
               },
               {
-                path: "expense",
+                path: "Insurance",
                 name: "expenses.index",
-                component: () => import("../pages/expenses/IndexView.vue"),
+                component: () =>
+                  import("../../pages/insurance_plans/index.vue"),
               },
             ],
           },
@@ -137,36 +142,39 @@ const routes = [
             path: "transaction",
             name: "transaction.index",
             props: true,
-            component: () => import("../pages/transactions/IndexTransaction.vue"),
+            component: () => import("../../pages/Payments/index.vue"),
 
             children: [
               {
                 path: "",
                 name: "transaction.index",
-                component: () => import("../pages/transactions/Transfer/IndexTransfer.vue"),
+                component: () =>
+                  import("../pages/transactions/Transfer/IndexTransfer.vue"),
               },
               {
                 path: "income",
                 name: "transaction.income",
-                component: () => import("../pages/transactions/Income/IndexIncome.vue"),
+                component: () => import("../../pages/plans/index.vue"),
               },
               {
                 path: "expense",
                 name: "transaction.expense",
-                component: () => import("../pages/transactions/Expense/IndexExpense.vue"),
+                component: () =>
+                  import("../pages/transactions/Expense/IndexExpense.vue"),
               },
             ],
           },
 
           //account
           {
-            path: "account",
+            path: "/clients",
             component: RouterView,
             children: [
               {
                 path: "",
                 name: "account.index-account",
-                component: () => import("../pages/accounts/IndexAccount.vue"),
+                component: () =>
+                  import("../../../resources/pages/Client/Clients.vue"),
               },
               {
                 path: "show/:id",
@@ -178,23 +186,26 @@ const routes = [
                     path: "",
                     props: true,
                     name: "account.transfers",
-                    component: () => import("../pages/accounts/TransfersPage.vue"),
+                    component: () =>
+                      import("../pages/accounts/TransfersPage.vue"),
                   },
                   {
                     props: true,
                     path: "incomes",
                     name: "account.incomes",
-                    component: () => import("../pages/accounts/IncomesPage.vue"),
+                    component: () =>
+                      import("../pages/accounts/IncomesPage.vue"),
                   },
                   {
                     props: true,
                     path: "expenses",
                     name: "account.expenses",
-                    component: () => import("../pages/accounts/ExpensesPage.vue"),
+                    component: () =>
+                      import("../pages/accounts/ExpensesPage.vue"),
                   },
-                ]
+                ],
               },
-            ]
+            ],
           },
         ],
       },
