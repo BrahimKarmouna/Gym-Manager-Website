@@ -7,7 +7,7 @@ export async function VerifyMiddleware({ store, to, next }) {
 
   const user = authStore.user;
 
-  if (user.email_verified_at === null) {
+  if (user?.email_verified_at === null) {
     return next({ name: "profile.index" });
   }
 

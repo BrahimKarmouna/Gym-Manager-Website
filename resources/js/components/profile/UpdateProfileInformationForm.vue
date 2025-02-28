@@ -14,81 +14,105 @@
           <q-card-section>
             <div class="grid grid-cols-6 gap-3">
               <!-- Profile Photo -->
-              <div v-if="true"
-                   class="col-span-6 sm:col-span-4">
+              <div
+                v-if="true"
+                class="col-span-6 sm:col-span-4"
+              >
                 <!-- Profile Photo File Input -->
-                <input id="photo"
-                       ref="photoInput"
-                       type="file"
-                       class="hidden"
-                       @change="updatePhotoPreview">
+                <input
+                  id="photo"
+                  ref="photoInput"
+                  type="file"
+                  class="hidden"
+                  @change="updatePhotoPreview"
+                >
 
                 <label class="font-medium text-gray-800 dark:text-white text-sm block mb-1">
                   Photo
                 </label>
 
                 <!-- Current Profile Photo -->
-                <div v-show="!photoPreview"
-                     class="mt-2">
-                  <q-img :src="user.profile_photo_url"
-                         :alt="user.name"
-                         class="rounded-full h-20 w-20 object-cover" />
+                <div
+                  v-show="!photoPreview"
+                  class="mt-2"
+                >
+                  <q-img
+                    :src="user.profile_photo_url"
+                    :alt="user.name"
+                    class="rounded-full h-20 w-20 object-cover"
+                  />
                 </div>
 
                 <!-- New Profile Photo Preview -->
-                <div v-show="photoPreview"
-                     class="mt-2">
-                  <span class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
-                        :style="'background-image: url(\'' + photoPreview + '\');'" />
+                <div
+                  v-show="photoPreview"
+                  class="mt-2"
+                >
+                  <span
+                    class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
+                    :style="'background-image: url(\'' + photoPreview + '\');'"
+                  />
                 </div>
 
-                <q-btn class="mt-2 me-2"
-                       label="Select A New Photo"
-                       outline
-                       @click="selectNewPhoto" />
+                <q-btn
+                  class="mt-2 me-2"
+                  label="Select A New Photo"
+                  outline
+                  @click="selectNewPhoto"
+                />
 
-                <q-btn v-if="user.profile_photo_url"
-                       class="mt-2"
-                       outline
-                       label="Remove Photo"
-                       :loading="deletingPhoto"
-                       @click="deletePhoto" />
+                <q-btn
+                  v-if="user.profile_photo_url"
+                  class="mt-2"
+                  outline
+                  label="Remove Photo"
+                  :loading="deletingPhoto"
+                  @click="deletePhoto"
+                />
 
                 <!-- Show Errors -->
-                <div v-if="'photo' in errors"
-                     class="mt-2 text-xs text-red-600 dark:text-red-400">
+                <div
+                  v-if="'photo' in errors"
+                  class="mt-2 text-xs text-red-600 dark:text-red-400"
+                >
                   {{ errors.photo?.[0] }}
                 </div>
               </div>
 
               <!-- Name -->
               <div class="col-span-6 sm:col-span-4">
-                <q-input v-model="payload.name"
-                         outlined
-                         dense
-                         hide-bottom-space
-                         :error="'name' in errors"
-                         :error-message="errors.name?.[0]"
-                         label="Name" />
+                <q-input
+                  v-model="payload.name"
+                  outlined
+                  dense
+                  hide-bottom-space
+                  :error="'name' in errors"
+                  :error-message="errors.name?.[0]"
+                  label="Name"
+                />
               </div>
 
               <!-- Email -->
               <div class="col-span-6 sm:col-span-4">
-                <q-input v-model="payload.email"
-                         outlined
-                         dense
-                         hide-bottom-space
-                         :error="'email' in errors"
-                         :error-message="errors.email?.[0]"
-                         label="Email" />
+                <q-input
+                  v-model="payload.email"
+                  outlined
+                  dense
+                  hide-bottom-space
+                  :error="'email' in errors"
+                  :error-message="errors.email?.[0]"
+                  label="Email"
+                />
 
-                <div v-if="user.email_verified_at === null">
+                <div v-if="user?.email_verified_at === null">
                   <p class="text-sm mt-2 dark:text-white">
                     Your email address is unverified.
 
-                    <q-btn :loading="sendingEmailVerification"
-                           flat
-                           @click.prevent="sendEmailVerification">
+                    <q-btn
+                      :loading="sendingEmailVerification"
+                      flat
+                      @click.prevent="sendEmailVerification"
+                    >
                       <span class="underline">
                         Click here to re-send the verification email.
                       </span>
@@ -99,15 +123,19 @@
             </div>
           </q-card-section>
 
-          <q-card-actions align="right"
-                          class="bg-gray-50 dark:bg-gray-800">
-            <q-btn class="q-ml-md"
-                   color="green-500 dark:bg-blue-900"
-                   label="Save"
-                   padding="sm md"
-                   :loading="submitting"
-                   unelevated
-                   type="submit" />
+          <q-card-actions
+            align="right"
+            class="bg-gray-50 dark:bg-gray-800"
+          >
+            <q-btn
+              class="q-ml-md"
+              color="green-500 dark:bg-blue-900"
+              label="Save"
+              padding="sm md"
+              :loading="submitting"
+              unelevated
+              type="submit"
+            />
           </q-card-actions>
         </q-card>
       </form>
