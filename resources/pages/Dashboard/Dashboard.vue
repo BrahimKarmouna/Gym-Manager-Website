@@ -58,7 +58,7 @@
   </div>
   <div class="flex space  py-5 px-8 gap-5 w-full justify-center h-64 ">
 
-    <div class="w-1/2  h-72 rounded-xl border-x-black max-h-96 overflow-auto ">
+    <div class="w-1/2 bg-gray-200 h-72 rounded-xl border-x-black max-h-96 overflow-auto ">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
