@@ -131,7 +131,8 @@
                 class="w-12 h-12 rounded-full border border-gray-300 shadow-sm object-cover"
               />
               <div class="ps-3">
-                <div class="text-base font-semibold">
+                <div class="text-bas
+                e font-semibold">
                   <button @click="showClient(client)">
                     {{ client.Full_name }}
                   </button>
@@ -159,7 +160,7 @@
                 class="flex items-center"
                 v-else
               >
-                <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
+                <div class="h-2.5 w-2.5 rounded-full me-2"></div>
                 Non assuré
               </div>
             </td>
