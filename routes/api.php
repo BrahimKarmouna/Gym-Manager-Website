@@ -13,8 +13,13 @@ use App\Http\Controllers\Api\PlanController;
 use App\Http\Controllers\Api\ProfilePhotoController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserProfileController;
+use App\Http\Controllers\Api\RevenueController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+
+
+Route::get('/revenue/monthly', [RevenueController::class, 'monthlyRevenue']);
 
 Route::prefix('insurance')->group(function () {
   // Route to get all insurance plans

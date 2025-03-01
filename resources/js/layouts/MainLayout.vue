@@ -1,10 +1,9 @@
 <template>
   <q-layout view="hHh LpR lFf">
-
     <q-header
       reveal
       bordered
-      class="bg-white text-dark dark:bg-gray-900 dark:text-white h-16 "
+      class="bg-white text-dark dark:bg-black dark:text-white h-16"
     >
       <q-toolbar>
         <q-btn
@@ -13,13 +12,10 @@
           round
           icon="sym_r_reorder"
           @click="toggleLeftDrawer"
-          class=" text-blue-900 dark:text-blue-400"
+          class="text-blue-900 dark:text-blue-400"
         />
 
-        <router-link
-          class=" text-black  my-1 "
-          :to="{ name: 'dashboard.index' }"
-        >
+        <router-link class="text-black my-1" :to="{ name: 'dashboard.index' }">
           <!-- <img
             src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
             alt="Logo"
@@ -29,24 +25,20 @@
 
         <q-toolbar-title class="flex items-center">
           <span
-            class="text-black dark:text-blue-400  text-2xl mr-1  "
-            style="font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"
+            class="text-black dark:text-blue-400 text-2xl mr-1"
+            style="
+              font-family: 'Trebuchet MS', 'Lucida Sans Unicode',
+                'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            "
           >
-
-
-
             <router-link
-              class=" text-black-900 dark:text-blue-400  text-bold my-1 "
+              class="text-black-900 dark:text-blue-400 text-bold my-1"
               :to="{ name: 'register' }"
             >
               Gym Manager
             </router-link>
-
           </span>
-
-
         </q-toolbar-title>
-
 
         <!-- Dark mode toggler -->
         <q-toggle
@@ -55,14 +47,9 @@
           checked-icon="sym_r_dark_mode"
           unchecked-icon="sym_r_light_mode"
         />
-        <q-btn
-          flat
-          round
-          class="ms-2"
-          no-wrap
-        >
+        <q-btn flat round class="ms-2" no-wrap>
           <q-avatar size="26px">
-            <img :src="authStore.user.profile_photo_url">
+            <img :src="authStore.user.profile_photo_url" />
           </q-avatar>
 
           <q-menu auto-close>
@@ -70,7 +57,8 @@
               <q-item>
                 <q-item-section>
                   <div class="text-nowrap ellipsis">
-                    Signed in as <strong class="ellipsis">{{ authStore.user.name }}</strong>
+                    Signed in as
+                    <strong class="ellipsis">{{ authStore.user.name }}</strong>
                   </div>
                 </q-item-section>
               </q-item>
@@ -83,10 +71,7 @@
               >
                 <q-item-section>Your profile</q-item-section>
               </q-item>
-              <q-item
-                clickable
-                @click="confirmLogout"
-              >
+              <q-item clickable @click="confirmLogout">
                 <q-item-section>Sign out</q-item-section>
               </q-item>
             </q-list>
@@ -103,8 +88,7 @@
       :mini="layoutStore.sidebar.mini"
       bordered
     >
-      <q-list class="q-pa-sm q-gutter-xs py-6 ">
-
+      <q-list class="q-pa-sm q-gutter-xs py-6">
         <!-- <q-item-label header>
           <span class="text-bold"
                 style="font-family:  'Lucida Sans'">Navigation</span>
@@ -118,19 +102,17 @@
           class="text-blue-900"
           style="font-family: sans-serif"
         />
-
       </q-list>
     </q-drawer>
 
     <q-page-container>
       <Suspense>
         <template #fallback>
-          <q-page :style-fn="(offset) => ({ height: `calc(100vh - ${offset}px)` })">
-            <div class="flex items-center justify-center fit ">
-              <q-inner-loading
-                :showing="true"
-                label="Loading..."
-              />
+          <q-page
+            :style-fn="(offset) => ({ height: `calc(100vh - ${offset}px)` })"
+          >
+            <div class="flex items-center justify-center fit">
+              <q-inner-loading :showing="true" label="Loading..." />
             </div>
           </q-page>
         </template>
@@ -138,58 +120,55 @@
         <RouterView />
       </Suspense>
     </q-page-container>
-
   </q-layout>
 </template>
 <style></style>
 <script>
-import EssentialLink from '@/components/EssentialLink.vue'
-import { computed, defineComponent } from 'vue'
-import { useQuasar } from 'quasar';
-import { useLayoutStore } from '@/stores/layout';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-
+import EssentialLink from "@/components/EssentialLink.vue";
+import { computed, defineComponent } from "vue";
+import { useQuasar } from "quasar";
+import { useLayoutStore } from "@/stores/layout";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
 const linksList = [
   {
-    title: 'Dashboad',
-    icon: 'sym_r_dashboard',
-    to: { name: 'dashboard.index' },
-    exact: true
+    title: "Dashboad",
+    icon: "sym_r_dashboard",
+    to: { name: "dashboard.index" },
+    exact: true,
   },
   {
-    title: 'Clients',
-    icon: 'sym_r_person',
-    to: { name: 'account.index-account' }
+    title: "Clients",
+    icon: "sym_r_person",
+    to: { name: "account.index-account" },
   },
   {
-    title: 'Payments',
-    icon: 'sym_r_move_down',
-    to: { name: 'transaction.index' }
+    title: "Payments",
+    icon: "sym_r_move_down",
+    to: { name: "transaction.index" },
   },
   {
-    title: 'Plans',
-    icon: 'sym_r_category',
+    title: "Plans",
+    icon: "sym_r_category",
     children: [
-
       {
-        title: 'Payment plans',
-        to: { name: 'incomes.index' }
+        title: "Payment plans",
+        to: { name: "incomes.index" },
       },
       {
-        title: 'Insurance plans',
-        to: { name: 'expenses.index' }
-      }
-    ]
+        title: "Insurance plans",
+        to: { name: "expenses.index" },
+      },
+    ],
   },
-]
+];
 
 export default defineComponent({
-  name: 'MainLayout',
+  name: "MainLayout",
 
   components: {
-    EssentialLink
+    EssentialLink,
   },
 
   setup() {
@@ -201,25 +180,24 @@ export default defineComponent({
 
     const router = useRouter();
 
-
     function confirmLogout() {
       $q.dialog({
-        title: 'Confirm',
-        message: 'Are you sure you want to sign out?',
+        title: "Confirm",
+        message: "Are you sure you want to sign out?",
         persistent: true,
         ok: {
-          label: 'Yes',
-          color: 'blue-900 dark:bg-blue-400',
+          label: "Yes",
+          color: "blue-900 dark:bg-blue-400",
           unelevated: true,
         },
 
         cancel: {
-          label: 'No',
+          label: "No",
           flat: true,
-          color: 'red-500 ',
+          color: "red-500 ",
           handler: () => {
             // Do nothing
-          }
+          },
         },
       }).onOk(() => {
         authStore.logout();
@@ -242,8 +220,7 @@ export default defineComponent({
       toggleLeftDrawer() {
         layoutStore.sidebar.opened = !layoutStore.sidebar.opened;
       },
-
-    }
-  }
+    };
+  },
 });
 </script>

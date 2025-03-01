@@ -19,4 +19,9 @@ class Plan extends Model
     {
         return $this->hasMany(Payment::class);
     }
+    public function plan()
+{
+    return $this->belongsTo(Plan::class, 'plan_id');
+}
+
 }

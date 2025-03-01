@@ -1,8 +1,6 @@
 <template>
   <ProfileSection @submit="save">
-    <template #title>
-      Profile Information
-    </template>
+    <template #title> Profile Information </template>
 
     <template #description>
       Update your account's profile information and email address.
@@ -10,14 +8,11 @@
 
     <template #content>
       <form @submit.prevent="save">
-        <q-card class="shadow bg-white dark:bg-gray-800">
+        <q-card class="shadow bg-white dark:bg-black-800">
           <q-card-section>
             <div class="grid grid-cols-6 gap-3">
               <!-- Profile Photo -->
-              <div
-                v-if="true"
-                class="col-span-6 sm:col-span-4"
-              >
+              <div v-if="true" class="col-span-6 sm:col-span-4">
                 <!-- Profile Photo File Input -->
                 <input
                   id="photo"
@@ -25,17 +20,16 @@
                   type="file"
                   class="hidden"
                   @change="updatePhotoPreview"
-                >
+                />
 
-                <label class="font-medium text-gray-800 dark:text-white text-sm block mb-1">
+                <label
+                  class="font-medium text-gray-800 dark:text-white text-sm block mb-1"
+                >
                   Photo
                 </label>
 
                 <!-- Current Profile Photo -->
-                <div
-                  v-show="!photoPreview"
-                  class="mt-2"
-                >
+                <div v-show="!photoPreview" class="mt-2">
                   <q-img
                     :src="user.profile_photo_url"
                     :alt="user.name"
@@ -44,10 +38,7 @@
                 </div>
 
                 <!-- New Profile Photo Preview -->
-                <div
-                  v-show="photoPreview"
-                  class="mt-2"
-                >
+                <div v-show="photoPreview" class="mt-2">
                   <span
                     class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center"
                     :style="'background-image: url(\'' + photoPreview + '\');'"
@@ -123,10 +114,7 @@
             </div>
           </q-card-section>
 
-          <q-card-actions
-            align="right"
-            class="bg-gray-50 dark:bg-gray-800"
-          >
+          <q-card-actions align="right" class="bg-gray-50 dark:bg-black-800">
             <q-btn
               class="q-ml-md"
               color="green-500 dark:bg-blue-900"
@@ -144,13 +132,13 @@
 </template>
 
 <script setup>
-import ProfileSection from './ProfileSection.vue';
+import ProfileSection from "./ProfileSection.vue";
 
 import { useQuasar } from "quasar";
 import { api } from "@/boot/axios";
 import { ref } from "vue";
 
-const user = defineModel('user', { type: Object, required: true });
+const user = defineModel("user", { type: Object, required: true });
 
 const $q = useQuasar();
 
@@ -178,10 +166,7 @@ async function save() {
   }
 
   try {
-    const resp = await api.postForm(
-      "user/profile-information",
-      payload.value
-    );
+    const resp = await api.postForm("user/profile-information", payload.value);
 
     if (user.value.email !== payload.value.email) {
       user.value.email_verified_at = null;
@@ -198,7 +183,6 @@ async function save() {
     return resp;
   } catch (err) {
     console.log(err);
-
 
     if (err.response.status === 422) {
       return (errors.value = err.response.data.errors);

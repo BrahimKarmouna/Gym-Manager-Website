@@ -2,9 +2,9 @@
   <q-layout view="lHh Lpr lFf">
     <q-page-container>
       <q-page padding>
-        <div class="bg-white dark:bg-gray-900 row fullscreen">
+        <div class="bg-white dark:bg-black row fullscreen">
           <div class="col-12 flex content-center justify-center">
-            <div class="py-6 px-4 w-full">
+            <div class="w-full">
               <router-view />
             </div>
           </div>
@@ -14,6 +14,4 @@
   </q-layout>
 </template>
 
-<script setup>
-
-</script>
+<script setup></script>

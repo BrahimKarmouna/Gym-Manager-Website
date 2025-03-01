@@ -12,22 +12,18 @@
   />
 
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-
     <div
-      class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900"
+      class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-black"
     >
       <div>
-        <q-btn
-          class="mr-7"
-          @click="openModal"
-        >
+        <q-btn class="mr-7" @click="openModal">
           <q-icon name="add" />
           <q-tooltip>Add Client</q-tooltip>
         </q-btn>
         <button
           id="dropdownActionButton"
           data-dropdown-toggle="dropdownAction"
-          class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-black-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
           type="button"
         >
           <span class="sr-only">Action button</span>
@@ -51,7 +47,7 @@
         <!-- Dropdown menu -->
         <div
           id="dropdownAction"
-          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600"
+          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-black-700 dark:divide-gray-600"
         >
           <ul
             class="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -61,35 +57,38 @@
               <a
                 href="#"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >Reward</a>
+                >Reward</a
+              >
             </li>
             <li>
               <a
                 href="#"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >Promote</a>
+                >Promote</a
+              >
             </li>
             <li>
               <a
                 href="#"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >Activate account</a>
+                >Activate account</a
+              >
             </li>
           </ul>
           <div class="py-1">
             <a
               href="#"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            >Delete User</a>
+              >Delete User</a
+            >
           </div>
         </div>
       </div>
-      <label
-        for="table-search"
-        class="sr-only"
-      >Search</label>
+      <label for="table-search" class="sr-only">Search</label>
       <div class="relative">
-        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+        <div
+          class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none"
+        >
           <svg
             class="w-4 h-4 text-gray-500 dark:text-gray-400"
             aria-hidden="true"
@@ -109,74 +108,53 @@
         <input
           type="text"
           id="table-search-users"
-          class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-black-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Search for users"
         />
       </div>
     </div>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table
+      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+    >
+      <thead
+        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-black-700 dark:text-gray-400"
+      >
         <tr>
-          <th
-            scope="col"
-            class="p-4"
-          >
+          <th scope="col" class="p-4">
             <div class="flex items-center">
               <input
                 id="checkbox-all-search"
                 type="checkbox"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-black-700 dark:border-gray-600"
               />
-              <label
-                for="checkbox-all-search"
-                class="sr-only"
-              >checkbox</label>
+              <label for="checkbox-all-search" class="sr-only">checkbox</label>
             </div>
           </th>
-          <th
-            scope="col"
-            class="px-6 py-3"
-          >id</th>
-          <th
-            scope="col"
-            class="px-6 py-3"
-          >Name</th>
+          <th scope="col" class="px-6 py-3">id</th>
+          <th scope="col" class="px-6 py-3">Name</th>
 
-          <th
-            scope="col"
-            class="px-6 py-3"
-          >Phone</th>
-          <th
-            scope="col"
-            class="px-6 py-3"
-          >Asserance</th>
-          <th
-            scope="col"
-            class="px-6 py-3"
-          >Payment</th>
-          <th
-            scope="col"
-            class="px-6 py-3"
-          >Action</th>
+          <th scope="col" class="px-6 py-3">Phone</th>
+          <th scope="col" class="px-6 py-3">Asserance</th>
+          <th scope="col" class="px-6 py-3">Payment</th>
+          <th scope="col" class="px-6 py-3">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr
           v-for="client in clients"
           :key="client.id"
-          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+          class="bg-white border-b dark:bg-black-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
           <td class="w-4 p-4">
             <div class="flex items-center">
               <input
                 id="checkbox-table-search-1"
                 type="checkbox"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-black-700 dark:border-gray-600"
               />
-              <label
-                for="checkbox-table-search-1"
-                class="sr-only"
-              >checkbox</label>
+              <label for="checkbox-table-search-1" class="sr-only"
+                >checkbox</label
+              >
             </div>
           </td>
           <td class="px-6 py-4">#{{ client.id }}</td>
@@ -213,42 +191,22 @@
             </div>
           </td>
           <td class="px-6 py-4">
-            <div
-              class="flex items-center"
-              v-if="client.is_assured"
-            >
+            <div class="flex items-center" v-if="client.is_assured">
               <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
               Assuré
             </div>
-            <div
-              class="flex items-center"
-              v-else
-            >
+            <div class="flex items-center" v-else>
               <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
               Non assuré
             </div>
-
-
-
           </td>
           <td class="px-6 py-4">
-
-            <div
-              v-if="client.is_payed"
-              class="flex items-center
-
-
-                       "
-            >
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2">
-              </div>
+            <div v-if="client.is_payed" class="flex items-center">
+              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
               payee
             </div>
 
-            <div
-              class="flex items-center"
-              v-else
-            >
+            <div class="flex items-center" v-else>
               <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
               non payee
             </div>
@@ -263,18 +221,11 @@
 
                     </td> -->
 
-          <td class="px-6 py-4 relative"> <!-- Add relative positioning to the <td> -->
-            <q-btn-dropdown
-              dense
-              unelevated
-            >
-
+          <td class="px-6 py-4 relative">
+            <!-- Add relative positioning to the <td> -->
+            <q-btn-dropdown dense unelevated>
               <q-list>
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="onItemClick"
-                >
+                <q-item clickable v-close-popup @click="onItemClick">
                   <q-btn
                     icon="edit"
                     color="blue"
@@ -284,11 +235,7 @@
                   ></q-btn>
                 </q-item>
 
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="onItemClick"
-                >
+                <q-item clickable v-close-popup @click="onItemClick">
                   <q-item-section>
                     <q-item-label>
                       <q-btn
@@ -302,11 +249,7 @@
                   </q-item-section>
                 </q-item>
 
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="onItemClick"
-                >
+                <q-item clickable v-close-popup @click="onItemClick">
                   <q-item-section>
                     <q-item-label>
                       <q-btn
@@ -316,14 +259,11 @@
                         background-color="white"
                         @click="showClient(client)"
                       ></q-btn>
-
-
                     </q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
             </q-btn-dropdown>
-
           </td>
         </tr>
       </tbody>

@@ -15,13 +15,18 @@ class Insurance extends Model
         'payment_date',
     ];
 
+    public function insurance_plan()
+{
+    return $this->belongsTo(InsurancePlan::class, 'insurance_plan_id');
+}
+
     public function client()
     {
         return $this->belongsTo(Client::class);
     }
 
-    public function insurancePlan()
-    {
-        return $this->belongsTo(InsurancePlan::class);
-    }
+    // public function insurancePlan()
+    // {
+    //     return $this->belongsTo(InsurancePlan::class);
+    // }
 }
