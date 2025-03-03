@@ -20,6 +20,15 @@ const routes = [
         component: () => import("../pages/auth/LoginPage.vue"),
       },
       {
+        path: "products",
+        alias: "/products",
+        name: "products",
+        meta: {
+          middleware: [GuestMiddleware],
+        },
+        component: () => import("../pages/products/index.vue"),
+      },
+      {
         path: "register",
         alias: "/",
         name: "register",
