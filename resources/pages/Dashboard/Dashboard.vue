@@ -1,5 +1,8 @@
 <template>
-  <ShowModal v-model:visible="ShowClient" :clients="clients" />
+  <ShowModal
+    v-model:visible="ShowClient"
+    :clients="clients"
+  />
 
   <!-- <div class="flex space justify-center py-10 px-3 gap-16 h-80  ">
         <div class=" flex w-1/4 border-2 rounded-xl ">
@@ -20,9 +23,7 @@
     </div> -->
   <div class="flex justify-center py-10 px-3 gap-10 h-80">
     <!-- Card 1 -->
-    <div
-      class="flex flex-col w-1/4 border-2 rounded-xl p-4 shadow-lg bg-white dark:bg-black-800"
-    >
+    <div class="flex flex-col w-1/4 border-2 rounded-xl p-4 shadow-lg bg-white dark:bg-black-800">
       <div class="flex justify-between">
         <div class="text-gray-800 dark:text-gray-100 text-lg font-semibold">
           Gross Revenue
@@ -37,9 +38,7 @@
     </div>
 
     <!-- Card 2 -->
-    <div
-      class="flex flex-col w-1/4 border-2 rounded-xl p-4 shadow-lg bg-white dark:bg-black-800"
-    >
+    <div class="flex flex-col w-1/4 border-2 rounded-xl p-4 shadow-lg bg-white dark:bg-black-800">
       <div class="flex justify-between">
         <div class="text-gray-800 dark:text-gray-100 text-lg font-semibold">
           Order Value
@@ -54,9 +53,7 @@
     </div>
 
     <!-- Card 3 -->
-    <div
-      class="flex flex-col w-1/4 border-2 rounded-xl p-4 shadow-lg bg-white dark:bg-black-800"
-    >
+    <div class="flex flex-col w-1/4 border-2 rounded-xl p-4 shadow-lg bg-white dark:bg-black-800">
       <div class="flex justify-between">
         <div class="text-gray-800 dark:text-gray-100 text-lg font-semibold">
           Total Orders
@@ -71,34 +68,47 @@
     </div>
   </div>
   <div class="flex space py-5 px-8 gap-5 w-full justify-center h-64">
-    <div
-      class="w-1/2 bg-gray-200 h-72 rounded-xl border-x-black max-h-96 overflow-auto"
-    >
-      <table
-        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-      >
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-black-700 dark:text-gray-400"
-        >
+    <div class="w-1/2 bg-gray-200 h-72 rounded-xl border-x-black max-h-96 overflow-auto">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-black-700 dark:text-gray-400">
           <tr>
-            <th scope="col" class="p-4">
+            <th
+              scope="col"
+              class="p-4"
+            >
               <div class="flex items-center">
                 <input
                   id="checkbox-all-search"
                   type="checkbox"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-black-700 dark:border-gray-600"
                 />
-                <label for="checkbox-all-search" class="sr-only"
-                  >checkbox</label
-                >
+                <label
+                  for="checkbox-all-search"
+                  class="sr-only"
+                >checkbox</label>
               </div>
             </th>
-            <th scope="col" class="px-6 py-3">ID</th>
-            <th scope="col" class="px-6 py-3">Name</th>
+            <th
+              scope="col"
+              class="px-6 py-3"
+            >ID</th>
+            <th
+              scope="col"
+              class="px-6 py-3"
+            >Name</th>
 
-            <th scope="col" class="px-6 py-3">Assurance</th>
-            <th scope="col" class="px-6 py-3">Payment</th>
-            <th scope="col" class="px-6 py-3">Action</th>
+            <th
+              scope="col"
+              class="px-6 py-3"
+            >Assurance</th>
+            <th
+              scope="col"
+              class="px-6 py-3"
+            >Payment</th>
+            <th
+              scope="col"
+              class="px-6 py-3"
+            >Action</th>
           </tr>
         </thead>
         <tbody>
@@ -114,9 +124,10 @@
                   type="checkbox"
                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-black-700 dark:border-gray-600"
                 />
-                <label for="checkbox-table-search-1" class="sr-only"
-                  >checkbox</label
-                >
+                <label
+                  for="checkbox-table-search-1"
+                  class="sr-only"
+                >checkbox</label>
               </div>
             </td>
             <td class="px-6 py-4">#{{ client.id }}</td>
@@ -135,9 +146,7 @@
                     {{ client.Full_name }}
                   </button>
                 </div>
-                <div
-                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
+                <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {{ client.name }}
                 </div>
                 <div class="font-normal text-gray-500">
@@ -148,28 +157,43 @@
 
             <td class="px-6 py-4">
               {{ console.log(client) }}
-              <div class="flex items-center" v-if="client.is_assured">
+              <div
+                class="flex items-center"
+                v-if="client.is_assured"
+              >
                 <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
                 Assuré
               </div>
-              <div class="flex items-center" v-else>
-                <div class="h-2.5 w-2.5 rounded-full me-2"></div>
+              <div
+                class="flex items-center"
+                v-else
+              >
+                <div class="h-2.5 w-2.5 bg-red-500 rounded-full me-2"></div>
                 Non assuré
               </div>
             </td>
             <td class="px-6 py-4">
-              <div v-if="client.is_payed" class="flex items-center">
+              <div
+                v-if="client.is_payed"
+                class="flex items-center"
+              >
                 <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
                 Payé
               </div>
-              <div class="flex items-center" v-else>
+              <div
+                class="flex items-center"
+                v-else
+              >
                 <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
                 Non payé
               </div>
             </td>
             <td class="px-6 py-4 relative">
               <!-- Three-dot (Ellipsis) Action Button -->
-              <q-btn-dropdown dense unelevated>
+              <q-btn-dropdown
+                dense
+                unelevated
+              >
                 <q-list>
                   <!-- Create Insurance -->
                   <q-item
@@ -181,7 +205,11 @@
                     <q-item-section>
                       <q-item-label>
                         Create Insurance
-                        <q-icon name="shield" size="sm" class="ms-1"></q-icon>
+                        <q-icon
+                          name="shield"
+                          size="sm"
+                          class="ms-1"
+                        ></q-icon>
                       </q-item-label>
                     </q-item-section>
                   </q-item>
@@ -211,7 +239,16 @@
         </tbody>
       </table>
     </div>
-    <div class="w-1/3 bg-gray-200 h-72 rounded-xl"></div>
+    <div class="w-1/3 border-black h-72 rounded-xl">
+      <div id="chart">
+        <apexchart
+          type="bar"
+          height="350"
+          :options="chartOptions"
+          :series="series"
+        ></apexchart>
+      </div>
+    </div>
   </div>
 
   <!-- <div class=" overflow-x-auto shadow-md sm:rounded-lg">
@@ -254,6 +291,8 @@
 
     </div> -->
   <!-- Insurance Modal -->
+
+
   <InsuranceForm
     v-model:visible="isInsuranceModalVisible"
     :client="selectedClient"
@@ -278,6 +317,137 @@ const selectedClient = ref(null);
 const revenue = ref(null);
 const loading = ref(true);
 const error = ref(null);
+
+const series = [
+  {
+    name: 'Actual',
+    data: [
+      {
+        x: '2011',
+        y: 1292,
+        goals: [
+          {
+            name: 'Expected',
+            value: 1400,
+            strokeHeight: 5,
+            strokeColor: '#775DD0'
+          }
+        ]
+      },
+      {
+        x: '2012',
+        y: 4432,
+        goals: [
+          {
+            name: 'Expected',
+            value: 5400,
+            strokeHeight: 5,
+            strokeColor: '#775DD0'
+          }
+        ]
+      },
+      {
+        x: '2013',
+        y: 5423,
+        goals: [
+          {
+            name: 'Expected',
+            value: 5200,
+            strokeHeight: 5,
+            strokeColor: '#775DD0'
+          }
+        ]
+      },
+      {
+        x: '2014',
+        y: 6653,
+        goals: [
+          {
+            name: 'Expected',
+            value: 6500,
+            strokeHeight: 5,
+            strokeColor: '#775DD0'
+          }
+        ]
+      },
+      {
+        x: '2015',
+        y: 8133,
+        goals: [
+          {
+            name: 'Expected',
+            value: 6600,
+            strokeHeight: 13,
+            strokeWidth: 0,
+            strokeLineCap: 'round',
+            strokeColor: '#775DD0'
+          }
+        ]
+      },
+      {
+        x: '2016',
+        y: 7132,
+        goals: [
+          {
+            name: 'Expected',
+            value: 7500,
+            strokeHeight: 5,
+            strokeColor: '#775DD0'
+          }
+        ]
+      },
+      {
+        x: '2017',
+        y: 7332,
+        goals: [
+          {
+            name: 'Expected',
+            value: 8700,
+            strokeHeight: 5,
+            strokeColor: '#775DD0'
+          }
+        ]
+      },
+      {
+        x: '2018',
+        y: 6553,
+        goals: [
+          {
+            name: 'Expected',
+            value: 7300,
+            strokeHeight: 2,
+            strokeDashArray: 2,
+            strokeColor: '#775DD0'
+          }
+        ]
+      }
+    ]
+  }
+];
+
+const chartOptions = {
+  chart: {
+    height: 350,
+    type: 'bar'
+  },
+  plotOptions: {
+    bar: {
+      columnWidth: '60%'
+    }
+  },
+  colors: ['#00E396'],
+  dataLabels: {
+    enabled: false
+  },
+  legend: {
+    show: true,
+    showForSingleSeries: true,
+    customLegendItems: ['Actual', 'Expected'],
+    markers: {
+      fillColors: ['#00E396', '#775DD0']
+    }
+  }
+};
 
 const fetchRevenue = async () => {
   try {

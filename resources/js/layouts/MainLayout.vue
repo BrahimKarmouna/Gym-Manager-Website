@@ -3,81 +3,161 @@
     <q-header
       reveal
       bordered
-      class="bg-white text-dark dark:bg-black dark:text-white h-16"
+      class="glassmorphism-header"
     >
-      <q-toolbar>
+      <!-- <q-toolbar>
         <q-btn
           dense
           flat
           round
-          icon="sym_r_reorder"
+          icon="menu"
           @click="toggleLeftDrawer"
-          class="text-blue-900 dark:text-blue-400"
+          class="text-primary"
         />
 
-        <router-link class="text-black my-1" :to="{ name: 'dashboard.index' }">
-          <!-- <img
-            src="https://i.ibb.co/D7xPmJR/finance-coin-money-with-flying-wings-logo-3.png"
-            alt="Logo"
-            class="text-dark w-20 h-10 mx-auto mb-1 ml-1"
-          /> -->
+        <router-link
+          class="brand-logo"
+          :to="{ name: 'dashboard.index' }"
+        >
+          <span>Gym Manager</span>
         </router-link>
 
         <q-toolbar-title class="flex items-center">
-          <span
-            class="text-black dark:text-blue-400 text-2xl mr-1"
-            style="
-              font-family: 'Trebuchet MS', 'Lucida Sans Unicode',
-                'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-            "
+          <router-link
+            class="text-lg text-bold"
+            :to="{ name: 'register' }"
           >
-            <router-link
-              class="text-black-900 dark:text-blue-400 text-bold my-1"
-              :to="{ name: 'register' }"
-            >
-              Gym Manager
-            </router-link>
-          </span>
+            Fitness Redefined
+          </router-link>
         </q-toolbar-title>
 
-        <!-- Dark mode toggler -->
         <q-toggle
           :model-value="isDarkActive"
           @update:model-value="toggleDarkMode"
-          checked-icon="sym_r_dark_mode"
-          unchecked-icon="sym_r_light_mode"
+          checked-icon="dark_mode"
+          unchecked-icon="light_mode"
         />
-        <q-btn flat round class="ms-2" no-wrap>
-          <q-avatar size="26px">
-            <img :src="authStore.user.profile_photo_url" />
-          </q-avatar>
 
+        <q-btn
+          flat
+          round
+          class="profile-btn"
+        >
+          <q-avatar rounded>
+            <img src="https://cdn.quasar.dev/img/avatar.png">
+          </q-avatar>
           <q-menu auto-close>
             <q-list dense>
               <q-item>
                 <q-item-section>
-                  <div class="text-nowrap ellipsis">
-                    Signed in as
-                    <strong class="ellipsis">{{ authStore.user.name }}</strong>
-                  </div>
+                  <div class="text-nowrap">Signed in as <strong>{{ authStore.user.name }}</strong></div>
                 </q-item-section>
               </q-item>
               <q-separator />
-
               <q-item
                 clickable
-                class="dark:text-white"
                 :to="{ name: 'profile.index' }"
               >
-                <q-item-section>Your profile</q-item-section>
+                <q-item-section>Your Profile</q-item-section>
               </q-item>
-              <q-item clickable @click="confirmLogout">
-                <q-item-section>Sign out</q-item-section>
+              <q-item
+                clickable
+                @click="confirmLogout"
+              >
+                <q-item-section>Sign Out</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-toolbar> -->
+
+      <q-toolbar class="bg-white text-black shadow-2 h-20 ">
+        <!-- Menu Button -->
+        <q-btn
+          dense
+          flat
+          round
+          icon="list"
+          size="24px"
+          @click="toggleLeftDrawer"
+          class="text-black mr-10"
+        />
+
+        <!-- Brand Logo -->
+        <router-link
+          class="text-h6 text-bold text-black"
+          :to="{ name: 'dashboard.index' }"
+        >
+          <img
+            src="/images/logo/logoblack.png"
+            class="w-16"
+            alt="Logo"
+          >
+
+        </router-link>
+
+        <!-- Title with Fitness Redefined -->
+        <q-toolbar-title class="flex items-center justify-center text-lg text-bold">
+          <!-- <router-link
+            class="text-black"
+            :to="{ name: 'register' }"
+          >
+            Fitness Redefined
+          </router-link> -->
+        </q-toolbar-title>
+
+        <!-- Dark Mode Toggle -->
+        <q-toggle
+          :model-value="isDarkActive"
+          @update:model-value="toggleDarkMode"
+          checked-icon="dark_mode"
+          unchecked-icon="light_mode"
+          class="text-black"
+        />
+
+        <!-- Profile Button and Menu -->
+        <q-btn
+          flat
+          round
+          class="text-white profile-btn"
+        >
+          <q-avatar
+            size="32px"
+            rounded
+          >
+            <img
+              :src="authStore.user.profile_photo_url"
+              alt="Profile Image"
+            >
+          </q-avatar>
+          <q-menu auto-close>
+            <q-list
+              dense
+              class="bg-grey-1"
+            >
+              <q-item>
+                <q-item-section>
+                  <div class="text-nowrap">Signed in as <strong>{{ authStore.user.name }}</strong></div>
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item
+                clickable
+                :to="{ name: 'profile.index' }"
+              >
+                <q-item-section>Your Profile</q-item-section>
+              </q-item>
+              <q-item
+                clickable
+                @click="confirmLogout"
+              >
+                <q-item-section>Sign Out</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
         </q-btn>
       </q-toolbar>
+
     </q-header>
 
     <q-drawer
@@ -85,22 +165,15 @@
       v-model="layoutStore.sidebar.opened"
       side="left"
       :width="250"
-      :mini="layoutStore.sidebar.mini"
       bordered
+      class="sidebar-menu mt-1"
     >
-      <q-list class="q-pa-sm q-gutter-xs py-6">
-        <!-- <q-item-label header>
-          <span class="text-bold"
-                style="font-family:  'Lucida Sans'">Navigation</span>
-
-        </q-item-label> -->
-
+      <q-list>
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
-          class="text-blue-900"
-          style="font-family: sans-serif"
+          class="nav-item"
         />
       </q-list>
     </q-drawer>
@@ -108,21 +181,66 @@
     <q-page-container>
       <Suspense>
         <template #fallback>
-          <q-page
-            :style-fn="(offset) => ({ height: `calc(100vh - ${offset}px)` })"
-          >
-            <div class="flex items-center justify-center fit">
-              <q-inner-loading :showing="true" label="Loading..." />
-            </div>
+          <q-page class="loading-screen">
+            <q-inner-loading
+              :showing="true"
+              label="Loading..."
+            />
           </q-page>
         </template>
-
         <RouterView />
       </Suspense>
     </q-page-container>
   </q-layout>
 </template>
-<style></style>
+
+<style scoped>
+.glassmorphism-header {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.brand-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.profile-btn:hover {
+  transform: scale(1.05);
+  transition: 0.3s;
+}
+
+.sidebar-menu {
+  background: #f8f9fc;
+  padding: 20px 0;
+}
+
+.nav-item {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.nav-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+</style>
+
 <script>
 import EssentialLink from "@/components/EssentialLink.vue";
 import { computed, defineComponent } from "vue";
@@ -132,95 +250,50 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 
 const linksList = [
+  { title: "Dashboard", icon: "dashboard", to: { name: "dashboard.index" } },
+  { title: "Clients", icon: "person", to: { name: "account.index-account" } },
+  { title: "Payments", icon: "payments", to: { name: "transaction.index" } },
   {
-    title: "Dashboad",
-    icon: "sym_r_dashboard",
-    to: { name: "dashboard.index" },
-    exact: true,
-  },
-  {
-    title: "Clients",
-    icon: "sym_r_person",
-    to: { name: "account.index-account" },
-  },
-  {
-    title: "Payments",
-    icon: "sym_r_move_down",
-    to: { name: "transaction.index" },
-  },
-  {
-    title: "Plans",
-    icon: "sym_r_category",
-    children: [
-      {
-        title: "Payment plans",
-        to: { name: "incomes.index" },
-      },
-      {
-        title: "Insurance plans",
-        to: { name: "expenses.index" },
-      },
-    ],
-  },
+    title: "Plans", icon: "category", children: [
+      { title: "Payment Plans", to: { name: "incomes.index" } },
+      { title: "Insurance Plans", to: { name: "expenses.index" } }
+    ]
+  }
 ];
 
 export default defineComponent({
   name: "MainLayout",
-
-  components: {
-    EssentialLink,
-  },
-
+  components: { EssentialLink },
   setup() {
     const layoutStore = useLayoutStore();
-
     const authStore = useAuthStore();
-
     const $q = useQuasar();
-
     const router = useRouter();
 
     function confirmLogout() {
       $q.dialog({
-        title: "Confirm",
-        message: "Are you sure you want to sign out?",
+        title: "Confirm", message: "Are you sure you want to sign out?",
         persistent: true,
-        ok: {
-          label: "Yes",
-          color: "blue-900 dark:bg-blue-400",
-          unelevated: true,
-        },
-
-        cancel: {
-          label: "No",
-          flat: true,
-          color: "red-500 ",
-          handler: () => {
-            // Do nothing
-          },
-        },
-      }).onOk(() => {
-        authStore.logout();
-      });
+        ok: { label: "Yes", color: "blue-900" },
+        cancel: { label: "No", color: "red-500" }
+      }).onOk(() => authStore.logout());
     }
 
     function toggleDarkMode(value) {
       $q.dark.set(value);
     }
 
-    const isDarkActive = computed(() => $q.dark.isActive);
-
     return {
       essentialLinks: linksList,
       layoutStore,
       authStore,
-      isDarkActive,
+      isDarkActive: computed(() => $q.dark.isActive),
       toggleDarkMode,
       confirmLogout,
       toggleLeftDrawer() {
         layoutStore.sidebar.opened = !layoutStore.sidebar.opened;
-      },
+      }
     };
-  },
+  }
 });
 </script>

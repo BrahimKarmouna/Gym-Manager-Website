@@ -13,12 +13,10 @@
     @mouseenter="!isExpanded && (isHovered = true)"
     @mouseleave="isHovered = false"
   >
-    <div
-      :class="[
-        'py-8 flex',
-        !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start',
-      ]"
-    >
+    <div :class="[
+      'py-8 flex',
+      !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start',
+    ]">
       <router-link to="/">
         <img
           v-if="isExpanded || isHovered || isMobileOpen"
@@ -45,27 +43,29 @@
         />
       </router-link>
     </div>
-    <div
-      class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar"
-    >
+    <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
       <nav class="mb-6">
         <div class="flex flex-col gap-4">
-          <div v-for="(menuGroup, groupIndex) in menuGroups" :key="groupIndex">
-            <h2
-              :class="[
-                'mb-4 text-xs uppercase flex leading-[20px] text-gray-400',
-                !isExpanded && !isHovered
-                  ? 'lg:justify-center'
-                  : 'justify-start',
-              ]"
-            >
+          <div
+            v-for="(menuGroup, groupIndex) in menuGroups"
+            :key="groupIndex"
+          >
+            <h2 :class="[
+              'mb-4 text-xs uppercase flex leading-[20px] text-gray-400',
+              !isExpanded && !isHovered
+                ? 'lg:justify-center'
+                : 'justify-start',
+            ]">
               <template v-if="isExpanded || isHovered || isMobileOpen">
                 {{ menuGroup.title }}
               </template>
               <HorizontalDots v-else />
             </h2>
             <ul class="flex flex-col gap-4">
-              <li v-for="(item, index) in menuGroup.items" :key="item.name">
+              <li
+                v-for="(item, index) in menuGroup.items"
+                :key="item.name"
+              >
                 <button
                   v-if="item.subItems"
                   @click="toggleSubmenu(groupIndex, index)"
@@ -80,20 +80,17 @@
                       : 'lg:justify-start',
                   ]"
                 >
-                  <span
-                    :class="[
-                      isSubmenuOpen(groupIndex, index)
-                        ? 'menu-item-icon-active'
-                        : 'menu-item-icon-inactive',
-                    ]"
-                  >
+                  <span :class="[
+                    isSubmenuOpen(groupIndex, index)
+                      ? 'menu-item-icon-active'
+                      : 'menu-item-icon-inactive',
+                  ]">
                     <component :is="item.icon" />
                   </span>
                   <span
                     v-if="isExpanded || isHovered || isMobileOpen"
                     class="menu-item-text"
-                    >{{ item.name }}</span
-                  >
+                  >{{ item.name }}</span>
                   <ChevronDownIcon
                     v-if="isExpanded || isHovered || isMobileOpen"
                     :class="[
@@ -118,20 +115,17 @@
                     },
                   ]"
                 >
-                  <span
-                    :class="[
-                      isActive(item.path)
-                        ? 'menu-item-icon-active'
-                        : 'menu-item-icon-inactive',
-                    ]"
-                  >
+                  <span :class="[
+                    isActive(item.path)
+                      ? 'menu-item-icon-active'
+                      : 'menu-item-icon-inactive',
+                  ]">
                     <component :is="item.icon" />
                   </span>
                   <span
                     v-if="isExpanded || isHovered || isMobileOpen"
                     class="menu-item-text"
-                    >{{ item.name }}</span
-                  >
+                  >{{ item.name }}</span>
                 </router-link>
                 <transition
                   @enter="startTransition"
@@ -139,14 +133,14 @@
                   @before-leave="startTransition"
                   @after-leave="endTransition"
                 >
-                  <div
-                    v-show="
-                      isSubmenuOpen(groupIndex, index) &&
-                      (isExpanded || isHovered || isMobileOpen)
-                    "
-                  >
+                  <div v-show="isSubmenuOpen(groupIndex, index) &&
+                    (isExpanded || isHovered || isMobileOpen)
+                    ">
                     <ul class="mt-2 space-y-1 ml-9">
-                      <li v-for="subItem in item.subItems" :key="subItem.name">
+                      <li
+                        v-for="subItem in item.subItems"
+                        :key="subItem.name"
+                      >
                         <router-link
                           :to="subItem.path"
                           :class="[

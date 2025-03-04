@@ -8,12 +8,16 @@
       <nav>
         <ul>
           <li class="py-2 px-4 hover:bg-gray-200">
-            <router-link to="/"
-                         class="text-gray-800">Home</router-link>
+            <router-link
+              to="/"
+              class="text-gray-800"
+            >Home</router-link>
           </li>
           <li class="py-2 px-4 hover:bg-gray-200">
-            <router-link to="/transaction-categories"
-                         class="text-gray-800">Transaction Categories</router-link>
+            <router-link
+              to="/transaction-categories"
+              class="text-gray-800"
+            >Transaction Categories</router-link>
           </li>
           <!-- Other links... -->
         </ul>
@@ -24,24 +28,32 @@
     <main class="flex-1 p-6">
       <header class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Transaction Categories</h1>
-        <q-btn @click="openCreateModal"
-               color="primary"
-               label="Create Category" />
+        <q-btn
+          @click="openCreateModal"
+          color="primary"
+          label="Create Category"
+        />
       </header>
 
       <!-- Transaction Categories List -->
       <ul>
-        <li v-for="category in categories"
-            :key="category.id"
-            class="flex justify-between items-center mb-4">
+        <li
+          v-for="category in categories"
+          :key="category.id"
+          class="flex justify-between items-center mb-4"
+        >
           <span>{{ category.name }}</span>
           <div>
-            <q-btn @click="openEditModal(category)"
-                   color="blue"
-                   label="Edit" />
-            <q-btn @click="deleteCategory(category)"
-                   color="red"
-                   label="Delete" />
+            <q-btn
+              @click="openEditModal(category)"
+              color="blue"
+              label="Edit"
+            />
+            <q-btn
+              @click="deleteCategory(category)"
+              color="red"
+              label="Delete"
+            />
           </div>
         </li>
       </ul>
@@ -51,16 +63,22 @@
         <q-card>
           <q-card-section>
             <div class="text-h6">{{ isEditing ? 'Edit Category' : 'Create Category' }}</div>
-            <q-input v-model="form.name"
-                     label="Category Name"
-                     outlined />
+            <q-input
+              v-model="form.name"
+              label="Category Name"
+              outlined
+            />
           </q-card-section>
           <q-card-actions>
-            <q-btn @click="submitForm"
-                   color="primary"
-                   label="Save" />
-            <q-btn @click="isModalOpen = false"
-                   label="Cancel" />
+            <q-btn
+              @click="submitForm"
+              color="primary"
+              label="Save"
+            />
+            <q-btn
+              @click="isModalOpen = false"
+              label="Cancel"
+            />
           </q-card-actions>
         </q-card>
       </q-dialog>
