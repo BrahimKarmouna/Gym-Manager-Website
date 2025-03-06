@@ -19,15 +19,26 @@ const routes = [
         },
         component: () => import("../pages/auth/LoginPage.vue"),
       },
+      //for guest user
       {
         path: "products",
-        alias: "/products",
+        alias: "/product",
         name: "products",
         meta: {
           middleware: [GuestMiddleware],
         },
-        component: () => import("../pages/products/index.vue"),
+        component: () => import("../pages/guest/products/index.vue"),
       },
+      {
+        path: "product_show",
+        alias: "show_product",
+        name: "products.show",
+        meta: {
+          middleware: [GuestMiddleware],
+        },
+        component: () => import("../pages/guest/products/show.vue"),
+      },
+
       {
         path: "register",
         alias: "/",
@@ -112,7 +123,31 @@ const routes = [
             component: () =>
               import("../../../resources/pages/Dashboard/Dashboard.vue"),
           },
+          // for admin
+          {
+            path: "/my_products",
+            name: "my_products",
 
+            component: () => import("../pages/my_products/index.vue"),
+          },
+          {
+            path: "/sells",
+            name: "sells",
+
+            component: () => import("../pages/Sells/index.vue"),
+          },
+          {
+            path: "/bills",
+            name: "bills.index",
+
+            component: () => import("../pages/bills/index.vue"),
+          },
+          {
+            path: "/assistants",
+            name: "assistants.index",
+
+            component: () => import("../pages/assistants/index.vue"),
+          },
           // Transaction Categories
           {
             path: "plans",
@@ -127,6 +162,11 @@ const routes = [
               {
                 path: "Insurance",
                 name: "expenses.index",
+                component: () => import("../../pages/Insurance/index.vue"),
+              },
+              {
+                path: "Insurance_plan",
+                name: "expenses_plan.index",
                 component: () =>
                   import("../../pages/insurance_plans/index.vue"),
               },
@@ -220,7 +260,11 @@ const routes = [
       },
     ],
   },
-
+  {
+    path: "/stripe",
+    name: "stripe",
+    component: () => import("../pages/stripe/stripeForm.vue"),
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

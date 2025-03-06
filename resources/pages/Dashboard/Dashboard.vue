@@ -21,7 +21,7 @@
             <div class="w-full h-1/3  bg-green-500">f</div>
         </div>
     </div> -->
-  <div class="flex justify-center py-10 px-3 gap-10 h-80">
+  <div class="flex justify-center py-10  gap-10 h-80">
     <!-- Card 1 -->
     <div class="flex flex-col w-1/4 border-2 rounded-xl p-4 shadow-lg bg-white dark:bg-black-800">
       <div class="flex justify-between">
@@ -67,7 +67,7 @@
       <div class="w-full h-10 bg-green-500 mt-4 rounded"></div>
     </div>
   </div>
-  <div class="flex space py-5 px-8 gap-5 w-full justify-center h-64">
+  <div class="flex space py-5  gap-5 w-full justify-center h-64">
     <div class="w-1/2 bg-gray-200 h-72 rounded-xl border-x-black max-h-96 overflow-auto">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-black-700 dark:text-gray-400">

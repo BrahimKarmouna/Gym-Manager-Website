@@ -250,15 +250,27 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 
 const linksList = [
-  { title: "Dashboard", icon: "dashboard", to: { name: "dashboard.index" } },
-  { title: "Clients", icon: "person", to: { name: "account.index-account" } },
-  { title: "Payments", icon: "payments", to: { name: "transaction.index" } },
+  { title: "Dashboard", icon: "sym_r_dashboard", to: { name: "dashboard.index" } },
+  { title: "Clients", icon: "sym_r_person", to: { name: "account.index-account" } },
+  { title: "Payments", icon: "sym_r_payments", to: { name: "transaction.index" } },
+  { title: "Insurance", icon: "sym_r_shield", to: { name: "expenses.index" } },
   {
-    title: "Plans", icon: "category", children: [
+    title: "Plans", icon: "sym_r_category", children: [
       { title: "Payment Plans", to: { name: "incomes.index" } },
       { title: "Insurance Plans", to: { name: "expenses.index" } }
     ]
-  }
+  },
+  {
+    title: "Products", icon: "sym_r_box", children: [
+      { title: "My products", icon: "sym_r_package", to: { name: "my_products" } },
+      { title: "Orders", icon: "sym_r_inventory_2", to: { name: "my_products" } },
+      { title: "Sells", icon: "sym_r_sell", to: { name: "sells" } },
+    ]
+  },
+
+
+  { title: "Bills", icon: "inventory", to: { name: "bills.index" } },
+  { title: "Assistants", icon: "group_add", to: { name: "assistants.index" } },
 ];
 
 export default defineComponent({

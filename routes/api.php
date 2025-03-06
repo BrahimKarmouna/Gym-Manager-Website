@@ -17,6 +17,9 @@ use App\Http\Controllers\Api\RevenueController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Laravel\Cashier\Cashier;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 
 Route::get('/revenue/monthly', [RevenueController::class, 'monthlyRevenue']);
@@ -149,19 +152,134 @@ Route::name('api.')
 
 
 
-//! Accounts
-Route::apiResource('accounts', AccountController::class);
 
-Route::get('accounts/{account}/transfers', [AccountController::class, 'transfers'])->name('accounts.transfers');
-Route::get('accounts/{account}/incomes', [AccountController::class, 'incomes'])->name('accounts.incomes');
-Route::get('accounts/{account}/expenses', [AccountController::class, 'expenses'])->name('accounts.expenses');
+//! stripe payments
+Route::post('/charge', function (Request $request) {
+  $user = $request->user();
+  Stripe::setApiKey(env('STRIPE_SECRET'));
 
-//! Transactions
-Route::get('transactions/dashboard', [TransactionController::class, 'dashboard']);
-Route::apiResource('transactions', TransactionController::class);
+  try {
+    $paymentIntent = PaymentIntent::create([
+      'amount' => 2000, // Amount in cents (e.g., $20.00)
+      'currency' => 'usd',
+      'payment_method' => $request->payment_method_id,
+      'confirm' => true,
+    ]);
 
-//! Dashboard
-Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
+    return response()->json([
+      'success' => true,
+      'paymentIntent' => $paymentIntent,
+    ]);
+  } catch (\Exception $e) {
+    return response()->json([
+      'success' => false,
+      'message' => $e->getMessage(),
+    ], 500);
+  }
+});
+Route::get('/checkout-success', function (Request $request) {
 
-Route::get('get-incomes', [HomeController::class, 'incomes'])->name('get-incomes');
-Route::get('get-expenses', [HomeController::class, 'expenses'])->name('get-expenses');
+  $session = Cashier::stripe()->checkout->sessions->retrieve($request->get('session_id'));
+
+  if ($session->payment_status !== 'paid') {
+    return response()->json([
+      'message' => 'Payment issue has been occured',
+    ]);
+  }
+
+  /** @var App\Models\User $user */
+  $user = $request->user();
+
+  dd($session->metadata['order_id']);
+
+  $paymentMethod = $user->paymentMethods('', $session->payment_intent);
+
+  return response()->json([
+    'session' => $session,
+    'payments' => $paymentMethod,
+  ]);
+
+})->name('checkout.success');
+
+Route::get('/checkout-canceled', function (Request $request) {
+  return $request;
+})->name('checkout.canceled');
+
+Route::get('/charge-checkout', function (Request $request) {
+
+  $product = [
+    'name' => 'T-shirt Nike',
+    'amount' => 200
+  ];
+
+  return $request->user()->checkoutCharge($product['amount'], $product['name'], 5, [
+    'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+    'cancel_url' => route('checkout.success'),
+  ]);
+});
+
+
+Route::middleware(['auth:sanctum'])
+  ->post('/create-checkout-session', function (Request $request) {
+    /** @var App\Models\User */
+    $user = $request->user();
+
+    $checkoutSession = $user
+      ->checkout(
+        items: [
+          [
+            'price_data' => [
+              'currency' => 'USD',
+              'unit_amount' => 1000,
+
+              'product_data' => [
+                'name' => 'Send me money!!!'
+              ]
+            ],
+            'quantity' => 1,
+          ],
+
+          [
+            'price_data' => [
+              'currency' => 'USD',
+              'unit_amount' => 2100,
+
+              'product_data' => [
+                'name' => 'Send me money 2!!!'
+              ]
+            ],
+            'quantity' => 1,
+          ],
+
+          // [
+          //   'price' => 2000,
+          //   'quantity' => 1,
+          //   // 'product_data' => [
+          //   //   'name' => 'Send me money!!!'
+          //   // ]
+          // ]
+        ],
+
+        // name: 'T-Shirt',
+        // amount: 1000,
+        sessionOptions: [
+          'ui_mode' => 'embedded',
+          'mode' => 'payment',
+          'metadata' => [
+            'order_id' => 1
+          ],
+          'return_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+          // 'cancel_url' => route('checkout.success'),
+        ],
+
+        // name: 'T-Shirt',
+        // sessionOptions: [
+        //   'success_url' => route('checkout.success') . '?session_id={CHECKOUT_SESSION_ID}',
+        //   'cancel_url' => route('checkout.success'),
+        // ]
+      )->asStripeCheckoutSession();
+
+    return [
+      'client_secret' => $checkoutSession->client_secret
+    ];
+  });

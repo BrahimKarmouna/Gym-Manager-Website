@@ -15,6 +15,7 @@
     type="image/x-icon"
   >
   <title> Gym Manager</title>
+  <script src="https://js.stripe.com/v3/"></script>
 
 </head>
 
