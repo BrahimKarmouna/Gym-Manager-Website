@@ -1,20 +1,223 @@
 <template>
   <q-layout view="lHh Lpr lFf">
+    <div
+      v-if="visible"
+      ref="menuRef"
+      class="relative z-10"
+      aria-labelledby="slide-over-title"
+      role="dialog"
+      aria-modal="true"
+    >
+      <!--
+    Background backdrop, show/hide based on slide-over state.
+
+    Entering: "ease-in-out duration-500"
+      From: "opacity-0"
+      To: "opacity-100"
+    Leaving: "ease-in-out duration-500"
+      From: "opacity-100"
+      To: "opacity-0"
+  -->
+      <div
+        class="fixed inset-0 bg-gray-500/75 transition-opacity"
+        aria-hidden="true"
+      ></div>
+
+      <div class="fixed inset-0 overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden">
+          <div
+            class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10"
+          >
+            <!--
+          Slide-over panel, show/hide based on slide-over state.
+
+          Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+            From: "translate-x-full"
+            To: "translate-x-0"
+          Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+            From: "translate-x-0"
+            To: "translate-x-full"
+        -->
+            <div class="pointer-events-auto w-screen max-w-md">
+              <div
+                class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
+              >
+                <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                  <div class="flex items-start justify-between">
+                    <h2
+                      class="text-lg font-medium text-gray-900"
+                      id="slide-over-title"
+                    >
+                      Shopping cart
+                    </h2>
+                    <div class="ml-3 flex h-7 items-center">
+                      <button
+                        type="button"
+                        @click="visible = false"
+                        class="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
+                      >
+                        <span class="absolute -inset-0.5"></span>
+                        <span class="sr-only">Close panel</span>
+                        <svg
+                          class="size-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                          data-slot="icon"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="mt-8">
+                    <div class="flow-root">
+                      <ul role="list" class="-my-6 divide-y divide-gray-200">
+                        <li class="flex py-6">
+                          <div
+                            class="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200"
+                          >
+                            <img
+                              src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-01.jpg"
+                              alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
+                              class="size-full object-cover"
+                            />
+                          </div>
+
+                          <div class="ml-4 flex flex-1 flex-col">
+                            <div>
+                              <div
+                                class="flex justify-between text-base font-medium text-gray-900"
+                              >
+                                <h3>
+                                  <a href="#">Throwback Hip Bag</a>
+                                </h3>
+                                <p class="ml-4">$90.00</p>
+                              </div>
+                              <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                            </div>
+                            <div
+                              class="flex flex-1 items-end justify-between text-sm"
+                            >
+                              <p class="text-gray-500">Qty 1</p>
+
+                              <div class="flex">
+                                <button
+                                  type="button"
+                                  class="font-medium text-indigo-600 hover:text-indigo-500"
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="flex py-6">
+                          <div
+                            class="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200"
+                          >
+                            <img
+                              src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-02.jpg"
+                              alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch."
+                              class="size-full object-cover"
+                            />
+                          </div>
+
+                          <div class="ml-4 flex flex-1 flex-col">
+                            <div>
+                              <div
+                                class="flex justify-between text-base font-medium text-gray-900"
+                              >
+                                <h3>
+                                  <a href="#">Medium Stuff Satchel</a>
+                                </h3>
+                                <p class="ml-4">$32.00</p>
+                              </div>
+                              <p class="mt-1 text-sm text-gray-500">Blue</p>
+                            </div>
+                            <div
+                              class="flex flex-1 items-end justify-between text-sm"
+                            >
+                              <p class="text-gray-500">Qty 1</p>
+
+                              <div class="flex">
+                                <button
+                                  type="button"
+                                  class="font-medium text-indigo-600 hover:text-indigo-500"
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+
+                        <!-- More products... -->
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                  <div
+                    class="flex justify-between text-base font-medium text-gray-900"
+                  >
+                    <p>Subtotal</p>
+                    <p>$262.00</p>
+                  </div>
+                  <p class="mt-0.5 text-sm text-gray-500">
+                    Shipping and taxes calculated at checkout.
+                  </p>
+                  <div class="mt-6">
+                    <a
+                      href="#"
+                      class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700"
+                      >Checkout</a
+                    >
+                  </div>
+                  <div
+                    class="mt-6 flex justify-center text-center text-sm text-gray-500"
+                  >
+                    <p>
+                      or
+                      <button
+                        type="button"
+                        class="font-medium text-indigo-600 hover:text-indigo-500"
+                      >
+                        Continue Shopping
+                        <span aria-hidden="true"> &rarr;</span>
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <q-page-container>
       <q-page>
         <div class="col-12 flex content-center justify-center overflow-hidden">
-          <div class="w-full-6xl w-full mx-auto"> <!-- Restrict max width -->
+          <div class="w-full-6xl w-full mx-auto">
+            <!-- Restrict max width -->
 
             <div class="w-full">
               <header>
-
-                <nav class="bg-black border-gray-900 py-2  ">
-                  <div class=" flex flex-wrap items-center justify-between mx-auto p-2 h-16">
+                <nav class="bg-black border-gray-900 py-2">
+                  <div
+                    class="flex flex-wrap items-center justify-between mx-auto p-2 h-16"
+                  >
                     <!-- Logo -->
-                    <a
-                      href="#"
-                      class="flex items-center space-x-3"
-                    >
+                    <a href="#" class="flex items-center space-x-3">
                       <img
                         src="../../../public/images/logo/logo.png"
                         class="h-24 max-w-full"
@@ -23,68 +226,197 @@
                     </a>
 
                     <!-- Liens au centre -->
-                    <div class="hidden md:flex space-x-8 text-white text-lg font-medium">
-                      <router-link
-                        class="hover:text-gray-400"
-                        to="/"
-                      >Home</router-link>
-                      <router-link
-                        class="hover:text-gray-400"
-                        to="/products"
-                      >Products</router-link>
-                      <a
-                        href="#"
-                        class="hover:text-gray-400"
-                      >Pricing</a>
-                      <a
-                        href="#"
-                        class="hover:text-gray-400"
-                      >Contact</a>
+                    <div
+                      class="hidden md:flex space-x-8 text-white text-lg font-medium"
+                    >
+                      <router-link class="hover:text-gray-400" to="/"
+                        >Home</router-link
+                      >
+                      <router-link class="hover:text-gray-400" to="/products"
+                        >Products</router-link
+                      >
+                      <a href="#" class="hover:text-gray-400">Pricing</a>
+                      <a href="#" class="hover:text-gray-400">Contact</a>
                     </div>
 
                     <!-- Bouton de langue à droite -->
                     <div class="flex items-center space-x-4">
-                      <button
-                        type="button"
-                        data-dropdown-toggle="language-dropdown-menu"
-                        class="inline-flex items-center font-medium justify-center px-4 py-2 text-sm text-white rounded-lg
-               cursor-pointer hover:bg-gray-700"
+                      <!-- for cart this button -->
+                      <q-btn
+                        @click="showCart = !showCart"
+                        icon="shopping_cart"
+                        color="black"
+                        class="text-lg"
                       >
-                        <svg
-                          class="w-5 h-5 rounded-full me-3"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 3900 3900"
-                        >
-                          <path
-                            fill="#b22234"
-                            d="M0 0h7410v3900H0z"
-                          />
-                          <path
-                            d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0"
-                            stroke="#fff"
-                            stroke-width="300"
-                          />
-                          <path
-                            fill="#3c3b6e"
-                            d="M0 0h2964v2100H0z"
-                          />
-                        </svg>
-                        English (US)
-                      </button>
+                      </q-btn>
                     </div>
                   </div>
                 </nav>
-
               </header>
               <router-view />
             </div>
           </div>
         </div>
+
+        <q-dialog
+          v-model="showCart"
+          maximized
+          backdrop-filter="invert(100%)"
+          position="right"
+        >
+          <q-card>
+            <div class="flex flex-col overflow-y-scroll h-full">
+              <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                <div class="flex items-start justify-between">
+                  <h2
+                    class="text-lg font-medium text-gray-900"
+                    id="slide-over-title"
+                  >
+                    Shopping cart
+                  </h2>
+                  <div class="ml-3 flex h-7 items-center">
+                  <q-btn 
+                    v-close-popup
+                    flat
+                    round
+                    dense
+                  >
+                    <q-icon name="close" />
+                    
+                  </q-btn>
+                  </div>
+                </div>
+
+                <div class="mt-8">
+                  <div class="flow-root">
+                    <ul role="list" class="-my-6 divide-y divide-gray-200">
+                      <li class="flex py-6">
+                        <div
+                          class="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200"
+                        >
+                          <img
+                            src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-01.jpg"
+                            alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
+                            class="size-full object-cover"
+                          />
+                        </div>
+
+                        <div class="ml-4 flex flex-1 flex-col">
+                          <div>
+                            <div
+                              class="flex justify-between text-base font-medium text-gray-900"
+                            >
+                              <h3>
+                                <a href="#">Throwback Hip Bag</a>
+                              </h3>
+                              <p class="ml-4">$90.00</p>
+                            </div>
+                            <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                          </div>
+                          <div
+                            class="flex flex-1 items-end justify-between text-sm"
+                          >
+                            <p class="text-gray-500">Qty 1</p>
+
+                            <div class="flex">
+                              <button
+                                type="button"
+                                class="font-medium text-indigo-600 hover:text-indigo-500"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="flex py-6">
+                        <div
+                          class="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200"
+                        >
+                          <img
+                            src="https://tailwindcss.com/plus-assets/img/ecommerce-images/shopping-cart-page-04-product-02.jpg"
+                            alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch."
+                            class="size-full object-cover"
+                          />
+                        </div>
+
+                        <div class="ml-4 flex flex-1 flex-col">
+                          <div>
+                            <div
+                              class="flex justify-between text-base font-medium text-gray-900"
+                            >
+                              <h3>
+                                <a href="#">Medium Stuff Satchel</a>
+                              </h3>
+                              <p class="ml-4">$32.00</p>
+                            </div>
+                            <p class="mt-1 text-sm text-gray-500">Blue</p>
+                          </div>
+                          <div
+                            class="flex flex-1 items-end justify-between text-sm"
+                          >
+                            <p class="text-gray-500">Qty 1</p>
+
+                            <div class="flex">
+                              <button
+                                type="button"
+                                class="font-medium text-indigo-600 hover:text-indigo-500"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+
+                      <!-- More products... -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                <div
+                  class="flex justify-between text-base font-medium text-gray-900"
+                >
+                  <p>Subtotal</p>
+                  <p>$262.00</p>
+                </div>
+                <p class="mt-0.5 text-sm text-gray-500">
+                  Shipping and taxes calculated at checkout.
+                </p>
+                <div class="mt-6">
+                  <a
+                    href="#"
+                    class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-indigo-700"
+                    >Checkout</a
+                  >
+                </div>
+                <div
+                  class="mt-6 flex justify-center text-center text-sm text-gray-500"
+                >
+                  <p>
+                    or
+                    <button
+                      type="button"
+                      class="font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                      Continue Shopping
+                      <span aria-hidden="true"> &rarr;</span>
+                    </button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </q-card>
+        </q-dialog>
       </q-page>
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
+import { ref } from "vue";
+
+const showCart = ref(false);
 </script>

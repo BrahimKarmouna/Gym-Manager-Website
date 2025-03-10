@@ -6,7 +6,10 @@
 /storage/*.key
 /storage/pail
 /vendor
-
+/seeders
+/fctories
+.seeders
+.fctories
 .env
 .env.backup
 .env.production

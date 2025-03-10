@@ -257,7 +257,7 @@ const linksList = [
   {
     title: "Plans", icon: "sym_r_category", children: [
       { title: "Payment Plans", to: { name: "incomes.index" } },
-      { title: "Insurance Plans", to: { name: "expenses.index" } }
+      { title: "Insurance Plans", to: { name: "expenses_plan.index" } }
     ]
   },
   {

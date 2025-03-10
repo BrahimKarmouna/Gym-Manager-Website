@@ -45,7 +45,7 @@ class ClientController extends Controller
           $expirationDate = Carbon::parse($client->subscription_expired_date);
           $is_payed = $expirationDate->isFuture() ? 1 : 0;
         }
-
+        
         // Check if the client has active insurance
         $latestInsurance = $client->insurances->sortByDesc('expiry_date')->first();
         $is_assured = false; // Default if no insurances found
