@@ -1,36 +1,114 @@
 <template>
+  <div class="payments-dashboard q-pa-md">
+    <!-- Header section -->
+    <div class="row items-center q-mb-lg">
+      <div class="col-12 col-sm-8">
+        <h4 class="text-h4 q-my-none text-weight-bold text-primary">Payments Management</h4>
+        <p class="text-subtitle1 q-mt-sm text-grey-7">Track and manage all payment transactions</p>
+      </div>
+      <div class="col-12 col-sm-4 text-right">
+        <q-btn
+          @click="OpenModal"
+          unelevated
+          rounded
+          color="primary"
+          class="q-px-md q-py-sm"
+          icon-right="add_circle"
+          label="New Payment"
+          :loading="false"
+        />
+      </div>
+    </div>
+
+    <!-- Filter and search section -->
+    <q-card flat bordered class="q-mb-md bg-grey-1">
+      <q-card-section>
+        <div class="row q-col-gutter-md">
+          <div class="col-12 col-sm-4">
+            <q-input dense filled v-model="search" label="Search payments" clearable>
+              <template v-slot:prepend>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </div>
+          <div class="col-12 col-sm-4">
+            <q-select dense filled v-model="dateFilter" label="Filter by date" :options="['All', 'Last 7 days', 'Last month']" />
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <!-- Payments table -->
+    <q-card flat bordered class="payments-table-card">
+      <q-table
+        :rows="payments"
+        :columns="columns"
+        row-key="id"
+        :loading="false"
+        :filter="search"
+        :pagination="{ rowsPerPage: 10 }"
+        class="payments-table"
+        flat
+      >
+        <template v-slot:top>
+          <div class="text-h6 text-weight-bold q-py-sm">Payment Records</div>
+        </template>
+        
+        <template v-slot:body-cell-payment_date="props">
+          <q-td :props="props">
+            <div class="text-weight-medium">
+              {{ new Date(props.value).toLocaleDateString() }}
+            </div>
+          </q-td>
+        </template>
+        
+        <template v-slot:body-cell-amount="props">
+          <q-td :props="props" class="text-weight-medium text-primary">
+            ${{ props.value }}
+          </q-td>
+        </template>
+        
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props" class="text-center">
+            <q-btn
+              flat
+              round
+              color="negative"
+              icon="delete_outline"
+              size="sm"
+              class="q-ml-sm"
+              @click.stop="confirmDeletePayment(props.row.id)"
+            >
+              <q-tooltip>Delete Payment</q-tooltip>
+            </q-btn>
+            <q-btn
+              flat
+              round
+              color="info"
+              icon="receipt_long"
+              size="sm"
+              class="q-ml-sm"
+            >
+              <q-tooltip>View Receipt</q-tooltip>
+            </q-btn>
+          </q-td>
+        </template>
+        
+        <template v-slot:no-data>
+          <div class="full-width row flex-center q-pa-lg">
+            <q-icon name="payments" size="3em" color="grey-6" />
+            <div class="q-ml-md text-grey-6">No payment records found</div>
+          </div>
+        </template>
+      </q-table>
+    </q-card>
+  </div>
+
   <CreateForm
     :visible="is_visible"
     @update:visible="is_visible = $event"
     @new_payment="refreshPayments"
   />
-
-
-  <q-btn
-    @click="OpenModal"
-    color="primary"
-    label="Add Payment"
-  >
-    Add Payment
-    <q-icon name="add" />
-  </q-btn>
-
-  <q-table
-    title="Payments"
-    :rows="payments"
-    :columns="columns"
-    row-key="id"
-  >
-    <template v-slot:body-cell-actions="props">
-      <q-td :props="props">
-        <q-btn
-          color="negative"
-          icon="delete"
-          @click="confirmDeletePayment(props.row.id)"
-        />
-      </q-td>
-    </template>
-  </q-table>
 </template>
 
 <script setup>

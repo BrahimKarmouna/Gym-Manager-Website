@@ -1,88 +1,160 @@
 <template>
-  <div class="q-pa-md q-gutter-sm">
-    <q-dialog
-      v-model="visible"
-      persistent
-    >
-      <q-card style="min-width: 900px; height: 600px;">
-        <q-card-section class="row justify-between items-center">
-          <div class="text-h6">Add Payment</div>
-          <q-btn
-            flat
-            round
-            dense
-            icon="close"
-            @click="closeModal"
-          />
-        </q-card-section>
+  <q-dialog
+    v-model="visible"
+    transition-show="slide-up"
+    transition-hide="slide-down"
+    persistent
+  >
+    <q-card class="rounded-xl max-w-[900px] w-[90vw] bg-white">
+      <div class="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-white rounded-t-xl">
+        <div class="text-h5 font-bold">New Payment</div>
+        <q-btn flat round color="grey-7" icon="close" @click="closeModal" />
+      </div>
+      
+      <q-separator />
 
-        <q-card-section class="q-pt-none">
-          <div class="row q-col-gutter-md">
-            <!-- Client (Preselected and Disabled if Provided) -->
+      <q-card-section class="p-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Client Selection -->
+          <div>
             <q-input
               v-if="client"
               :model-value="payment.client.Full_name"
               label="Client"
-              filled
-              class="col-6 q-mb-md"
+              outlined
+              bg-color="white"
+              class="rounded-lg"
               disable
-            />
+              prefix="person |"
+            >
+              <template v-slot:prepend>
+                <q-icon name="person" color="primary" />
+              </template>
+            </q-input>
 
-            <!-- Client Selection Dropdown (Only If No Client Is Provided) -->
             <q-select
               v-else
               v-model="payment.client"
               :options="clients"
               label="Select Client"
-              filled
-              class="col-6 q-mb-md"
+              outlined
+              bg-color="white"
+              class="rounded-lg"
               option-value="id"
               option-label="Full_name"
               use-input
               @filter="searchClients"
-            />
+              popup-content-class="client-dropdown"
+            >
+              <template v-slot:prepend>
+                <q-icon name="person" color="primary" />
+              </template>
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">No clients found</q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
 
-            <!-- Plan Selection -->
+          <!-- Plan Selection -->
+          <div>
             <q-select
               v-model="payment.plan"
               :options="plans"
               label="Select Plan"
-              filled
-              class="col-6 q-mb-md"
+              outlined
+              bg-color="white"
+              class="rounded-lg"
               option-value="id"
               option-label="name"
-            />
+            >
+              <template v-slot:prepend>
+                <q-icon name="fitness_center" color="primary" />
+              </template>
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">No plans available</q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
 
-            <!-- Payment Date -->
+          <!-- Payment Date -->
+          <div>
             <q-input
-              dense
               v-model="payment.payment_date"
               label="Payment Date"
-              type="date"
-              filled
-              class="col-6 q-mb-md"
-            />
+              outlined
+              bg-color="white"
+              readonly
+              class="rounded-lg cursor-pointer"
+            >
+              <template v-slot:prepend>
+                <q-icon name="event" color="primary" />
+              </template>
+              <template v-slot:append>
+                <q-icon name="arrow_drop_down" color="primary" class="cursor-pointer" />
+              </template>
+              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                <q-card class="rounded-xl shadow-lg overflow-hidden">
+                  <q-date
+                    v-model="payment.payment_date"
+                    mask="YYYY-MM-DD"
+                    today-btn
+                    color="primary"
+                    navigation-min-years-shown="3"
+                    minimal
+                    class="p-2"
+                  >
+                    <div class="flex items-center justify-end p-2">
+                      <q-btn 
+                        v-close-popup 
+                        label="Select" 
+                        color="primary" 
+                        unelevated
+                        rounded
+                        dense
+                        class="px-4"
+                      />
+                    </div>
+                  </q-date>
+                </q-card>
+              </q-popup-proxy>
+            </q-input>
           </div>
-        </q-card-section>
+        </div>
+      </q-card-section>
+      
+      <q-card-section class="bg-gray-50 rounded-lg mx-5 mt-4">
+        <q-item>
+          <q-item-section>
+            <div class="text-subtitle2 text-gray-600">Payment Summary</div>
+            <div class="flex justify-between mt-2">
+              <span class="text-sm">Plan:</span>
+              <span class="text-sm font-bold">{{ payment.plan?.name || 'Not selected' }}</span>
+            </div>
+            <div class="flex justify-between mt-1">
+              <span class="text-sm">Price:</span>
+              <span class="text-sm font-bold">{{ payment.plan?.price ? '$' + payment.plan.price : 'N/A' }}</span>
+            </div>
+          </q-item-section>
+        </q-item>
+      </q-card-section>
 
-        <q-card-actions
-          align="right"
-          class="text-primary"
-        >
-          <q-btn
-            flat
-            label="Cancel"
-            @click="closeModal"
-          />
-          <q-btn
-            flat
-            label="Save Payment"
-            @click="savePayment"
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-  </div>
+      <q-card-actions align="right" class="p-4">
+        <q-btn flat color="grey-7" label="Cancel" @click="closeModal" />
+        <q-btn 
+          unelevated 
+          color="primary" 
+          label="Complete Payment" 
+          @click="savePayment" 
+          :loading="false" 
+          :disable="!payment.client || !payment.plan"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -134,7 +206,7 @@ const fetchClients = async (search = null) => {
   if (!search) url = '/api/clients';
   else url = `/api/clients?search=${search}`;
   await axios.get(url).then((response) => {
-    clients.value = response.data;
+    clients.value = response.data.clients;
   });
 };
 

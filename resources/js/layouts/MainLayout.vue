@@ -1,110 +1,25 @@
 <template>
   <q-layout view="hHh LpR lFf">
-    <q-header
-      reveal
-      bordered
-      class="glassmorphism-header"
-    >
-      <!-- <q-toolbar>
-        <q-btn
-          dense
-          flat
-          round
-          icon="menu"
-          @click="toggleLeftDrawer"
-          class="text-primary"
-        />
-
-        <router-link
-          class="brand-logo"
-          :to="{ name: 'dashboard.index' }"
-        >
-          <span>Gym Manager</span>
-        </router-link>
-
-        <q-toolbar-title class="flex items-center">
-          <router-link
-            class="text-lg text-bold"
-            :to="{ name: 'register' }"
-          >
-            Fitness Redefined
-          </router-link>
-        </q-toolbar-title>
-
-        <q-toggle
-          :model-value="isDarkActive"
-          @update:model-value="toggleDarkMode"
-          checked-icon="dark_mode"
-          unchecked-icon="light_mode"
-        />
-
-        <q-btn
-          flat
-          round
-          class="profile-btn"
-        >
-          <q-avatar rounded>
-            <img src="https://cdn.quasar.dev/img/avatar.png">
-          </q-avatar>
-          <q-menu auto-close>
-            <q-list dense>
-              <q-item>
-                <q-item-section>
-                  <div class="text-nowrap">Signed in as <strong>{{ authStore.user.name }}</strong></div>
-                </q-item-section>
-              </q-item>
-              <q-separator />
-              <q-item
-                clickable
-                :to="{ name: 'profile.index' }"
-              >
-                <q-item-section>Your Profile</q-item-section>
-              </q-item>
-              <q-item
-                clickable
-                @click="confirmLogout"
-              >
-                <q-item-section>Sign Out</q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
-      </q-toolbar> -->
-
-      <q-toolbar class="bg-white text-black shadow-2 h-20 ">
+    <!-- Modern Header -->
+    <q-header reveal bordered class="bg-white/90 backdrop-blur-lg shadow-sm border-b border-gray-100">
+      <q-toolbar class="h-[70px] px-6">
         <!-- Menu Button -->
         <q-btn
           dense
           flat
           round
-          icon="list"
-          size="24px"
+          icon="menu"
+          size="md"
           @click="toggleLeftDrawer"
-          class="text-black mr-10"
+          class="text-gray-700 hover:text-primary transition-transform hover:scale-110"
         />
 
         <!-- Brand Logo -->
-        <router-link
-          class="text-h6 text-bold text-black"
-          :to="{ name: 'dashboard.index' }"
-        >
-          <img
-            src="/images/logo/logoblack.png"
-            class="w-16"
-            alt="Logo"
-          >
-
+        <router-link :to="{ name: 'dashboard.index' }" class="flex items-center hover:opacity-80 transition-opacity">
+          <img src="/images/logo/logoblack.png" class="w-10 h-auto transition-transform hover:scale-105" alt="Logo">
         </router-link>
 
-        <!-- Title with Fitness Redefined -->
-        <q-toolbar-title class="flex items-center justify-center text-lg text-bold">
-          <!-- <router-link
-            class="text-black"
-            :to="{ name: 'register' }"
-          >
-            Fitness Redefined
-          </router-link> -->
-        </q-toolbar-title>
+        <q-space />
 
         <!-- Dark Mode Toggle -->
         <q-toggle
@@ -112,80 +27,101 @@
           @update:model-value="toggleDarkMode"
           checked-icon="dark_mode"
           unchecked-icon="light_mode"
-          class="text-black"
+          class="mr-4"
+          color="primary"
         />
 
-        <!-- Profile Button and Menu -->
-        <q-btn
-          flat
-          round
-          class="text-white profile-btn"
-        >
-          <q-avatar
-            size="32px"
-            rounded
-          >
-            <img
-              :src="authStore.user.profile_photo_url"
-              alt="Profile Image"
-            >
+        <!-- Profile Button -->
+        <q-btn flat round class="relative overflow-hidden transition-all">
+          <q-avatar size="40px" class="ring-2 ring-white shadow-lg">
+            <img :src="authStore.user.profile_photo_url" alt="Profile">
           </q-avatar>
-          <q-menu auto-close>
-            <q-list
-              dense
-              class="bg-grey-1"
-            >
-              <q-item>
+          <q-menu auto-close class="rounded-xl shadow-xl w-56">
+            <q-list dense>
+              <!-- Profile Header -->
+              <q-item class="bg-gradient-to-r from-blue-500 to-purple-500 p-4">
                 <q-item-section>
-                  <div class="text-nowrap">Signed in as <strong>{{ authStore.user.name }}</strong></div>
+                  <div class="text-white font-bold text-base">{{ authStore.user.name }}</div>
+                  <div class="text-white/80 text-xs mt-1">Signed in as Admin</div>
                 </q-item-section>
               </q-item>
+              
               <q-separator />
-              <q-item
-                clickable
-                :to="{ name: 'profile.index' }"
-              >
+              
+              <!-- Menu Items -->
+              <q-item clickable :to="{ name: 'profile.index' }" class="p-3 hover:bg-gray-50">
+                <q-item-section avatar>
+                  <q-icon name="person" class="text-gray-600" />
+                </q-item-section>
                 <q-item-section>Your Profile</q-item-section>
               </q-item>
-              <q-item
-                clickable
-                @click="confirmLogout"
-              >
+              
+              <q-item clickable @click="confirmLogout" class="p-3 hover:bg-gray-50">
+                <q-item-section avatar>
+                  <q-icon name="logout" class="text-gray-600" />
+                </q-item-section>
                 <q-item-section>Sign Out</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
         </q-btn>
       </q-toolbar>
-
     </q-header>
 
+    <!-- Sidebar -->
     <q-drawer
       show-if-above
       v-model="layoutStore.sidebar.opened"
       side="left"
-      :width="250"
+      :width="280"
       bordered
-      class="sidebar-menu mt-1"
+      class="bg-gradient-to-br from-white to-gray-50 border-r border-gray-100"
     >
-      <q-list>
+      <!-- Sidebar Header -->
+      <div class="h-[70px] px-6 flex items-center gap-3 border-b border-gray-100">
+      <img src="/images/logo/logoblack.png" class="w-9 h-auto transform transition-all duration-300 hover:scale-110" alt="Logo">
+      <div class="text-lg font-bold bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+        Fitness Redefined
+      </div>
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="p-4">
+      <q-list padding class="rounded-2xl bg-white shadow-sm">
         <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-          class="nav-item"
+        v-for="link in essentialLinks"
+        :key="link.title"
+        v-bind="link"
+        class="my-1 px-4 py-3 rounded-xl font-medium text-gray-700 transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:translate-x-1"
         />
       </q-list>
+      
+      <!-- Admin Section -->
+      <div class="mt-8 p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 backdrop-blur-sm">
+        <div class="text-xs font-bold uppercase text-gray-500 mb-3 px-2">Administration</div>
+        <q-item clickable v-ripple class="rounded-xl mb-1 hover:bg-white/70 transition-all duration-200">
+        <q-item-section avatar>
+          <q-icon name="settings" color="blue-grey-7" />
+        </q-item-section>
+        <q-item-section>Settings</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple class="rounded-xl hover:bg-white/70 transition-all duration-200">
+        <q-item-section avatar>
+          <q-icon name="help" color="blue-grey-7" />
+        </q-item-section>
+        <q-item-section>Help Center</q-item-section>
+        </q-item>
+      </div>
+      </div>
     </q-drawer>
 
-    <q-page-container>
+    <!-- Main Content -->
+    <q-page-container class="bg-gray-50">
       <Suspense>
         <template #fallback>
-          <q-page class="loading-screen">
-            <q-inner-loading
-              :showing="true"
-              label="Loading..."
-            />
+          <q-page class="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+            <q-spinner-dots color="primary" size="60px" />
+            <div class="mt-4 text-gray-600">Loading...</div>
           </q-page>
         </template>
         <RouterView />
@@ -193,53 +129,6 @@
     </q-page-container>
   </q-layout>
 </template>
-
-<style scoped>
-.glassmorphism-header {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.brand-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  background: linear-gradient(to right, #4facfe, #00f2fe);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.profile-btn:hover {
-  transform: scale(1.05);
-  transition: 0.3s;
-}
-
-.sidebar-menu {
-  background: #f8f9fc;
-  padding: 20px 0;
-}
-
-.nav-item {
-  padding: 12px 20px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-  border-radius: 8px;
-  transition: background 0.3s;
-}
-
-.nav-item:hover {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.loading-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-</style>
 
 <script>
 import EssentialLink from "@/components/EssentialLink.vue";

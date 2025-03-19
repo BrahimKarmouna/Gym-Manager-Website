@@ -1,70 +1,108 @@
 <template>
     <div class="q-pa-md q-gutter-sm">
-        <q-dialog
-            v-model="visible"
-            persistent
-        >
-            <q-card style="min-width: 600px; height: auto;">
-                <q-card-section class="row justify-between items-center">
-                    <div class="text-h6">Ajouter un Plan</div>
-                    <q-btn
-                        flat
-                        round
-                        dense
-                        icon="close"
-                        @click="closeModal"
-                    />
+        <q-dialog v-model="visible" persistent>
+            <q-card class="modern-card">
+                <q-card-section class="header-section bg-primary text-white">
+                    <div class="text-h5 text-weight-bold">Nouveau Plan</div>
+                    <q-btn flat round dense icon="close" color="white" @click="closeModal" />
                 </q-card-section>
 
-                <q-card-section class="q-pt-none">
-                    <div class="row q-col-gutter-md">
+                <q-card-section class="q-pt-lg q-px-lg">
+                    <div class="row q-col-gutter-lg">
                         <!-- Nom du plan -->
-                        <q-input
-                            v-model="plan.name"
-                            label="Nom du plan"
-                            filled
-                            class="col-12 q-mb-md"
-                        />
+                        <div class="col-12">
+                            <q-input
+                                v-model="plan.name"
+                                label="Nom du plan"
+                                outlined
+                                class="custom-input"
+                                :rules="[val => !!val || 'Le nom est requis']"
+                                bottom-slots
+                            >
+                                <template v-slot:prepend>
+                                    <q-icon name="badge" color="primary" />
+                                </template>
+                            </q-input>
+                        </div>
 
                         <!-- Durée (en mois) -->
-                        <q-input
-                            v-model="plan.duration"
-                            label="Durée (en mois)"
-                            type="number"
-                            filled
-                            class="col-6 q-mb-md"
-                        />
+                        <div class="col-6">
+                            <q-input
+                                v-model="plan.duration"
+                                label="Durée (en mois)"
+                                type="number"
+                                outlined
+                                class="custom-input"
+                                :rules="[val => val > 0 || 'La durée doit être positive']"
+                            >
+                                <template v-slot:prepend>
+                                    <q-icon name="schedule" color="primary" />
+                                </template>
+                            </q-input>
+                        </div>
 
                         <!-- Prix -->
-                        <q-input
-                            v-model="plan.price"
-                            label="Prix (DH)"
-                            type="number"
-                            filled
-                            class="col-6 q-mb-md"
-                        />
+                        <div class="col-6">
+                            <q-input
+                                v-model="plan.price"
+                                label="Prix (DH)"
+                                type="number"
+                                outlined
+                                class="custom-input"
+                                :rules="[val => val > 0 || 'Le prix doit être positif']"
+                            >
+                                <template v-slot:prepend>
+                                    <q-icon name="paid" color="primary" />
+                                </template>
+                            </q-input>
+                        </div>
                     </div>
                 </q-card-section>
 
-                <q-card-actions
-                    align="right"
-                    class="text-primary"
-                >
+                <q-card-actions align="right" class="q-pa-lg">
                     <q-btn
                         flat
                         label="Annuler"
+                        color="grey"
+                        class="q-px-md"
                         @click="closeModal"
                     />
                     <q-btn
-                        flat
+                        unelevated
                         label="Enregistrer"
+                        color="primary"
+                        class="q-px-md"
                         @click="savePlan"
-                    />
+                    >
+                        <q-icon name="save" class="q-ml-sm" />
+                    </q-btn>
                 </q-card-actions>
             </q-card>
         </q-dialog>
     </div>
 </template>
+
+<style scoped>
+.modern-card {
+    min-width: 600px;
+    border-radius: 12px;
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.custom-input {
+    margin-bottom: 8px;
+}
+
+.custom-input :deep(.q-field__control) {
+    border-radius: 8px;
+}
+</style>
 
 <script setup>
 import { ref } from "vue";

@@ -148,7 +148,14 @@ Route::name('api.')
     //! Categories
     Route::apiResource('categories', CategoryController::class);
   });
+  // // New Clients This Month
+  // Route::get('/clients/new-this-month', [ClientController::class, 'newClientsThisMonth']);
 
+  // // Active Subscriptions
+  // Route::get('/subscriptions/active', [SubscriptionController::class, 'activeSubscriptions']);
+
+  // // Expired Subscriptions
+  // Route::get('/subscriptions/expired', [SubscriptionController::class, 'expiredSubscriptions']);
 
 
 

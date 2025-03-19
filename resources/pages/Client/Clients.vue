@@ -1,273 +1,143 @@
 <template>
-  <CreateForm v-model:visible="is_visible" />
-  <UpdateModal
-    v-model:visible="updateModalClient"
-    :clients="clients"
-    :id="selectedUpdateClientid?.id"
-  />
-  <ShowModal
-    v-model:visible="ShowClient"
-    :clients="clients"
-    :id="selectedClientid?.id"
-  />
+  <div class="bg-gray-100 dark:bg-gray-900 min-h-screen p-6">
+    <!-- Modals -->
+    <CreateForm v-model:visible="is_visible" />
+    <UpdateModal
+      v-model:visible="updateModalClient"
+      :clients="clients"
+      :id="selectedUpdateClientid?.id"
+    />
+    <ShowModal
+      v-model:visible="ShowClient"
+      :clients="clients"
+      :id="selectedClientid?.id"
+    />
 
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <div
-      class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-black"
-    >
-      <div>
-        <q-btn class="mr-7" @click="openModal">
-          <q-icon name="add" />
-          <q-tooltip>Add Client</q-tooltip>
-        </q-btn>
-        <button
-          id="dropdownActionButton"
-          data-dropdown-toggle="dropdownAction"
-          class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-black-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          type="button"
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto">
+      <!-- Header Section -->
+      <div class="mb-8 flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Clients Management</h1>
+        <button 
+          @click="openModal"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
         >
-          <span class="sr-only">Action button</span>
-          Action
-          <svg
-            class="w-2.5 h-2.5 ms-2.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 10 6"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m1 1 4 4 4-4"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
           </svg>
+          <span>Add New Client</span>
         </button>
-        <!-- Dropdown menu -->
-        <div
-          id="dropdownAction"
-          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-black-700 dark:divide-gray-600"
-        >
-          <ul
-            class="py-1 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="dropdownActionButton"
-          >
-            <li>
-              <a
-                href="#"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Reward</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Promote</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >Activate account</a
-              >
-            </li>
-          </ul>
-          <div class="py-1">
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >Delete User</a
-            >
+      </div>
+
+      <!-- Search and Filter Section -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+        <div class="flex flex-wrap gap-4 justify-between items-center">
+          <div class="relative flex-1 min-w-[300px]">
+            <input
+              type="text"
+              v-model="search"
+              placeholder="Search clients..."
+              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            />
+            <svg class="h-5 w-5 text-gray-400 absolute left-3 top-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="flex gap-3">
+            <select v-model="filter" class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+              <option value="All">All</option>
+              <option value="Assured">Assured</option>
+              <option value="Not Assured">Not Assured</option>
+            </select>
+            <select v-model="paymentFilter" class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+              <option value="All">All</option>
+              <option value="Paid">Paid</option>
+              <option value="Unpaid">Unpaid</option>
+            </select>
           </div>
         </div>
       </div>
-      <label for="table-search" class="sr-only">Search</label>
-      <div class="relative">
-        <div
-          class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none"
-        >
-          <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-400"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 20 20"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-            />
-          </svg>
-        </div>
-        <input
-          type="text"
-          id="table-search-users"
-          class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-black-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Search for users"
-        />
+
+      <!-- Table Section -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <table class="w-full">
+          <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th scope="col" class="p-4 text-left">
+                <input type="checkbox" v-model="selectAll" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+              </th>
+              <th v-for="header in ['ID', 'Client Details', 'Phone', 'Insurance', 'Payment', 'Actions']" 
+                  :key="header"
+                  class="px-6 py-4 text-sm font-semibold text-gray-700 dark:text-gray-200"
+              >
+                {{ header }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="client in clients" 
+                :key="client.id"
+                class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+            >
+              <td class="p-4">
+                <input type="checkbox" v-model="selectedClients" :value="client.id" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+              </td>
+              <td class="px-6 py-4 text-gray-600 dark:text-gray-300">#{{ client.id }}</td>
+              <td class="px-6 py-4">
+                <div class="flex items-center space-x-4">
+                  <img
+                    :src="'storage/' + client.client_picture"
+                    class="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+                  />
+                  <div>
+                    <div class="font-semibold text-gray-800 dark:text-white">{{ client.Full_name }}</div>
+                    <div class="text-sm text-gray-500">{{ client.email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-center">
+                  <svg class="h-5 w-5 text-gray-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                  </svg>
+                  {{ client.phone }}
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="px-3 py-1 rounded-full text-sm font-medium" :class="client.is_assured ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                  {{ client.is_assured ? 'Assured' : 'Not Assured' }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <span class="px-3 py-1 rounded-full text-sm font-medium" :class="client.is_payed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                  {{ client.is_payed ? 'Paid' : 'Unpaid' }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex space-x-2">
+                  <button @click="showClient(client)" class="text-blue-600 hover:text-blue-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <button @click="updateClient(client)" class="text-yellow-600 hover:text-yellow-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
+                  </button>
+                  <button @click="deleteClient(client.id)" class="text-red-600 hover:text-red-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <table
-      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-    >
-      <thead
-        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-black-700 dark:text-gray-400"
-      >
-        <tr>
-          <th scope="col" class="p-4">
-            <div class="flex items-center">
-              <input
-                id="checkbox-all-search"
-                type="checkbox"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-black-700 dark:border-gray-600"
-              />
-              <label for="checkbox-all-search" class="sr-only">checkbox</label>
-            </div>
-          </th>
-          <th scope="col" class="px-6 py-3">id</th>
-          <th scope="col" class="px-6 py-3">Name</th>
-
-          <th scope="col" class="px-6 py-3">Phone</th>
-          <th scope="col" class="px-6 py-3">Asserance</th>
-          <th scope="col" class="px-6 py-3">Payment</th>
-          <th scope="col" class="px-6 py-3">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="client in clients"
-          :key="client.id"
-          class="bg-white border-b dark:bg-black-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
-        >
-          <td class="w-4 p-4">
-            <div class="flex items-center">
-              <input
-                id="checkbox-table-search-1"
-                type="checkbox"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-black-700 dark:border-gray-600"
-              />
-              <label for="checkbox-table-search-1" class="sr-only"
-                >checkbox</label
-              >
-            </div>
-          </td>
-          <td class="px-6 py-4">#{{ client.id }}</td>
-          <th
-            scope="row"
-            class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-          >
-            <img
-              :src="'storage/' + client.client_picture"
-              alt="Client Image"
-              class="w-12 h-12 rounded-full border border-gray-300 shadow-sm object-cover"
-            />
-            <div class="ps-3">
-              <div class="text-base font-semibold">
-                <button @click="showClient(client)">
-                  {{ client.Full_name }}
-                </button>
-              </div>
-              <div class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ client.name }}
-              </div>
-              <div class="font-normal text-gray-500">
-                {{ client.email }}
-              </div>
-            </div>
-          </th>
-
-          <td class="px-6 py-4">
-            <div class="flex items-center">
-              {{ client.phone }}
-              <div class="mb-1">
-                <q-icon name="phone_iphone"></q-icon>
-              </div>
-            </div>
-          </td>
-          <td class="px-6 py-4">
-            <div class="flex items-center" v-if="client.is_assured">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              Assuré
-            </div>
-            <div class="flex items-center" v-else>
-              <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-              Non assuré
-            </div>
-          </td>
-          <td class="px-6 py-4">
-            <div v-if="client.is_payed" class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
-              payee
-            </div>
-
-            <div class="flex items-center" v-else>
-              <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div>
-              non payee
-            </div>
-          </td>
-          <!-- <td class="px-6 py-4">
-                        <q-btn
-                            icon="edit"
-                            @click="updateClient(client)"
-                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                        ></q-btn>
-
-
-                    </td> -->
-
-          <td class="px-6 py-4 relative">
-            <!-- Add relative positioning to the <td> -->
-            <q-btn-dropdown dense unelevated>
-              <q-list>
-                <q-item clickable v-close-popup @click="onItemClick">
-                  <q-btn
-                    icon="edit"
-                    color="blue"
-                    width="100%"
-                    background-color="white"
-                    @click="updateClient(client)"
-                  ></q-btn>
-                </q-item>
-
-                <q-item clickable v-close-popup @click="onItemClick">
-                  <q-item-section>
-                    <q-item-label>
-                      <q-btn
-                        icon="delete"
-                        color="red"
-                        width="100%"
-                        background-color="white"
-                        @click="deleteClient(client.id)"
-                      ></q-btn>
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable v-close-popup @click="onItemClick">
-                  <q-item-section>
-                    <q-item-label>
-                      <q-btn
-                        icon="visibility"
-                        color="blue"
-                        width="100%"
-                        background-color="white"
-                        @click="showClient(client)"
-                      ></q-btn>
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-btn-dropdown>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
@@ -301,7 +171,7 @@ function updateClient(client) {
 axios
   .get("/api/clients")
   .then((response) => {
-    clients.value = response.data;
+    clients.value = response.data.clients;
     console.log(clients.value);
   })
   .catch((error) => {

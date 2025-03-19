@@ -15,53 +15,67 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ClientController extends Controller
 {
   // index
+  public function getDashboardStats()
+  {
+    $currentMonth = Carbon::now()->month;
+    $currentYear = Carbon::now()->year;
+
+    // New clients this month
+    $newClientsThisMonth = Client::whereYear('created_at', $currentYear)
+      ->whereMonth('created_at', $currentMonth)
+      ->count();
+
+    // Active subscriptions
+    $activeSubscriptions = Client::whereHas('payments', function (Builder $query) {
+      $query->where('subscription_expired_date', '>=', Carbon::now());
+    })->count();
+
+    // Expired subscriptions
+    $expiredSubscriptions = Client::whereHas('payments', function (Builder $query) {
+      $query->where('subscription_expired_date', '<', Carbon::now());
+    })->count();
+
+    return response()->json([
+      'new_clients_this_month' => $newClientsThisMonth,
+      'active_subscriptions' => $activeSubscriptions,
+      'expired_subscriptions' => $expiredSubscriptions,
+    ]);
+  }
 
   public function index(Request $request)
   {
+    $dashboardStats = $this->getDashboardStats();
+    
     $clients = QueryBuilder::for(Client::class)
       ->allowedFilters([AllowedFilter::exact('full_name', 'Full_name')])
       ->allowedSorts([
         AllowedSort::field('id', 'id'),
         AllowedSort::field('created_at', 'created_at'),
       ])
-      ->with('payments.plan') // Including the related payment and plan data
+      ->with('payments.plan')
       ->when($request->input('search'), function ($query) use ($request) {
         $query->where('Full_name', 'like', '%' . $request->input('search') . '%')
           ->orWhere('email', 'like', '%' . $request->input('search') . '%');
       })
-      ->get()->map(function ($client) {
-        $phone = $client->phone;
-        if ($phone) {
-          $phone = preg_replace('/\D/', '', $phone);
-          if (strlen($phone) === 10 && substr($phone, 0, 1) === '0') {
-            $phone = '+212 ' . substr($phone, 1, 1) . substr($phone, 2, 3) . '-' . substr($phone, 5, 3) . '-' . substr($phone, 8, 2);
-          }
-        }
-
-        // Check if the client has an active subscription (payment expiration check)
-        $latestPayment = $client->payments->sortByDesc('payment_date')->first();
-        $is_payed = 0; // Default if no payments found
-        if ($latestPayment && $client->subscription_expired_date) {
-          $expirationDate = Carbon::parse($client->subscription_expired_date);
-          $is_payed = $expirationDate->isFuture() ? 1 : 0;
-        }
-        
-        // Check if the client has active insurance
-        $latestInsurance = $client->insurances->sortByDesc('expiry_date')->first();
-        $is_assured = false; // Default if no insurances found
-        if ($latestInsurance && $client->assurance_expired_date) {
-          $expirationDate = Carbon::parse($client->assurance_expired_date);
-          $is_assured = $expirationDate->isFuture() ? true : false;
-        }
-        // Add subscription status to client object
-        $client->phone = $phone;
-        $client->is_payed = $is_payed;
-        $client->is_assured = $is_assured;
-
-        return $client;
-      });
-
-    return response()->json($clients);
+      ->get();
+  
+    // Get new clients (clients created in the current month)
+    $newClients = Client::whereMonth('created_at', Carbon::now()->month)
+      ->whereYear('created_at', Carbon::now()->year)
+      ->get();
+  
+    // Get expired subscriptions
+    $expiredSubscriptions = Client::whereHas('payments', function (Builder $query) {
+      $query->where('subscription_expired_date', '<', Carbon::now());
+    })->get();
+  
+    return response()->json([
+      'dashboard_stats' => $dashboardStats->getData(),
+      'clients' => $clients,
+      'total_clients' => Client::count(),
+      'new_clients' => $newClients,
+      'expired_subscriptions' => $expiredSubscriptions
+    ]);
   }
 
   // post

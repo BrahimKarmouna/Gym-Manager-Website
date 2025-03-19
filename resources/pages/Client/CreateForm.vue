@@ -1,42 +1,165 @@
 <template>
-  <div class="q-pa-md q-gutter-sm">
-    <q-dialog v-model="visible" persistent>
-      <q-card style="min-width: 900px; height: 700px;">
-        <q-card-section class="row justify-between items-center">
-          <div class="text-h6">Add Client Information</div>
-          <q-btn flat round dense icon="close" @click="closeModal" />
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <div class="row q-col-gutter-md">
-            <!-- Full Name -->
-            <q-input dense v-model="client.Full_name" label="Full Name" filled class="col-6 q-mb-md" />
-            <!-- ID Card Number -->
-            <q-input dense v-model="client.id_card_number" label="ID Card Number" filled class="col-6 q-mb-md" />
-
-            <!-- Date of Birth -->
-            <q-input dense v-model="client.date_of_birth" label="Date of Birth" type="date" filled class="col-6 q-mb-md" />
-            <!-- Phone Number -->
-            <q-input dense v-model="client.phone" label="Phone Number" type="tel" filled class="col-6 q-mb-md" />
-
-            <!-- Email -->
-            <q-input dense v-model="client.email" label="Email" type="email" filled class="col-6 q-mb-md" />
-            <!-- Address -->
-            <q-input dense v-model="client.address" label="Address" filled class="col-6 q-mb-md" />
-
-            <!-- Gym ID -->
-            <q-input dense v-model="client.gym_id" label="Gym ID" type="number" filled class="col-6 q-mb-md" />
-
-            <!-- Uploads alignés en bas -->
-            <q-uploader label="Upload ID Card Picture" accept="image/*" filled class="col-6 q-mb-md" @added="handleIdCardUpload" />
-            <q-uploader label="Upload Client Picture" accept="image/*" filled class="col-6 q-mb-md" @added="handleClientPictureUpload" />
+  <div>
+    <q-dialog v-model="visible" persistent maximized transition-show="slide-up" transition-hide="slide-down">
+      <q-card class="bg-white">
+        <!-- Header -->
+        <q-card-section class="bg-black text-white q-px-lg">
+          <div class="row items-center justify-between">
+            <div class="text-h5 font-weight-bold">New Client Registration</div>
+            <q-btn round flat icon="close" color="white" v-close-popup @click="closeModal" />
           </div>
         </q-card-section>
 
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" @click="closeModal" />
-          <q-btn flat label="Save Client" @click="saveClient" />
-        </q-card-actions>
+        <!-- Form Content -->
+        <q-card-section class="q-pa-lg">
+          <div class="row q-col-gutter-x-xl q-col-gutter-y-md">
+            <!-- Left Column -->
+            <div class="col-12 col-md-6">
+              <div class="text-h6 q-mb-md text-weight-medium">Personal Information</div>
+              
+              <q-input 
+                v-model="client.Full_name" 
+                label="Full Name" 
+                outlined 
+                class="q-mb-md" 
+                bg-color="white"
+                color="black"
+              />
+              
+              <q-input 
+                v-model="client.date_of_birth" 
+                label="Date of Birth" 
+                type="date" 
+                outlined 
+                class="q-mb-md" 
+                bg-color="white"
+                color="black"
+              />
+              
+              <q-input 
+                v-model="client.id_card_number" 
+                label="ID Card Number" 
+                outlined 
+                class="q-mb-md" 
+                bg-color="white"
+                color="black"
+              />
+              
+              <q-input 
+                v-model="client.email" 
+                label="Email Address" 
+                type="email" 
+                outlined 
+                class="q-mb-md" 
+                bg-color="white"
+                color="black"
+              />
+              
+              <q-input 
+                v-model="client.phone" 
+                label="Phone Number" 
+                outlined 
+                class="q-mb-md" 
+                bg-color="white"
+                color="black"
+              />
+              
+              <q-input 
+                v-model="client.address" 
+                label="Address" 
+                outlined 
+                type="textarea" 
+                rows="3" 
+                class="q-mb-md"
+                bg-color="white"
+                color="black"
+              />
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-12 col-md-6">
+              <div class="text-h6 q-mb-md text-weight-medium">Gym Details & Documents</div>
+              
+              <q-input 
+                v-model="client.gym_id" 
+                label="Gym ID" 
+                type="number" 
+                outlined 
+                class="q-mb-md" 
+                bg-color="white"
+                color="black"
+              />
+
+              <!-- ID Card Upload -->
+              <div class="q-mb-lg">
+                <p class="q-mb-xs text-subtitle1">ID Card Picture</p>
+                <div class="file-upload-container">
+                  <q-file
+                    v-model="client.id_card_picture"
+                    outlined
+                    accept="image/*"
+                    class="full-width"
+                    bg-color="white"
+                    color="black"
+                    bottom-slots
+                  >
+                    <template v-slot:prepend>
+                      <q-icon name="attach_file" color="black" />
+                    </template>
+                    <template v-slot:hint>
+                      JPG, PNG or PDF format
+                    </template>
+                  </q-file>
+                </div>
+              </div>
+
+              <!-- Client Picture Upload -->
+              <div class="q-mb-lg">
+                <p class="q-mb-xs text-subtitle1">Client Picture</p>
+                <div class="file-upload-container">
+                  <q-file
+                    v-model="client.client_picture"
+                    outlined
+                    accept="image/*"
+                    class="full-width"
+                    bg-color="white"
+                    color="black"
+                    bottom-slots
+                  >
+                    <template v-slot:prepend>
+                      <q-icon name="photo_camera" color="black" />
+                    </template>
+                    <template v-slot:hint>
+                      Passport-sized photo recommended
+                    </template>
+                  </q-file>
+                </div>
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+
+        <!-- Footer Actions -->
+        <q-card-section class="q-pa-lg bg-grey-1">
+          <div class="row justify-end q-gutter-md">
+            <q-btn 
+              label="Cancel" 
+              color="dark" 
+              flat 
+              @click="closeModal" 
+              class="q-px-md" 
+              v-close-popup
+            />
+            <q-btn 
+              label="Save Client" 
+              color="black" 
+              unelevated 
+              @click="saveClient" 
+              class="q-px-md" 
+              icon-right="save"
+            />
+          </div>
+        </q-card-section>
       </q-card>
     </q-dialog>
   </div>

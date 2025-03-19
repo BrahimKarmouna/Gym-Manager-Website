@@ -27,7 +27,6 @@ class InsuranceController extends Controller
       'payment_date' => 'required|date',
       'expiry_date' => 'required|date',
     ]);
-
     // Fetch client and plan details
     $client = Client::findOrFail($request->input('client_id'));
     $plan = InsurancePlan::findOrFail($request->input('insurance_plan_id'));
