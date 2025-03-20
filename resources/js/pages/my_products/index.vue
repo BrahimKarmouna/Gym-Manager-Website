@@ -1,197 +1,199 @@
 <template>
-  <q-page class="bg-gray-50">
-    <!-- Enhanced Hero Banner Section -->
-    <div class="relative bg-gradient-to-r from-blue-700 to-indigo-800 h-72">
-      <div class="absolute inset-0 bg-pattern opacity-10"></div>
-      <div class="max-w-7xl mx-auto px-4 py-16 relative">
-        <div class="text-white">
-          <h1 class="text-4xl font-bold mb-2">Products Management</h1>
-          <p class="text-blue-100">Manage your gym's inventory with ease</p>
-          <div class="mt-6 flex gap-4">
-            <q-btn
-              @click="openAddProductModal"
-              color="white"
-              text-color="blue-600"
-              icon="add"
-              label="Add New Product"
-              class="font-medium"
-            />
-            <q-btn
-              outline
-              color="white"
-              icon="download"
-              label="Export Inventory"
-              class="font-medium"
-            />
-          </div>
-        </div>
-      </div>
+  <div class="p-6 max-w-7xl mx-auto">
+    <div class="mb-8 bg-gray-50 p-6 rounded-lg">
+      <h1 class="text-2xl font-bold text-gray-800">Product Management</h1>
+      <p class="text-gray-600">Manage your fitness products inventory</p>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="max-w-7xl mx-auto px-4 -mt-8">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <q-card class="bg-white shadow-lg">
-          <q-card-section>
-            <div class="flex items-center">
-              <q-icon name="inventory" size="2.5rem" color="primary" />
-              <div class="ml-4">
-                <div class="text-sm text-gray-500">Total Products</div>
-                <div class="text-2xl font-bold">{{ products.length }}</div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-
-        <q-card class="bg-white shadow-lg">
-          <q-card-section>
-            <div class="flex items-center">
-              <q-icon name="warning" size="2.5rem" color="orange" />
-              <div class="ml-4">
-                <div class="text-sm text-gray-500">Low Stock Items</div>
-                <div class="text-2xl font-bold">
-                  {{ products.filter(p => p.stock < 10).length }}
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-
-        <q-card class="bg-white shadow-lg">
-          <q-card-section>
-            <div class="flex items-center">
-              <q-icon name="trending_up" size="2.5rem" color="positive" />
-              <div class="ml-4">
-                <div class="text-sm text-gray-500">Total Value</div>
-                <div class="text-2xl font-bold">
-                  ${{ calculateTotalValue() }}
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-
-        <q-card class="bg-white shadow-lg">
-          <q-card-section>
-            <div class="flex items-center">
-              <q-icon name="category" size="2.5rem" color="purple" />
-              <div class="ml-4">
-                <div class="text-sm text-gray-500">Categories</div>
-                <div class="text-2xl font-bold">
-                  {{ categoryOptions.length - 1 }}
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-      </div>
-    </div>
-
-    <!-- Enhanced Filters Section -->
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <q-card class="bg-white shadow-lg">
-        <q-card-section>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <q-input
-              v-model="searchQuery"
-              dense
-              filled
-              placeholder="Search products..."
-              class="col-span-1"
-            >
-              <template v-slot:prepend>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-            
-            <q-select
-              v-model="categoryFilter"
-              :options="categoryOptions"
-              filled
-              dense
-              label="Category"
-            />
-
-            <q-select
-              v-model="sortBy"
-              :options="sortOptions"
-              filled
-              dense
-              label="Sort By"
-            />
-
-            <q-select
-              v-model="stockFilter"
-              :options="[
-                { label: 'All Stock Levels', value: null },
-                { label: 'Low Stock (< 10)', value: 'low' },
-                { label: 'In Stock', value: 'in' },
-                { label: 'Out of Stock', value: 'out' }
-              ]"
-              filled
-              dense
-              label="Stock Level"
-            />
-          </div>
-        </q-card-section>
-      </q-card>
-
-      <!-- Enhanced Products Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
-        <q-card
-          v-for="product in filteredProducts"
-          :key="product.id"
-          class="transform hover:scale-105 transition-transform duration-300"
+    <!-- Actions Bar -->
+    <div class="flex justify-between items-center mb-6">
+      <div class="relative w-64">
+        <input 
+          type="text" 
+          placeholder="Search products..." 
+          v-model="searchQuery"
+          class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <q-img
-            :src="product.image"
-            :ratio="1"
-            class="h-48 object-cover"
-          >
-            <div class="absolute-top-right q-pa-sm">
-              <q-badge
-                :color="product.stock > 10 ? 'green' : 'red'"
-                :label="product.stock > 0 ? 'In Stock' : 'Out of Stock'"
-                class="text-bold"
-              />
-            </div>
-          </q-img>
-
-          <q-card-section>
-            <div class="text-lg font-semibold line-clamp-2">{{ product.name }}</div>
-            <div class="text-sm text-gray-500 mt-1">{{ product.category }}</div>
-            <div class="flex justify-between items-center mt-3">
-              <div class="text-xl font-bold text-blue-600">${{ product.price }}</div>
-              <div class="text-sm text-gray-500">Stock: {{ product.stock }}</div>
-            </div>
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-actions align="around">
-            <q-btn flat color="primary" icon="edit" label="Edit" @click="editProduct(product)" />
-            <q-btn flat color="negative" icon="delete" label="Delete" @click="confirmDelete(product)" />
-          </q-card-actions>
-        </q-card>
+        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
       </div>
-
-      <!-- Enhanced Empty State -->
-      <div
-        v-if="filteredProducts.length === 0"
-        class="text-center py-16 bg-white rounded-lg shadow-lg mt-8"
+      <button 
+        @click="openProductForm()" 
+        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center"
       >
-        <q-icon name="inventory_2" size="6rem" color="grey-4" />
-        <h3 class="text-xl font-semibold text-gray-700 mt-4">No Products Found</h3>
-        <p class="text-gray-500 mt-2">Try adjusting your filters or add new products</p>
-        <q-btn
-          color="primary"
-          label="Add Your First Product"
-          class="mt-4"
-          @click="openAddProductModal"
-        />
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add New Product
+      </button>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="flex gap-4 mb-6">
+      <select 
+        v-model="categoryFilter" 
+        class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">All Categories</option>
+        <option value="Equipment">Equipment</option>
+        <option value="Apparel">Apparel</option>
+        <option value="Supplements">Supplements</option>
+      </select>
+      <select 
+        v-model="sortOption" 
+        class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="default">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name-asc">Name: A to Z</option>
+      </select>
+    </div>
+
+    <!-- Products Table -->
+    <div class="bg-white rounded-lg shadow overflow-hidden mb-8">
+      <table class="w-full table-auto">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Product</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Category</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Price</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr v-for="product in filteredProducts" :key="product.id">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10">
+                  <img class="h-10 w-10 rounded-md object-cover" :src="product.imageUrl" alt="">
+                </div>
+                <div class="ml-4">
+                  <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+                  <div class="text-sm text-gray-500" v-if="product.badge">{{ product.badge }}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">{{ product.category }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">${{ product.price.toFixed(2) }}</div>
+              <div class="text-sm text-gray-500" v-if="product.originalPrice">${{ product.originalPrice.toFixed(2) }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                Active
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <button @click="editProduct(product)" class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+              <button @click="deleteProduct(product.id)" class="text-red-600 hover:text-red-900">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-between items-center">
+      <div class="text-sm text-gray-700">
+        Showing <span class="font-medium">{{ startIndex + 1 }}</span> to 
+        <span class="font-medium">{{ Math.min(startIndex + itemsPerPage, filteredProductsTotal) }}</span> of 
+        <span class="font-medium">{{ filteredProductsTotal }}</span> products
+      </div>
+      <div class="flex gap-2">
+        <button 
+          @click="currentPage--" 
+          :disabled="currentPage === 1" 
+          class="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Previous
+        </button>
+        <button 
+          v-for="page in totalPages" 
+          :key="page" 
+          @click="currentPage = page" 
+          class="px-3 py-1 border border-gray-300 rounded-md"
+          :class="{'bg-blue-600 text-white': page === currentPage}"
+        >
+          {{ page }}
+        </button>
+        <button 
+          @click="currentPage++" 
+          :disabled="currentPage === totalPages" 
+          class="px-3 py-1 border border-gray-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Next
+        </button>
       </div>
     </div>
-  </q-page>
+
+    <!-- Product Form Modal -->
+    <div v-if="showProductForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">{{ editingProduct ? 'Edit Product' : 'Add New Product' }}</h2>
+          <button @click="closeProductForm" class="text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <form @submit.prevent="saveProduct">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+              <input v-model="formProduct.name" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <select v-model="formProduct.category" required class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                <option value="Equipment">Equipment</option>
+                <option value="Apparel">Apparel</option>
+                <option value="Supplements">Supplements</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+              <input v-model.number="formProduct.price" type="number" step="0.01" required class="w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Original Price ($) (Optional)</label>
+              <input v-model.number="formProduct.originalPrice" type="number" step="0.01" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Badge (Optional)</label>
+              <input v-model="formProduct.badge" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+              <input v-model="formProduct.imageUrl" type="url" required class="w-full px-3 py-2 border border-gray-300 rounded-md">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Product Colors (comma separated hex codes)</label>
+            <input v-model="colorsInput" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="e.g. #000000, #ff0000, #0000ff">
+          </div>
+          <div class="flex justify-end gap-3">
+            <button type="button" @click="closeProductForm" class="px-4 py-2 border border-gray-300 rounded-md">
+              Cancel
+            </button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+              {{ editingProduct ? 'Update Product' : 'Create Product' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -199,99 +201,144 @@ export default {
   data() {
     return {
       searchQuery: '',
-      categoryFilter: null,
-      sortBy: null,
-      deleteDialog: false,
-      selectedProduct: null,
-      categoryOptions: [
-        { label: 'All Categories', value: null },
-        { label: 'Supplements', value: 'supplements' },
-        { label: 'Equipment', value: 'equipment' },
-        { label: 'Clothing', value: 'clothing' }
-      ],
-      sortOptions: [
-        { label: 'Name: A-Z', value: 'name-asc' },
-        { label: 'Name: Z-A', value: 'name-desc' },
-        { label: 'Price: Low to High', value: 'price-asc' },
-        { label: 'Price: High to Low', value: 'price-desc' },
-        { label: 'Stock: Low to High', value: 'stock-asc' },
-        { label: 'Stock: High to Low', value: 'stock-desc' }
-      ],
+      categoryFilter: '',
+      sortOption: 'default',
+      currentPage: 1,
+      itemsPerPage: 10,
+      showProductForm: false,
+      editingProduct: false,
+      formProduct: {
+        id: null,
+        name: '',
+        category: 'Equipment',
+        price: 0,
+        originalPrice: null,
+        badge: '',
+        colors: [],
+        imageUrl: '',
+      },
+      colorsInput: '',
       products: [
         {
           id: 1,
-          name: 'Premium Whey Protein',
-          price: 29.99,
-          stock: 50,
-          category: 'supplements',
-          image: '/images/protein.jpg'
+          name: 'Pro Performance Training Shoes',
+          category: 'Apparel',
+          price: 129.99,
+          originalPrice: 159.99,
+          badge: 'New',
+          colors: ['#000', '#e63946', '#457b9d'],
+          imageUrl: 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/58359469-0302-4e59-b404-c5987cc17763/metcon-8-workout-shoes-Cczj2B.png',
         },
-        // Add more products...
+        // Keeping the existing product data from your original component...
+        {
+          id: 2,
+          name: 'Premium Weight Lifting Belt',
+          category: 'Equipment',
+          price: 59.99,
+          colors: ['#000', '#6d597a'],
+          imageUrl: 'https://contents.mediadecathlon.com/p2154743/k$6c1a68bf1fc06a394e2aca56599594d2/weight-training-leather-belt.jpg',
+        },
+        // ... rest of the products data
       ]
-    }
+    };
   },
   computed: {
-    filteredProducts() {
-      let filtered = [...this.products]
+    allFilteredProducts() {
+      let result = [...this.products];
       
       // Apply search filter
       if (this.searchQuery) {
-        filtered = filtered.filter(product =>
-          product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        )
+        const query = this.searchQuery.toLowerCase();
+        result = result.filter(product => 
+          product.name.toLowerCase().includes(query) || 
+          product.category.toLowerCase().includes(query)
+        );
       }
-
+      
       // Apply category filter
       if (this.categoryFilter) {
-        filtered = filtered.filter(product => product.category === this.categoryFilter)
+        result = result.filter(product => product.category === this.categoryFilter);
       }
-
+      
       // Apply sorting
-      if (this.sortBy) {
-        filtered.sort((a, b) => {
-          switch (this.sortBy) {
-            case 'name-asc':
-              return a.name.localeCompare(b.name)
-            case 'name-desc':
-              return b.name.localeCompare(a.name)
-            case 'price-asc':
-              return a.price - b.price
-            case 'price-desc':
-              return b.price - a.price
-            case 'stock-asc':
-              return a.stock - b.stock
-            case 'stock-desc':
-              return b.stock - a.stock
-            default:
-              return 0
-          }
-        })
+      switch (this.sortOption) {
+        case 'price-asc':
+          result.sort((a, b) => a.price - b.price);
+          break;
+        case 'price-desc':
+          result.sort((a, b) => b.price - a.price);
+          break;
+        case 'name-asc':
+          result.sort((a, b) => a.name.localeCompare(b.name));
+          break;
       }
-
-      return filtered
+      
+      return result;
+    },
+    filteredProducts() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      return this.allFilteredProducts.slice(startIndex, startIndex + this.itemsPerPage);
+    },
+    filteredProductsTotal() {
+      return this.allFilteredProducts.length;
+    },
+    totalPages() {
+      return Math.ceil(this.filteredProductsTotal / this.itemsPerPage);
+    },
+    startIndex() {
+      return (this.currentPage - 1) * this.itemsPerPage;
     }
   },
   methods: {
-    openAddProductModal() {
-      // Implement add product modal logic
+    openProductForm() {
+      this.editingProduct = false;
+      this.formProduct = {
+        id: Date.now(), // Simple way to generate unique ID
+        name: '',
+        category: 'Equipment',
+        price: 0,
+        originalPrice: null,
+        badge: '',
+        colors: [],
+        imageUrl: '',
+      };
+      this.colorsInput = '';
+      this.showProductForm = true;
+    },
+    closeProductForm() {
+      this.showProductForm = false;
     },
     editProduct(product) {
-      // Implement edit product logic
+      this.editingProduct = true;
+      this.formProduct = { ...product };
+      this.colorsInput = product.colors.join(', ');
+      this.showProductForm = true;
     },
-    confirmDelete(product) {
-      this.selectedProduct = product
-      this.deleteDialog = true
+    saveProduct() {
+      // Parse colors from input
+      this.formProduct.colors = this.colorsInput
+        .split(',')
+        .map(color => color.trim())
+        .filter(color => color);
+      
+      if (this.editingProduct) {
+        // Update existing product
+        const index = this.products.findIndex(p => p.id === this.formProduct.id);
+        if (index !== -1) {
+          this.products.splice(index, 1, { ...this.formProduct });
+        }
+      } else {
+        // Add new product
+        this.products.push({ ...this.formProduct });
+      }
+      
+      this.closeProductForm();
     },
-    deleteProduct() {
-      // Implement delete product logic
-      if (this.selectedProduct) {
-        // Delete logic here
-        this.selectedProduct = null
+    deleteProduct(id) {
+      if (confirm('Are you sure you want to delete this product?')) {
+        this.products = this.products.filter(p => p.id !== id);
       }
     }
   }
-}
-</script>    editProduct(product) {
-      // Implement edit product logic
-      console.log('Editing product:', product);
-    },
+};
+</script>

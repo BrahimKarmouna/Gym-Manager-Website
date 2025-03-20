@@ -112,6 +112,29 @@
                     placeholder="Enter password"
                     class="h-11 w-full  border border-gray-600 bg-gray-900 px-4 py-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-3 focus:ring-blue-500"
                   />
+                  <label
+    for="password_confirmation"
+    class="block mb-1.5 text-base font-medium text-white"
+  >
+    Confirm Password<span class="text-red-500">*</span>
+  </label>
+  <div class="relative">
+    <input
+      outlined
+      dense
+      type="password"
+      name="password_confirmation"
+      no-error-icon
+      label="Confirm Password"
+      :error="'password_confirmation' in form.errors"
+      :error-message="form.errors.password_confirmation?.[0]"
+      hide-bottom-space
+      v-model="form.fields.password_confirmation"
+      autocomplete="new-password"
+      placeholder="Confirm your password"
+      class="h-11 w-full border border-gray-600 bg-gray-900 px-4 py-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-3 focus:ring-blue-500"
+    />
+  </div>
                   <span
                     @click="togglePasswordVisibility"
                     class="absolute text-gray-300 -translate-y-1/2 cursor-pointer right-4 mt-5"
