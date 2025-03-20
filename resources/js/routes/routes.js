@@ -7,7 +7,7 @@ const routes = [
   // Auth
   {
     path: "/",
-    component: () => import("../layouts/AuthLayout.vue"),
+    component: () => import("../layouts/DashboardLayout.vue"),
 
     children: [
       {
@@ -88,7 +88,7 @@ const routes = [
   {
     path: "",
     alias: "/admin",
-    component: () => import("../layouts/MainLayout.vue"),
+    component: () => import("../layouts/DashboardLayout.vue"),
 
     meta: {
       middleware: [AuthMiddleware],
@@ -104,6 +104,25 @@ const routes = [
             path: "",
             name: "profile.index",
             component: () => import("../pages/profile/ProfilePage.vue"),
+          },
+        ],
+      },
+
+      // User Orders
+      {
+        path: "/orders",
+        component: RouterView,
+        children: [
+          {
+            path: "",
+            name: "user.orders.index",
+            component: () => import("../pages/user/orders/index.vue"),
+          },
+          {
+            path: "confirmation/:id?",
+            name: "user.orders.confirmation",
+            props: true,
+            component: () => import("../pages/user/orders/confirmation.vue"),
           },
         ],
       },
@@ -140,7 +159,7 @@ const routes = [
             path: "/bills",
             name: "bills.index",
 
-            component: () => import("../pages/bills/index.vue"),
+            component: () => import("../pages/admin/bills/index.vue"),
           },
           {
             path: "/assistants",

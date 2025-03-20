@@ -9,7 +9,7 @@ class Payment extends Model
 {
   use HasFactory;
 
-  protected $fillable = ['client_id', 'plan_id', 'payment_date'];
+  protected $fillable = ['client_id', 'plan_id', 'payment_date', 'user_id'];
 
 
   // When a payment is created, update the client's subscription expiration date

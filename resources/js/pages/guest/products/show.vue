@@ -25,11 +25,11 @@
         <p class="text-xl mt-4">{{ product.description }}</p>
 
         <div class="mt-6">
-          <span class="text-3xl font-semibold text-blue-400">{{ product.price }} €</span>
+          <span class="text-3xl font-semibold text-blue-400">{{ cartStore.formatPrice(product.price) }} €</span>
           <span
             v-if="product.discount"
             class="text-red-400 line-through ml-4 text-2xl"
-          >{{ product.originalPrice }} €</span>
+          >{{ cartStore.formatPrice(product.originalPrice) }} €</span>
         </div>
 
         <!-- Sélecteur de quantité -->
@@ -49,14 +49,33 @@
           >+</button>
         </div>
 
+        <!-- Add to Cart Button -->
+        <button
+          @click="addToCart"
+          class="mt-4 w-full bg-orange-600 text-center text-white py-5 text-2xl rounded-lg hover:bg-orange-700 transition"
+        >
+          Add to Cart
+        </button>
+
         <!-- Bouton Achetez maintenant (WhatsApp) -->
         <a
           :href="'https://wa.me/+212766269594?text=J%27ai%20besoin%20de%20commander%20la%20montre%20' + product.name + '%20pour%20' + product.price + '%20€'"
           target="_blank"
-          class="mt-8 w-full bg-blue-600 text-center text-white py-5 text-2xl rounded-lg hover:bg-green-700 transition"
+          class="mt-4 w-full bg-blue-600 text-center text-white py-5 text-2xl rounded-lg hover:bg-green-700 transition"
         >
           Achetez maintenant
         </a>
+
+        <!-- Cart Indicator -->
+        <div class="mt-4 flex justify-between items-center">
+          <div class="flex items-center cursor-pointer" @click="cartStore.showCartPanel()">
+            <span class="material-icons text-2xl mr-2">shopping_cart</span>
+            <span>Cart ({{ cartStore.totalItems }} items)</span>
+          </div>
+          <span v-if="cartStore.totalItems > 0" class="text-blue-400">
+            Total: {{ cartStore.formatPrice(cartStore.subtotal) }} €
+          </span>
+        </div>
 
         <!-- Avis clients -->
         <div class="mt-12">
@@ -73,14 +92,27 @@
         </div>
       </div>
     </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-notification" v-if="showToast" :class="{ 'show': showToast }">
+      <div class="toast-content">
+        <span class="material-icons success-icon">check_circle</span>
+        <span>{{ toastMessage }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useCartStore } from "../../../stores/cart";
+
+// Initialize cart store
+const cartStore = useCartStore();
 
 const product = ref({
+  id: 1, // Added ID for cart functionality
   name: "Montre de Luxe",
   description: "Une montre élégante et moderne pour toutes les occasions.",
   price: 249.99,
@@ -101,6 +133,8 @@ const product = ref({
 
 const selectedImage = ref(product.value.images[0]);
 const quantity = ref(1);
+const showToast = ref(false);
+const toastMessage = ref('');
 
 const increaseQuantity = () => {
   quantity.value++;
@@ -110,9 +144,47 @@ const decreaseQuantity = () => {
   if (quantity.value > 1) quantity.value--;
 };
 
-const addToCart = () => {
-  alert(`Ajouté au panier : ${product.value.name} x${quantity.value}`);
+const addToCart = async () => {
+  await cartStore.addToCart(product.value, quantity.value);
+  toastMessage.value = `${product.value.name} x${quantity.value} added to cart!`;
+  showToast.value = true;
+  setTimeout(() => {
+    showToast.value = false;
+  }, 3000);
 };
+
+// Initialize cart on page load
+onMounted(async () => {
+  await cartStore.initCart();
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+.toast-notification {
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: bottom 0.3s;
+}
+
+.toast-notification.show {
+  bottom: 20px;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.success-icon {
+  font-size: 1.5rem;
+}
+</style>

@@ -9,7 +9,7 @@ class Gym extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'location'];
+    protected $fillable = ['name', 'location', 'user_id'];
 
     public function members()
     {
@@ -34,5 +34,13 @@ class Gym extends Model
     public function bills()
     {
         return $this->hasMany(Bill::class);
+    }
+    
+    /**
+     * Get all users who have access to this gym
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

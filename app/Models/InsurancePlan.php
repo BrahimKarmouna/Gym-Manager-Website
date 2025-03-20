@@ -9,7 +9,7 @@ class InsurancePlan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'price', 'duration'];
+    protected $fillable = ['name', 'price', 'duration', 'user_id'];
 
     public function members()
     {

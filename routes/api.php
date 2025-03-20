@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CurrentUserController;
+use App\Http\Controllers\Api\DataMigrationController;
+use App\Http\Controllers\Api\GymUserController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\InsuranceController;
 use App\Http\Controllers\Api\InsurancePlansController;
@@ -14,13 +16,13 @@ use App\Http\Controllers\Api\ProfilePhotoController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\Api\RevenueController;
+use App\Http\Controllers\Api\BillController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Laravel\Cashier\Cashier;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
-
 
 Route::get('/revenue/monthly', [RevenueController::class, 'monthlyRevenue']);
 
@@ -32,10 +34,36 @@ Route::prefix('insurance')->group(function () {
   Route::post('/', [InsuranceController::class, 'store']);
 });
 
-
 Route::get('/user', function (Request $request) {
   return $request->user();
 })->middleware('auth:sanctum');
+
+// Data migration endpoints
+Route::middleware(['auth:sanctum'])->group(function () {
+  Route::get('/data-migration/assign-clients', [DataMigrationController::class, 'assignClientsToCurrentUser']);
+  Route::get('/data-migration/list-users', [DataMigrationController::class, 'listUsers']);
+  
+  // Gym User Management
+  Route::prefix('gyms')->group(function () {
+    // Get gyms the authenticated user has access to
+    Route::get('/my-gyms', [GymUserController::class, 'index']);
+    
+    // Get all gyms (admin only)
+    Route::get('/all', [GymUserController::class, 'allGyms']);
+    
+    // Assign user to gym (admin only)
+    Route::post('/assign-user', [GymUserController::class, 'assignUserToGym']);
+    
+    // Remove user from gym (admin only)
+    Route::post('/remove-user', [GymUserController::class, 'removeUserFromGym']);
+    
+    // Get users with access to a specific gym
+    Route::get('/{gymId}/users', [GymUserController::class, 'gymUsers']);
+    
+    // Testing: assign current user to all gyms
+    Route::get('/assign-me-to-all', [GymUserController::class, 'assignCurrentUserToAllGyms']);
+  });
+});
 
 // clients
 Route::get('/clients', ClientController::class . '@index');
@@ -52,7 +80,6 @@ Route::post('/payments', PaymentController::class . '@store');
 Route::put('/payments/{id}', PaymentController::class . '@update');
 Route::delete('/payments/{id}', PaymentController::class . '@destroy');
 
-
 // plans
 
 //insurance
@@ -66,10 +93,6 @@ Route::get('/plans/{id}', [PlanController::class, 'show']);
 Route::post('/plans', [PlanController::class, 'store']);
 Route::put('/plans/{id}', [PlanController::class, 'update']);
 Route::delete('/plans/{id}', [PlanController::class, 'destroy']);
-
-
-
-
 
 // Insurance Plans Routes
 Route::prefix('insurance-plans')->group(function () {
@@ -124,7 +147,9 @@ Route::prefix('payments')->group(function () {
   // Delete a payment
   Route::delete('/{id}', [PaymentController::class, 'destroy']);
 });
+
 Route::get('test', [UserProfileController::class, 'index'])->name('test.page');
+
 // Auth
 Route::name('api.')
   ->middleware(['auth:sanctum'])
@@ -148,17 +173,15 @@ Route::name('api.')
     //! Categories
     Route::apiResource('categories', CategoryController::class);
   });
-  // // New Clients This Month
-  // Route::get('/clients/new-this-month', [ClientController::class, 'newClientsThisMonth']);
 
-  // // Active Subscriptions
-  // Route::get('/subscriptions/active', [SubscriptionController::class, 'activeSubscriptions']);
+// // New Clients This Month
+// Route::get('/clients/new-this-month', [ClientController::class, 'newClientsThisMonth']);
 
-  // // Expired Subscriptions
-  // Route::get('/subscriptions/expired', [SubscriptionController::class, 'expiredSubscriptions']);
+// // Active Subscriptions
+// Route::get('/subscriptions/active', [SubscriptionController::class, 'activeSubscriptions']);
 
-
-
+// // Expired Subscriptions
+// Route::get('/subscriptions/expired', [SubscriptionController::class, 'expiredSubscriptions']);
 
 //! stripe payments
 Route::post('/charge', function (Request $request) {
@@ -184,6 +207,7 @@ Route::post('/charge', function (Request $request) {
     ], 500);
   }
 });
+
 Route::get('/checkout-success', function (Request $request) {
 
   $session = Cashier::stripe()->checkout->sessions->retrieve($request->get('session_id'));
@@ -224,7 +248,6 @@ Route::get('/charge-checkout', function (Request $request) {
     'cancel_url' => route('checkout.success'),
   ]);
 });
-
 
 Route::middleware(['auth:sanctum'])
   ->post('/create-checkout-session', function (Request $request) {
@@ -290,3 +313,24 @@ Route::middleware(['auth:sanctum'])
       'client_secret' => $checkoutSession->client_secret
     ];
   });
+
+// Bills Management Routes
+Route::prefix('bills')->middleware(['auth:sanctum'])->group(function () {
+  // Get all bills with statistics
+  Route::get('/', [BillController::class, 'index']);
+  
+  // Get bill statistics for dashboard
+  Route::get('/stats', [BillController::class, 'getStats']);
+  
+  // Get a specific bill
+  Route::get('/{id}', [BillController::class, 'show']);
+  
+  // Create a new bill
+  Route::post('/', [BillController::class, 'store']);
+  
+  // Update an existing bill
+  Route::put('/{id}', [BillController::class, 'update']);
+  
+  // Delete a bill
+  Route::delete('/{id}', [BillController::class, 'destroy']);
+});

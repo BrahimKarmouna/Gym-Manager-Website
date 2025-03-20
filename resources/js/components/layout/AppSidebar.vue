@@ -227,6 +227,7 @@ import {
 import SidebarWidget from "./SidebarWidget.vue";
 import BoxCubeIcon from "@/icons/BoxCubeIcon.vue";
 import { useSidebar } from "@/composables/useSidebar";
+import DocumentTextIcon from "@/icons/DocumentTextIcon.vue";
 
 const route = useRoute();
 
@@ -251,7 +252,11 @@ const menuGroups = [
         name: "User Profile",
         path: "/profile",
       },
-
+      {
+        icon: DocumentTextIcon,
+        name: "Bills",
+        path: "/bills",
+      },
       {
         name: "Forms",
         icon: ListIcon,

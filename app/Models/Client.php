@@ -12,6 +12,7 @@ class Client extends Model
 
   protected $fillable = [
     'gym_id',
+    'user_id', // Add user_id to allow associating clients with users
     'Full_name',
     'date_of_birth',
     'address',
@@ -31,6 +32,14 @@ class Client extends Model
   public function gym()
   {
     return $this->belongsTo(Gym::class);
+  }
+
+  /**
+   * Relationship: A client belongs to a user.
+   */
+  public function user()
+  {
+    return $this->belongsTo(User::class);
   }
 
   /**

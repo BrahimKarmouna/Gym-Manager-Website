@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
     'email',
     'password',
     'profile_photo_path',
+    'is_admin',
   ];
 
   /**
@@ -40,7 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail
   ];
 
   /**
-   * Get the attributes that should be cast.
+   * The attributes that should be cast.
    *
    * @return array<string, string>
    */
@@ -49,7 +50,58 @@ class User extends Authenticatable implements MustVerifyEmail
     return [
       'email_verified_at' => 'datetime',
       'password' => 'hashed',
+      'is_admin' => 'boolean',
     ];
+  }
+
+  /**
+   * Check if the user is an admin.
+   *
+   * @return bool
+   */
+  public function isAdmin(): bool
+  {
+    return (bool) $this->is_admin;
+  }
+
+  /**
+   * Get all clients belonging to this user.
+   */
+  public function clients()
+  {
+    return $this->hasMany(Client::class);
+  }
+
+  /**
+   * Get all gyms this user has access to
+   */
+  public function gyms()
+  {
+    return $this->belongsToMany(Gym::class);
+  }
+  
+  /**
+   * Get all clients from gyms this user has access to
+   */
+  public function gymClients()
+  {
+    return Client::whereIn('gym_id', $this->gyms()->pluck('id'));
+  }
+  
+  /**
+   * Get the list of gym IDs this user has access to
+   * 
+   * @return array
+   */
+  public function getAuthorizedGymIds()
+  {
+    // Admin can access all gyms
+    if ($this->isAdmin()) {
+      return Gym::pluck('id')->toArray();
+    }
+    
+    // Regular user can only access assigned gyms
+    return $this->gyms()->pluck('id')->toArray();
   }
 
   public static function boot(): void

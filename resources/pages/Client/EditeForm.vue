@@ -59,12 +59,7 @@
               </q-input>
             </div>
             <div class="col-12 col-md-6">
-              <q-input dense v-model="client.gym_id" label="Gym ID" type="number" filled 
-                class="modern-input" lazy-rules>
-                <template v-slot:prepend>
-                  <q-icon name="fitness_center" />
-                </template>
-              </q-input>
+              <!-- Gym ID field removed - client stays in the same gym -->
             </div>
           </div>
 
@@ -145,7 +140,6 @@ const client = ref({
   Full_name: "",
   date_of_birth: "",
   address: "",
-  gym_id: "",
   id_card_picture: null,
   client_picture: null,
   id_card_number: "",
@@ -164,7 +158,6 @@ const updateClient = () => {
   formData.append('Full_name', client.value.Full_name);
   formData.append('date_of_birth', client.value.date_of_birth);
   formData.append('address', client.value.address);
-  formData.append('gym_id', client.value.gym_id);
   formData.append('id_card_number', client.value.id_card_number);
   formData.append('email', client.value.email);
   formData.append('phone', client.value.phone);
@@ -177,7 +170,7 @@ const updateClient = () => {
   }
 
   axios
-    .put(`/api/clients/${props.id}`, client, {
+    .put(`/api/clients/${props.id}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -233,7 +226,6 @@ const resetClient = () => {
     Full_name: "",
     date_of_birth: "",
     address: "",
-    gym_id: "",
     id_card_picture: null,
     client_picture: null,
     id_card_number: "",
@@ -281,4 +273,3 @@ const resetClient = () => {
   background-color: #f5f7fa;
 }
 </style>
-  

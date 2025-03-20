@@ -3,8 +3,9 @@
     <!-- Modern Header -->
     <q-header reveal bordered class="bg-white/90 backdrop-blur-lg shadow-sm border-b border-gray-100">
       <q-toolbar class="h-[70px] px-6">
-        <!-- Menu Button -->
+        <!-- Menu Button - Only Show When Authenticated -->
         <q-btn
+          v-if="authStore.authenticated"
           dense
           flat
           round
@@ -15,11 +16,24 @@
         />
 
         <!-- Brand Logo -->
-        <router-link :to="{ name: 'dashboard.index' }" class="flex items-center hover:opacity-80 transition-opacity">
+        <router-link :to="authStore.authenticated ? { name: 'dashboard.index' } : { name: 'products' }" class="flex items-center hover:opacity-80 transition-opacity">
           <img src="/images/logo/logoblack.png" class="w-10 h-auto transition-transform hover:scale-105" alt="Logo">
         </router-link>
 
         <q-space />
+
+        <!-- Guest Navigation Links - Only Show When NOT Authenticated -->
+        <div v-if="!authStore.authenticated" class="flex items-center gap-4">
+          <router-link :to="{ name: 'products' }" class="text-gray-700 hover:text-primary transition-all font-medium">
+            Products
+          </router-link>
+          <router-link :to="{ name: 'login' }" class="text-gray-700 hover:text-primary transition-all font-medium">
+            Login
+          </router-link>
+          <router-link :to="{ name: 'register' }" class="text-gray-700 hover:text-primary transition-all font-medium">
+            Register
+          </router-link>
+        </div>
 
         <!-- Dark Mode Toggle -->
         <q-toggle
@@ -31,8 +45,8 @@
           color="primary"
         />
 
-        <!-- Profile Button -->
-        <q-btn flat round class="relative overflow-hidden transition-all">
+        <!-- Profile Button - Only Show When Authenticated -->
+        <q-btn v-if="authStore.authenticated" flat round class="relative overflow-hidden transition-all">
           <q-avatar size="40px" class="ring-2 ring-white shadow-lg">
             <img :src="authStore.user.profile_photo_url" alt="Profile">
           </q-avatar>
@@ -42,7 +56,9 @@
               <q-item class="bg-gradient-to-r from-blue-500 to-purple-500 p-4">
                 <q-item-section>
                   <div class="text-white font-bold text-base">{{ authStore.user.name }}</div>
-                  <div class="text-white/80 text-xs mt-1">Signed in as Admin</div>
+                  <div class="text-white/80 text-xs mt-1">
+                    Signed in as {{ authStore.user.isAdmin ? 'Admin' : 'User' }}
+                  </div>
                 </q-item-section>
               </q-item>
               
@@ -54,6 +70,13 @@
                   <q-icon name="person" class="text-gray-600" />
                 </q-item-section>
                 <q-item-section>Your Profile</q-item-section>
+              </q-item>
+              
+              <q-item clickable :to="{ name: 'user.orders.index' }" class="p-3 hover:bg-gray-50">
+                <q-item-section avatar>
+                  <q-icon name="shopping_bag" class="text-gray-600" />
+                </q-item-section>
+                <q-item-section>My Orders</q-item-section>
               </q-item>
               
               <q-item clickable @click="confirmLogout" class="p-3 hover:bg-gray-50">
@@ -68,8 +91,9 @@
       </q-toolbar>
     </q-header>
 
-    <!-- Sidebar -->
+    <!-- Sidebar - Only Show When Authenticated -->
     <q-drawer
+      v-if="authStore.authenticated"
       show-if-above
       v-model="layoutStore.sidebar.opened"
       side="left"
@@ -96,8 +120,8 @@
         />
       </q-list>
       
-      <!-- Admin Section -->
-      <div class="mt-8 p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 backdrop-blur-sm">
+      <!-- Admin Section - Only Show for Admin Users -->
+      <div v-if="authStore.user && authStore.user.isAdmin" class="mt-8 p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 backdrop-blur-sm">
         <div class="text-xs font-bold uppercase text-gray-500 mb-3 px-2">Administration</div>
         <q-item clickable v-ripple class="rounded-xl mb-1 hover:bg-white/70 transition-all duration-200">
         <q-item-section avatar>

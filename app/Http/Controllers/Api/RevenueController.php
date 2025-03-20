@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\Insurance;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class RevenueController extends Controller
 {
@@ -34,13 +35,17 @@ class RevenueController extends Controller
 
     private function calculateRevenue($startDate, $endDate)
     {
+        $userId = Auth::id();
+        
         $payments = Payment::with('plan')
+            ->where('user_id', $userId) // Filter by authenticated user
             ->whereBetween('payment_date', [$startDate, $endDate])
             ->get();
 
         $totalPayments = $payments->sum(fn($payment) => $payment->plan ? $payment->plan->price : 0);
 
         $insurances = Insurance::with('insurance_plan')
+            ->where('user_id', $userId) // Filter by authenticated user
             ->whereBetween('payment_date', [$startDate, $endDate])
             ->get();
 

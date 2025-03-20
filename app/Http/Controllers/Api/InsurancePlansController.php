@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\InsurancePlan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InsurancePlansController extends Controller
 {
@@ -13,7 +14,8 @@ class InsurancePlansController extends Controller
    */
   public function index()
   {
-    $plans = InsurancePlan::all();
+    // Only return insurance plans associated with the authenticated user
+    $plans = InsurancePlan::where('user_id', Auth::id())->get();
     return response()->json($plans);
   }
 
@@ -28,7 +30,10 @@ class InsurancePlansController extends Controller
       'duration' => 'required|integer|min:1', // Duration in months
     ]);
 
-    $plan = InsurancePlan::create($request->all());
+    // Merge user_id with the request data
+    $data = array_merge($request->all(), ['user_id' => Auth::id()]);
+    
+    $plan = InsurancePlan::create($data);
 
     return response()->json([
       'message' => 'Insurance plan created successfully',
@@ -41,7 +46,11 @@ class InsurancePlansController extends Controller
    */
   public function show($id)
   {
-    $plan = InsurancePlan::findOrFail($id);
+    // Only show insurance plans owned by the authenticated user
+    $plan = InsurancePlan::where('id', $id)
+      ->where('user_id', Auth::id())
+      ->firstOrFail();
+      
     return response()->json($plan);
   }
 
@@ -50,7 +59,10 @@ class InsurancePlansController extends Controller
    */
   public function update(Request $request, $id)
   {
-    $plan = InsurancePlan::findOrFail($id);
+    // Only allow updating insurance plans owned by the authenticated user
+    $plan = InsurancePlan::where('id', $id)
+      ->where('user_id', Auth::id())
+      ->firstOrFail();
 
     $request->validate([
       'name' => 'required|string|unique:insurance_plans,name,' . $id,
@@ -71,8 +83,10 @@ class InsurancePlansController extends Controller
    */
   public function destroy($id)
   {
-    // Find the insurance plan
-    $plan = InsurancePlan::findOrFail($id);
+    // Only allow deleting insurance plans owned by the authenticated user
+    $plan = InsurancePlan::where('id', $id)
+      ->where('user_id', Auth::id())
+      ->firstOrFail();
 
     // Check if the insurance plan is associated with any insurance record
     if ($plan->insurances()->exists()) {

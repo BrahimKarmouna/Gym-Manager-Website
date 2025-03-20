@@ -13,6 +13,7 @@ class Insurance extends Model
         'client_id',
         'insurance_plan_id',
         'payment_date',
+        'user_id',
     ];
 
     public function insurance_plan()

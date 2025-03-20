@@ -80,16 +80,6 @@
             <div class="col-12 col-md-6">
               <div class="text-h6 q-mb-md text-weight-medium">Gym Details & Documents</div>
               
-              <q-input 
-                v-model="client.gym_id" 
-                label="Gym ID" 
-                type="number" 
-                outlined 
-                class="q-mb-md" 
-                bg-color="white"
-                color="black"
-              />
-
               <!-- ID Card Upload -->
               <div class="q-mb-lg">
                 <p class="q-mb-xs text-subtitle1">ID Card Picture</p>
@@ -178,7 +168,6 @@ const client = ref({
   Full_name: "",
   date_of_birth: "",
   address: "",
-  gym_id: "",
   id_card_picture: null,
   client_picture: null,
   id_card_number: "",
@@ -207,7 +196,6 @@ const resetClient = () => {
       Full_name: "",
       date_of_birth: "",
       address: "",
-      gym_id: "",
       id_card_picture: null,
       client_picture: null,
       id_card_number: "",
@@ -222,7 +210,6 @@ const saveClient = () => {
   formData.append("Full_name", client.value.Full_name);
   formData.append("date_of_birth", client.value.date_of_birth);
   formData.append("address", client.value.address);
-  formData.append("gym_id", client.value.gym_id);
   formData.append("id_card_picture", client.value.id_card_picture);
   formData.append("client_picture", client.value.client_picture);
   formData.append("id_card_number", client.value.id_card_number);
