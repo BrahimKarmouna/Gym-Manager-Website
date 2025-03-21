@@ -100,6 +100,14 @@
               >
                 Sign In
               </button>
+
+              <div class="text-white text-center mt-4">
+                <p>
+                  <router-link to="/assistant-login" class="text-blue-400 hover:underline">
+                    Assistant Login
+                  </router-link>
+                </p>
+              </div>
               <!-- Forgot password -->
               <div class="text-sm mt-4">
                 <span class="text-white dark:text-white">

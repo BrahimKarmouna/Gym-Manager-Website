@@ -10,7 +10,7 @@ use App\Models\InsurancePlan;
 use App\Models\Member;
 use App\Models\Product;
 use App\Models\Payment;
-use App\Models\Bill;
+use App\Models\Expense;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -119,15 +119,17 @@ class DatabaseSeeder extends Seeder
         ]);
       }
 
-      // Create 2 bills for each user
+      // Create 2 expenses for each user
       for ($i = 0; $i < 2; $i++) {
-        Bill::create([
+        Expense::create([
           'gym_id' => $gyms[array_rand($gyms)]->id,
           'description' => fake()->sentence(),
           'amount' => fake()->numberBetween(100, 1000),
           'bill_date' => fake()->dateTimeThisYear()->format('Y-m-d'),
           'status' => fake()->randomElement(['pending', 'paid', 'overdue']),
-          'notes' => fake()->sentence(),
+          'due_date' => fake()->dateTimeBetween('now', '+30 days')->format('Y-m-d'),
+          'category' => fake()->randomElement(array_keys(Expense::CATEGORIES)),
+          'type' => 'bill',
           'user_id' => $user->id,
         ]);
       }

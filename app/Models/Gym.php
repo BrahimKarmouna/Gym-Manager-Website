@@ -41,6 +41,6 @@ class Gym extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->select('users.id', 'users.name', 'users.email');
     }
 }

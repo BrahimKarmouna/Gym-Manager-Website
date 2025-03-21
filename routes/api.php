@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Api\AssistantController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CurrentUserController;
 use App\Http\Controllers\Api\DataMigrationController;
+use App\Http\Controllers\Api\GymController;
 use App\Http\Controllers\Api\GymUserController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\InsuranceController;
@@ -48,8 +50,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Get gyms the authenticated user has access to
     Route::get('/my-gyms', [GymUserController::class, 'index']);
     
+    // Get the user's associated gyms
+    Route::get('/user-gyms', [AssistantController::class, 'getUserGyms']);
+    
     // Get all gyms (admin only)
     Route::get('/all', [GymUserController::class, 'allGyms']);
+    
+    // Basic gym CRUD operations
+    Route::get('/', [GymController::class, 'index']);
+    Route::post('/', [GymController::class, 'store']);
+    Route::get('/{id}', [GymController::class, 'show']);
+    Route::put('/{id}', [GymController::class, 'update']);
+    Route::delete('/{id}', [GymController::class, 'destroy']);
     
     // Assign user to gym (admin only)
     Route::post('/assign-user', [GymUserController::class, 'assignUserToGym']);
@@ -149,6 +161,19 @@ Route::prefix('payments')->group(function () {
 });
 
 Route::get('test', [UserProfileController::class, 'index'])->name('test.page');
+
+// Assistant Login routes
+Route::group([], function () {
+    Route::post('/assistant/login', [App\Http\Controllers\Auth\AssistantAuthController::class, 'login']);
+    Route::post('/assistant/logout', [App\Http\Controllers\Auth\AssistantAuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::get('/assistant/me', [App\Http\Controllers\Auth\AssistantAuthController::class, 'me'])->middleware('auth:sanctum');
+});
+
+// Test routes for assistant authentication (for debugging purposes only)
+Route::prefix('test-assistant')->group(function () {
+    Route::get('/create', [App\Http\Controllers\Auth\TestAssistantController::class, 'createTestAssistant']);
+    Route::get('/login', [App\Http\Controllers\Auth\TestAssistantController::class, 'testLogin']);
+});
 
 // Auth
 Route::name('api.')
@@ -323,3 +348,16 @@ Route::middleware(['auth:sanctum'])
       'client_secret' => $checkoutSession->client_secret
     ];
   });
+
+// Assistant Management Routes
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/assistants', [AssistantController::class, 'index']);
+    Route::post('/assistants', [AssistantController::class, 'store']);
+    Route::get('/assistants/{id}', [AssistantController::class, 'show']);
+    Route::put('/assistants/{id}', [AssistantController::class, 'update']);
+    Route::delete('/assistants/{id}', [AssistantController::class, 'destroy']);
+    
+    // Permission management for assistants
+    Route::get('/assistants/{id}/permissions', [AssistantController::class, 'getPermissions']);
+    Route::put('/assistants/{id}/permissions', [AssistantController::class, 'updatePermissions']);
+});

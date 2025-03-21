@@ -77,7 +77,7 @@ class User extends Authenticatable implements MustVerifyEmail
    */
   public function gyms()
   {
-    return $this->belongsToMany(Gym::class);
+    return $this->belongsToMany(Gym::class)->select('gyms.id', 'gyms.name', 'gyms.location');
   }
   
   /**

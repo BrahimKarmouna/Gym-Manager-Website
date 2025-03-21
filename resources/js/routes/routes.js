@@ -19,6 +19,17 @@ const routes = [
         },
         component: () => import("../pages/auth/LoginPage.vue"),
       },
+      
+      // Assistant login
+      {
+        path: "/assistant-login",
+        name: "assistant.login",
+        meta: {
+          middleware: [GuestMiddleware],
+        },
+        component: () => import("../pages/auth/AssistantLoginPage.vue"),
+      },
+      
       //for guest user
       {
         path: "products",
