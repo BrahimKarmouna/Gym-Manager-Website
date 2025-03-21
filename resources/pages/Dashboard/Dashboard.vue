@@ -992,13 +992,13 @@
   <InsuranceForm
     v-model:visible="isInsuranceModalVisible"
     :client="selectedClient"
-    @insuranceAdded="refreshPayments"
+    @insuranceAdded="refreshData"
   />
 
   <PaymentForm
     v-model:visible="isPaymentModalVisible"
     :client="selectedClient"
-    @new_payment="refreshPayments"
+    @new_payment="refreshData"
   />
 </template>
 <script setup>
@@ -1083,8 +1083,10 @@ const openInsuranceModal = (client) => {
   isInsuranceModalVisible.value = true;
 };
 
-const refreshPayments = () => {
+// Refresh client data after payment or insurance creation
+const refreshData = () => {
   fetchClients();
+  console.log('Refreshing client data after insurance/payment creation');
 };
 
 // Open the Payment Modal
@@ -1105,25 +1107,21 @@ function showClient() {
 const fetchClients = () => {
   axios
     .get("/api/clients")
-
     .then(function (response) {
-      console.log(response.data);
+      console.log('Fetched client data:', response.data);
       clients.value = response.data.clients;
-      new_clients.value = response.data.dashboard_stats.new_clients_this_month;
-      active_subscriptions.value =
-        response.data.dashboard_stats.active_subscriptions;
-      expired_subscriptions.value =
-        response.data.dashboard_stats.expired_subscriptions;
-      total_clients.value = response.data.total_clients;
+      new_clients.value = response.data.new_clients_this_month;
+      active_subscriptions.value = response.data.active_subscriptions;
+      expired_subscriptions.value = response.data.expired_subscriptions;
+      total_clients.value = response.data.total_clients || response.data.clients.length;
 
-      // handle success
-      // console.log(response);
+      // Log client status for debugging
+      clients.value.forEach(client => {
+        console.log(`Client ${client.id} (${client.Full_name}): is_payed = ${client.is_payed}, is_assured = ${client.is_assured}, subscription_expired_date = ${client.subscription_expired_date}, assurance_expired_date = ${client.assurance_expired_date}`);
+      });
     })
-    .catch(function (_error) {
-      // Error handling is commented out
-    })
-    .then(function () {
-      // always executed
+    .catch(function (error) {
+      console.error('Error fetching clients:', error);
     });
 };
 onMounted(() => {

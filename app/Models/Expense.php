@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Models\Gym;
+use App\Models\User;
 
-class Bill extends Model
+class Expense extends Model
 {
     use HasFactory;
 
@@ -18,16 +20,19 @@ class Bill extends Model
         'user_id',
         'status',
         'due_date',
-        'category'
+        'category',
+        'type'
     ];
 
     protected $casts = [
         'bill_date' => 'date',
         'due_date' => 'date',
         'amount' => 'float',
+        'status' => 'string',
+        'type' => 'string'
     ];
     
-    // Bill categories with associated icons
+    // Expense categories with associated icons
     const CATEGORIES = [
         'rent' => [
             'label' => 'Rent',
@@ -73,6 +78,18 @@ class Bill extends Model
             'label' => 'Software',
             'icon' => 'computer'
         ],
+        'renovation' => [
+            'label' => 'Renovation',
+            'icon' => 'construction'
+        ],
+        'decoration' => [
+            'label' => 'Decoration',
+            'icon' => 'palette'
+        ],
+        'furniture' => [
+            'label' => 'Furniture',
+            'icon' => 'chair'
+        ],
         'other' => [
             'label' => 'Other',
             'icon' => 'more_horiz'
@@ -90,13 +107,13 @@ class Bill extends Model
     }
 
     /**
-     * Check if the bill is overdue
+     * Check if the expense is overdue
      * 
      * @return bool
      */
     public function getIsOverdueAttribute()
     {
-        if ($this->status === 'paid') {
+        if ($this->status === 'paid' || $this->type === 'enhancement') {
             return false;
         }
         
@@ -104,16 +121,19 @@ class Bill extends Model
     }
 
     /**
-     * Auto-update status to overdue if needed before saving
+     * Scope a query to only include bills
      */
-    protected static function booted()
+    public function scopeBills($query)
     {
-        static::saving(function ($bill) {
-            // If the bill is pending and due date is in the past, mark as overdue
-            if ($bill->status === 'pending' && $bill->due_date && Carbon::parse($bill->due_date)->isPast()) {
-                $bill->status = 'overdue';
-            }
-        });
+        return $query->where('type', 'bill');
+    }
+
+    /**
+     * Scope a query to only include enhancements
+     */
+    public function scopeEnhancements($query)
+    {
+        return $query->where('type', 'enhancement');
     }
 
     public function gym()

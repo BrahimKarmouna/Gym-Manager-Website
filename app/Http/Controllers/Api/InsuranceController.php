@@ -34,6 +34,8 @@ class InsuranceController extends Controller
   // Store a new insurance record (similar to store method in PaymentController)
   public function store(Request $request)
   {
+    Log::info('Insurance store request received: ' . json_encode($request->all()));
+    
     // Validation to ensure required fields are present
     $request->validate([
       'client_id' => 'required|exists:clients,id',
@@ -44,46 +46,55 @@ class InsuranceController extends Controller
     
     // Fetch client and verify gym authorization
     $client = Client::findOrFail($request->input('client_id'));
+    Log::info('Client found: ' . $client->Full_name . ' (ID: ' . $client->id . ')');
     
     // Get authorized gym IDs for the current user
     $authorizedGymIds = Auth::user()->getAuthorizedGymIds();
     
     // Check if user has access to the gym this client belongs to
     if (!in_array($client->gym_id, $authorizedGymIds)) {
+      Log::warning('User does not have permission to add insurance for client ' . $client->id);
       return response()->json(['message' => 'You do not have permission to add insurance for this client'], 403);
     }
     
     $plan = InsurancePlan::findOrFail($request->input('insurance_plan_id'));
+    Log::info('Plan found: ' . $plan->name . ' (ID: ' . $plan->id . ')');
 
-    // Fetch the latest insurance record for the client
-    $insurance = Insurance::where('client_id', $client->id)->orderBy('expiry_date', 'desc')->first();
-    $insuranceExpiration = $insurance ? Carbon::parse($insurance->expiry_date) : null;
-
-    // Calculate the new expiration date
-    if ($insuranceExpiration && $insuranceExpiration->isFuture()) {
-      // If the last insurance expiration date is in the future, extend it
-      $newInsuranceExpiration = $insuranceExpiration->addMonths($plan->duration);
-    } else {
-      // Otherwise, use the provided expiry_date and add the plan duration
-      $newInsuranceExpiration = Carbon::parse($request->expiry_date)->addMonths($plan->duration);
+    // Parse the dates
+    $paymentDate = Carbon::parse($request->input('payment_date'));
+    $expiryDate = Carbon::parse($request->input('expiry_date'));
+    
+    // If expiry date is before payment date, adjust it
+    if ($expiryDate->lessThan($paymentDate)) {
+      $expiryDate = $paymentDate->copy()->addMonths($plan->duration);
     }
-
+    
     // Create the insurance record in the database
     $insurance = Insurance::create([
       'client_id' => $client->id,
       'insurance_plan_id' => $plan->id,
-      'payment_date' => Carbon::parse($request->payment_date)->format('Y-m-d'),
-      'expiry_date' => $newInsuranceExpiration->format('Y-m-d'),
+      'payment_date' => $paymentDate->format('Y-m-d'),
+      'expiry_date' => $expiryDate->format('Y-m-d'),
       'user_id' => Auth::id(), // Associate with authenticated user
     ]);
+    
+    Log::info('Insurance created: ID ' . $insurance->id);
 
     // Update the client's insurance expiration date
-    $client->update(['assurance_expired_date' => $newInsuranceExpiration]);
+    $client->assurance_expired_date = $expiryDate->format('Y-m-d');
+    $client->save();
+    
+    Log::info('Client assurance_expired_date updated to ' . $expiryDate->format('Y-m-d'));
+    
+    // Force refresh the client from the database to ensure we have the latest data
+    $client->refresh();
 
-    // Return a success response with the new expiration date
+    // Return a success response with the new insurance record
     return response()->json([
-      'message' => 'Insurance saved and expiration date updated.',
-      'new_expiration_date' => $newInsuranceExpiration
+      'message' => 'Insurance saved successfully.',
+      'insurance' => $insurance,
+      'client' => $client,
+      'plan' => $plan
     ]);
   }
 
@@ -148,10 +159,9 @@ class InsuranceController extends Controller
     ]);
 
     // Update the client's insurance expiration date if necessary
-    if ($client && $plan) {
-      $insuranceExpiration = Carbon::parse($insurance->expiry_date);
-      $newInsuranceExpiration = $insuranceExpiration->addMonths($plan->duration);
-      $client->update(['assurance_expired_date' => $newInsuranceExpiration]);
+    if ($client && isset($client->assurance_expired_date)) {
+      $client->update(['assurance_expired_date' => $insurance->expiry_date]);
+      Log::info('Client assurance_expired_date updated to ' . $insurance->expiry_date);
     }
 
     return response()->json([

@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+        Schema::table('bills', function (Blueprint $table) {
+            $table->date('due_date')->nullable();
+            $table->string('category')->nullable();
         });
     }
 
@@ -21,9 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
+        Schema::table('bills', function (Blueprint $table) {
+            $table->dropColumn(['due_date', 'category']);
         });
     }
 };

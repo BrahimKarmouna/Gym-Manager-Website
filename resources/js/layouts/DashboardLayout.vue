@@ -166,7 +166,7 @@ const linksList = [
   { title: "Dashboard", icon: "sym_r_dashboard", to: { name: "dashboard.index" } },
   { title: "Clients", icon: "sym_r_person", to: { name: "account.index-account" } },
   { title: "Payments", icon: "sym_r_payments", to: { name: "transaction.index" } },
-  { title: "Insurance", icon: "sym_r_shield", to: { name: "expenses.index" } },
+  { title: "Insurance", icon: "sym_r_shield", to: { name: "insurance.index" } },
   {
     title: "Plans", icon: "sym_r_category", children: [
       { title: "Payment Plans", to: { name: "incomes.index" } },
@@ -182,7 +182,7 @@ const linksList = [
   },
 
 
-  { title: "Bills", icon: "inventory", to: { name: "bills.index" } },
+  { title: "Expenses", icon: "receipt_long", to: { name: "expenses.index" } },
   { title: "Assistants", icon: "group_add", to: { name: "assistants.index" } },
 ];
 

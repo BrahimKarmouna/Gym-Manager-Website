@@ -13,7 +13,7 @@ class MemberSeeder extends Seeder
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
             'phone' => '123456789',
-            'payment_plan_id' => 1,
+            'plan_id' => 1,
             'insurance_plan_id' => 1,
         ]);
 
@@ -22,7 +22,7 @@ class MemberSeeder extends Seeder
             'name' => 'Jane Smith',
             'email' => 'jane.smith@example.com',
             'phone' => '987654321',
-            'payment_plan_id' => 2,
+            'plan_id' => 2,
             'insurance_plan_id' => 2,
         ]);
     }

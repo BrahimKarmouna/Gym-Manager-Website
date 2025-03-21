@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('gym_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('gym_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             
-            // Prevent duplicate assignments
-            $table->unique(['user_id', 'gym_id']);
+            $table->unique(['gym_id', 'user_id']);
         });
     }
 

@@ -254,8 +254,13 @@ const menuGroups = [
       },
       {
         icon: DocumentTextIcon,
-        name: "Bills",
-        path: "/bills",
+        name: "Expenses",
+        path: "/expenses",
+      },
+      {
+        icon: DocumentTextIcon,
+        name: "Expenses",
+        path: "/expensess",
       },
       {
         name: "Forms",

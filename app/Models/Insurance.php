@@ -13,6 +13,7 @@ class Insurance extends Model
         'client_id',
         'insurance_plan_id',
         'payment_date',
+        'expiry_date',
         'user_id',
     ];
 

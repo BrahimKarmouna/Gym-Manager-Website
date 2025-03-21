@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bills', function (Blueprint $table) {
-            $table->string('status')->default('pending')->after('bill_date');
-            $table->date('due_date')->nullable()->after('status');
-            $table->string('category')->nullable()->after('due_date');
+            $table->string('status')->default('pending');
+            $table->text('notes')->nullable();
         });
     }
 
@@ -24,9 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bills', function (Blueprint $table) {
-            $table->dropColumn('status');
-            $table->dropColumn('due_date');
-            $table->dropColumn('category');
+            $table->dropColumn(['status', 'notes']);
         });
     }
 };

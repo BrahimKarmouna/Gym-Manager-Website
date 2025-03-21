@@ -69,6 +69,14 @@ class Client extends Model
   {
     return $this->subscription_expired_date && Carbon::parse($this->subscription_expired_date)->isFuture();
   }
+  
+  /**
+   * Dynamic attribute for insurance status
+   */
+  public function getIsAssuredAttribute()
+  {
+    return $this->assurance_expired_date && Carbon::parse($this->assurance_expired_date)->isFuture();
+  }
 
   /**
    * Update status based on expiration dates.

@@ -42,15 +42,15 @@ class ClientController extends Controller
       ->whereMonth('created_at', $currentMonth)
       ->count();
 
-    // Active subscriptions
-    $activeSubscriptions = (clone $query)->whereHas('payments', function (Builder $query) {
-      $query->where('subscription_expired_date', '>=', Carbon::now());
-    })->count();
+    // Active subscriptions - simplified to avoid potential relationship issues
+    $activeSubscriptions = (clone $query)
+      ->where('subscription_expired_date', '>=', Carbon::now())
+      ->count();
 
-    // Expired subscriptions
-    $expiredSubscriptions = (clone $query)->whereHas('payments', function (Builder $query) {
-      $query->where('subscription_expired_date', '<', Carbon::now());
-    })->count();
+    // Expired subscriptions - simplified to avoid potential relationship issues
+    $expiredSubscriptions = (clone $query)
+      ->where('subscription_expired_date', '<', Carbon::now())
+      ->count();
 
     return response()->json([
       'new_clients_this_month' => $newClientsThisMonth,
@@ -61,62 +61,77 @@ class ClientController extends Controller
 
   public function index(Request $request)
   {
-    // Get dashboard stats for authorized gyms
-    $dashboardStats = $this->getDashboardStats();
+    // Get the current user ID
+    $userId = Auth::id();
+    
+    // Log the user ID for debugging
+    Log::info('Fetching clients for user ID: ' . $userId);
   
     // Get authorized gym IDs for the current user
     $authorizedGymIds = Auth::user()->getAuthorizedGymIds();
+    Log::info('Authorized Gym IDs: ' . implode(', ', $authorizedGymIds));
   
-    // Get all clients for the authorized gyms WITH USER ID FILTER
-    $clients = Client::with('gym')
-      ->where('user_id', Auth::id()) // Only show clients created by the current user
-      ->whereIn('gym_id', $authorizedGymIds)
-      ->when($request->has('status'), function ($query) use ($request) {
-        return $query->where('status', $request->input('status'));
-      })
-      ->with([
-        'payments' => function ($query) {
-          $query->orderBy('created_at', 'desc');
-        }
-      ])
-      ->with('payments.plan')
-      ->when($request->input('search'), function ($query) use ($request) {
-        $query->where('Full_name', 'like', '%' . $request->input('search') . '%')
-          ->orWhere('email', 'like', '%' . $request->input('search') . '%');
-      })
-      ->get();
+    // Build the query for clients
+    $clientsQuery = Client::with(['gym', 'payments', 'payments.plan', 'insurances'])
+      ->where('user_id', $userId)
+      ->whereIn('gym_id', $authorizedGymIds);
+      
+    // Apply search filter if provided
+    if ($request->has('search') && !empty($request->input('search'))) {
+      $search = $request->input('search');
+      $clientsQuery->where(function($query) use ($search) {
+        $query->where('Full_name', 'like', '%' . $search . '%')
+          ->orWhere('email', 'like', '%' . $search . '%')
+          ->orWhere('phone', 'like', '%' . $search . '%');
+      });
+    }
+    
+    // Apply status filter if provided
+    if ($request->has('status') && !empty($request->input('status'))) {
+      $clientsQuery->where('status', $request->input('status'));
+    }
+    
+    // Get the clients
+    $clients = $clientsQuery->get();
+    
+    // Add computed properties for the frontend
+    $clients->each(function ($client) {
+      // Check if client has a valid subscription
+      $client->is_payed = $client->getIsPayedAttribute();
+      
+      // Check if client has valid insurance
+      $client->is_assured = $client->getIsAssuredAttribute();
+      
+      // Log the client's status for debugging
+      Log::info("Client {$client->id} ({$client->Full_name}): is_payed = " . 
+               ($client->is_payed ? 'true' : 'false') . 
+               ", is_assured = " . ($client->is_assured ? 'true' : 'false') .
+               ", subscription_expired_date = {$client->subscription_expired_date}" .
+               ", assurance_expired_date = {$client->assurance_expired_date}");
+    });
       
     // Log the number of clients found
     Log::info('Number of clients found: ' . $clients->count());
-  
-    // Get new clients (clients created in the current month) WITH USER ID FILTER
-    $newClientsQuery = Client::whereMonth('created_at', Carbon::now()->month)
-      ->whereYear('created_at', Carbon::now()->year)
-      ->where('user_id', Auth::id()) // Only count clients created by the current user
-      ->whereIn('gym_id', $authorizedGymIds);
     
-    $newClients = $newClientsQuery->get();
-  
-    // Get expired subscriptions WITH USER ID FILTER
-    $expiredSubscriptionsQuery = Client::whereHas('payments', function (Builder $query) {
-      $query->where('subscription_expired_date', '<', Carbon::now());
-    })
-    ->where('user_id', Auth::id()) // Only count clients created by the current user
-    ->whereIn('gym_id', Auth::user()->getAuthorizedGymIds());
+    // If no clients were found, log all clients for debugging
+    if ($clients->count() == 0) {
+      $allClients = Client::all();
+      Log::info('Total clients in database: ' . $allClients->count());
+      
+      foreach ($allClients as $client) {
+        Log::info("Client ID: {$client->id}, Name: {$client->Full_name}, User ID: {$client->user_id}, Gym ID: {$client->gym_id}");
+      }
+    }
     
-    $expiredSubscriptions = $expiredSubscriptionsQuery->get();
+    // Get dashboard stats
+    $dashboardStats = $this->getDashboardStats()->getData();
     
-    // Get total count for the authorized gyms WITH USER ID FILTER
-    $totalClientsCount = Client::where('user_id', Auth::id())
-      ->whereIn('gym_id', $authorizedGymIds)
-      ->count();
-  
+    // Return the clients and dashboard stats
     return response()->json([
-      'dashboard_stats' => $dashboardStats->getData(),
       'clients' => $clients,
-      'total_clients' => $totalClientsCount,
-      'new_clients' => $newClients,
-      'expired_subscriptions' => $expiredSubscriptions
+      'new_clients_this_month' => $dashboardStats->new_clients_this_month,
+      'active_subscriptions' => $dashboardStats->active_subscriptions,
+      'expired_subscriptions' => $dashboardStats->expired_subscriptions,
     ]);
   }
 
@@ -170,97 +185,118 @@ class ClientController extends Controller
       'id_card_number' => $request->id_card_number,
       'id_card_picture' => $idCardPath,
       'client_picture' => $clientPicPath,
+      'status' => 'active',
     ]);
 
     return response()->json(['message' => 'Client enregistré avec succès!', 'client' => $client]);
   }
   
-  // app/Http/Controllers/ClientController.php
   //function show
   public function show($id)
   {
-    // Find the client by ID and ensure it belongs to the authenticated user
-    $client = Client::where('id', $id)
-      ->where('user_id', Auth::id()) // Only allow access to clients created by this user
-      ->with('gym')
-      ->with([
-        'payments' => function ($query) {
-          $query->orderBy('created_at', 'desc');
-        },
-        'payments.plan'
-      ])
+    $client = Client::with(['gym', 'payments', 'payments.plan', 'insurances'])
+      ->where('id', $id)
+      ->where('user_id', Auth::id())
       ->first();
-
+    
     if (!$client) {
-      return response()->json(['message' => 'Client not found or you do not have permission to view this client'], 404);
+      return response()->json(['message' => 'Client not found'], 404);
     }
-
+    
+    // Add computed properties using the accessor methods
+    $client->is_payed = $client->getIsPayedAttribute();
+    $client->is_assured = $client->getIsAssuredAttribute();
+    
+    // Log client status for debugging
+    Log::info("Fetched client {$client->id} ({$client->Full_name}): " .
+              "is_payed = " . ($client->is_payed ? 'true' : 'false') . 
+              ", is_assured = " . ($client->is_assured ? 'true' : 'false') .
+              ", subscription_expired_date = {$client->subscription_expired_date}" .
+              ", assurance_expired_date = {$client->assurance_expired_date}");
+    
     return response()->json($client);
   }
-
-  // Example in a Controller method
-  public function updateClientStatus($clientId)
-  {
-    $authorizedGymIds = Auth::user()->getAuthorizedGymIds();
-    
-    $client = Client::whereIn('gym_id', $authorizedGymIds)
-      ->where('id', $clientId)
-      ->firstOrFail();
-      
-    $client->updateStatusBasedOnExpiration();
-
-    // Optionally, return some response or data
-  }
-
+  
+  // Update client
   public function update(Request $request, $id)
   {
-    // Find the client by ID and ensure it belongs to the authenticated user
     $client = Client::where('id', $id)
-      ->where('user_id', Auth::id()) // Only allow updating clients created by this user
+      ->where('user_id', Auth::id())
       ->first();
-
+    
     if (!$client) {
-      return response()->json(['message' => 'Client not found or you do not have permission to modify this client'], 404);
+      return response()->json(['message' => 'Client not found'], 404);
     }
-
-    // Validation des champs
+    
     $request->validate([
       'Full_name' => 'required|string|max:255',
       'date_of_birth' => 'required|date',
       'address' => 'required|string|max:255',
-      'id_card_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-      'client_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
       'email' => 'required|email|unique:clients,email,' . $id,
       'phone' => 'nullable|string|max:20',
-      // 'gym_id' removed - clients will stay in their originally assigned gym
+      'id_card_number' => 'required',
     ]);
-
-    // We do not change the client's gym - they will stay in their originally assigned gym
-
-    // Mise à jour des champs texte
-    $client->update([
-      'Full_name' => $request->Full_name,
-      'date_of_birth' => $request->date_of_birth,
-      'address' => $request->address,
-      'email' => $request->email,
-      'phone' => $request->phone,
-      // user_id and gym_id remain unchanged
-    ]);
-
-    // Mise à jour de l'image de la carte d'identité si une nouvelle image est envoyée
+    
+    // Handle image updates if provided
     if ($request->hasFile('id_card_picture')) {
       $idCardPath = $request->file('id_card_picture')->store('clients', 'public');
       $client->id_card_picture = $idCardPath;
     }
-
-    // Mise à jour de l'image du client si une nouvelle image est envoyée
+    
     if ($request->hasFile('client_picture')) {
       $clientPicPath = $request->file('client_picture')->store('clients', 'public');
       $client->client_picture = $clientPicPath;
     }
-
+    
+    // Update client data
+    $client->Full_name = $request->Full_name;
+    $client->date_of_birth = $request->date_of_birth;
+    $client->address = $request->address;
+    $client->email = $request->email;
+    $client->phone = $request->phone;
+    $client->id_card_number = $request->id_card_number;
+    $client->status = $request->status ?? $client->status;
+    
     $client->save();
-
-    return response()->json(['message' => 'Client mis à jour avec succès!', 'client' => $client]);
+    
+    return response()->json(['message' => 'Client updated successfully', 'client' => $client]);
+  }
+  
+  // Delete client
+  public function destroy($id)
+  {
+    $client = Client::where('id', $id)
+      ->where('user_id', Auth::id())
+      ->first();
+    
+    if (!$client) {
+      return response()->json(['message' => 'Client not found'], 404);
+    }
+    
+    $client->delete();
+    
+    return response()->json(['message' => 'Client deleted successfully']);
+  }
+  
+  // Search clients
+  public function search(Request $request)
+  {
+    $search = $request->input('q');
+    
+    if (empty($search)) {
+      return response()->json(['clients' => []]);
+    }
+    
+    $clients = Client::where('user_id', Auth::id())
+      ->whereIn('gym_id', Auth::user()->getAuthorizedGymIds())
+      ->where(function($query) use ($search) {
+        $query->where('Full_name', 'like', '%' . $search . '%')
+          ->orWhere('email', 'like', '%' . $search . '%')
+          ->orWhere('phone', 'like', '%' . $search . '%');
+      })
+      ->with(['gym', 'payments'])
+      ->get();
+    
+    return response()->json(['clients' => $clients]);
   }
 }

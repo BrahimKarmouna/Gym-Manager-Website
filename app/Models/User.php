@@ -85,7 +85,7 @@ class User extends Authenticatable implements MustVerifyEmail
    */
   public function gymClients()
   {
-    return Client::whereIn('gym_id', $this->gyms()->pluck('id'));
+    return Client::whereIn('gym_id', $this->gyms()->pluck('gyms.id'));
   }
   
   /**
@@ -101,7 +101,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     
     // Regular user can only access assigned gyms
-    return $this->gyms()->pluck('id')->toArray();
+    return $this->gyms()->pluck('gyms.id')->toArray();
   }
 
   public static function boot(): void

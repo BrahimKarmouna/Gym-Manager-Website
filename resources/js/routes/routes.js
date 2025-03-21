@@ -162,6 +162,12 @@ const routes = [
             component: () => import("../pages/admin/bills/index.vue"),
           },
           {
+            path: "/expenses",
+            name: "expenses.index",
+
+            component: () => import("../pages/admin/expenses/index.vue"),
+          },
+          {
             path: "/assistants",
             name: "assistants.index",
 
@@ -180,7 +186,7 @@ const routes = [
               },
               {
                 path: "Insurance",
-                name: "expenses.index",
+                name: "insurance.index",
                 component: () => import("../../pages/Insurance/index.vue"),
               },
               {

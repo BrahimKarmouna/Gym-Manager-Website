@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\ProfilePhotoController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\Api\RevenueController;
-use App\Http\Controllers\Api\BillController;
+use App\Http\Controllers\Api\ExpenseController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -174,6 +174,16 @@ Route::name('api.')
     Route::apiResource('categories', CategoryController::class);
   });
 
+// Expenses routes
+Route::middleware(['auth:sanctum'])->group(function () {
+  Route::get('/expenses', [ExpenseController::class, 'index']);
+  Route::get('/expenses/stats', [ExpenseController::class, 'stats']);
+  Route::get('/expenses/{id}', [ExpenseController::class, 'show']);
+  Route::post('/expenses', [ExpenseController::class, 'store']);
+  Route::put('/expenses/{id}', [ExpenseController::class, 'update']);
+  Route::delete('/expenses/{id}', [ExpenseController::class, 'destroy']);
+});
+
 // // New Clients This Month
 // Route::get('/clients/new-this-month', [ClientController::class, 'newClientsThisMonth']);
 
@@ -313,24 +323,3 @@ Route::middleware(['auth:sanctum'])
       'client_secret' => $checkoutSession->client_secret
     ];
   });
-
-// Bills Management Routes
-Route::prefix('bills')->middleware(['auth:sanctum'])->group(function () {
-  // Get all bills with statistics
-  Route::get('/', [BillController::class, 'index']);
-  
-  // Get bill statistics for dashboard
-  Route::get('/stats', [BillController::class, 'getStats']);
-  
-  // Get a specific bill
-  Route::get('/{id}', [BillController::class, 'show']);
-  
-  // Create a new bill
-  Route::post('/', [BillController::class, 'store']);
-  
-  // Update an existing bill
-  Route::put('/{id}', [BillController::class, 'update']);
-  
-  // Delete a bill
-  Route::delete('/{id}', [BillController::class, 'destroy']);
-});
