@@ -39,7 +39,7 @@ class AssistantDirectLoginController extends Controller
                 'token' => $token,
                 'links' => [
                     'check_status' => '/api/assistant/me',
-                    'dashboard' => '/assistant/dashboard'
+                    'dashboard' => '/assistant'
                 ]
             ]);
         }

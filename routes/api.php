@@ -167,8 +167,13 @@ Route::group([], function () {
     Route::post('/assistant/login', [App\Http\Controllers\Auth\AssistantAuthController::class, 'login']);
     Route::post('/assistant/logout', [App\Http\Controllers\Auth\AssistantAuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('/assistant/me', [App\Http\Controllers\Auth\AssistantAuthController::class, 'me'])->middleware('auth:sanctum');
+    // Add dedicated route for assistant dashboard access
+    Route::get('/assistant/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->middleware('auth:sanctum')->name('assistant.dashboard');
 });
-
+Route::middleware(['auth:sanctum'])->group(function () {
+  Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+  // Other dashboard routes
+});
 // Test routes for assistant authentication (for debugging purposes only)
 Route::prefix('test-assistant')->group(function () {
     Route::get('/create', [App\Http\Controllers\Auth\TestAssistantController::class, 'createTestAssistant']);

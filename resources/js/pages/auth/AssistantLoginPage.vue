@@ -140,7 +140,8 @@ function handleRedirect(response) {
   authStore.authenticated = true;
   
   // Redirect to dashboard
-  router.push("/dashboard");
+  router.push("/");
+  
 }
 
 async function login() {

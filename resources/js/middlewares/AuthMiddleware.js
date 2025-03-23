@@ -9,5 +9,10 @@ export async function AuthMiddleware({ store, to, next }) {
     return next({ name: "login" });
   }
 
+  // Check if user has necessary role to access the route
+  if (to.meta && to.meta.requiredRole && !authStore.hasRole(to.meta.requiredRole)) {
+    return next({ name: "unauthorized" });
+  }
+
   return next();
 }

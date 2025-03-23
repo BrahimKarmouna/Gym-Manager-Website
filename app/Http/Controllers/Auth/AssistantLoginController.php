@@ -17,7 +17,7 @@ class AssistantLoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/assistant/dashboard';
+    protected $redirectTo = '/assistant';
 
     /**
      * Create a new controller instance.

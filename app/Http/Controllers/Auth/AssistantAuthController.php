@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
 class AssistantAuthController extends Controller
@@ -46,7 +47,10 @@ class AssistantAuthController extends Controller
             $assistant->save();
             
             // Generate sanctum token for API authentication
-            $token = $assistant->createToken('assistant-token')->plainTextToken;
+            $token = $assistant->createToken('assistant-token', ['*'])->plainTextToken;
+            
+            // Store token in session for persistence
+            session(['assistant_api_token' => $token]);
             
             \Log::channel('daily')->info('Token generated for assistant', [
                 'token_length' => strlen($token)
@@ -74,7 +78,15 @@ class AssistantAuthController extends Controller
      */
     public function logout(Request $request)
     {
+        // Revoke the current token if it exists
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+        }
+        
         Auth::guard('assistant')->logout();
+        
+        // Clear the stored token
+        session()->forget('assistant_api_token');
         
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -113,3 +125,5 @@ class AssistantAuthController extends Controller
         return response()->json(['message' => 'Not authenticated as assistant'], 401);
     }
 }
+// In your routes file (web.php or a dedicated routes file)
+

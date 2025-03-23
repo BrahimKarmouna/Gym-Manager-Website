@@ -101,9 +101,7 @@ const routes = [
     alias: "/admin",
     component: () => import("../layouts/DashboardLayout.vue"),
 
-    meta: {
-      middleware: [AuthMiddleware],
-    },
+   
 
     children: [
       // Profile
