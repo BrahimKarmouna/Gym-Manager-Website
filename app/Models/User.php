@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\HasProfilePhoto;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,11 +12,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
   /** @use HasFactory<\Database\Factories\UserFactory> */
-  use HasFactory, Notifiable, TwoFactorAuthenticatable, HasApiTokens, HasProfilePhoto, SoftDeletes, Billable;
+  use HasFactory, Notifiable, TwoFactorAuthenticatable, HasApiTokens, HasProfilePhoto, SoftDeletes, Billable, HasRoles;
 
   /**
    * The attributes that are mass assignable.
@@ -28,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
     'password',
     'profile_photo_path',
     'is_admin',
+    'role',
   ];
 
   /**
@@ -72,6 +75,16 @@ class User extends Authenticatable implements MustVerifyEmail
     return $this->hasMany(Client::class);
   }
 
+  public function permissions()
+  {
+    return $this->belongsToMany(Permission::class, 'model_has_permissions', 'model_id', 'permission_id');
+  }
+
+  public function roles()
+  {
+    return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id');
+  }
+
   /**
    * Get all gyms this user has access to
    */
@@ -79,7 +92,7 @@ class User extends Authenticatable implements MustVerifyEmail
   {
     return $this->belongsToMany(Gym::class)->select('gyms.id', 'gyms.name', 'gyms.location');
   }
-  
+
   /**
    * Get all clients from gyms this user has access to
    */
@@ -87,10 +100,10 @@ class User extends Authenticatable implements MustVerifyEmail
   {
     return Client::whereIn('gym_id', $this->gyms()->pluck('gyms.id'));
   }
-  
+
   /**
    * Get the list of gym IDs this user has access to
-   * 
+   *
    * @return array
    */
   public function getAuthorizedGymIds()
@@ -99,9 +112,46 @@ class User extends Authenticatable implements MustVerifyEmail
     if ($this->isAdmin()) {
       return Gym::pluck('id')->toArray();
     }
-    
+
     // Regular user can only access assigned gyms
     return $this->gyms()->pluck('gyms.id')->toArray();
+  }
+
+  /**
+   * Get the assistant linked to this user account.
+   */
+  public function assistant()
+  {
+    return $this->hasOne(Assistant::class, 'user_account_id');
+  }
+
+  /**
+   * Get all assistants created/managed by this user (not linked to user account).
+   */
+  public function managedAssistants()
+  {
+    return $this->hasMany(Assistant::class, 'user_id');
+  }
+
+  /**
+   * Check if user has an assistant role.
+   *
+   * @return bool
+   */
+  public function isAssistant(): bool
+  {
+    return $this->assistant()->exists();
+  }
+
+  /**
+   * Check if user has specific role.
+   *
+   * @param string $role
+   * @return bool
+   */
+  public function hasUserRole(string $role): bool
+  {
+    return $this->role === $role;
   }
 
   public static function boot(): void

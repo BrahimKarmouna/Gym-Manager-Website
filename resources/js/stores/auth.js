@@ -13,9 +13,14 @@ export const useAuthStore = defineStore("auth", () => {
 
   const router = useRouter();
 
-  // Computed property to check if user is admin
-  const isAdmin = computed(() => {
-    return user.value?.is_admin === true;
+  // Computed property to get user permissions
+  const permissions = computed(() => {
+    return user.value?.permissions || [];
+  });
+
+  // Computed property to get user roles
+  const roles = computed(() => {
+    return user.value?.roles || [];
   });
 
   async function fetchProfile(force = false) {
@@ -31,8 +36,16 @@ export const useAuthStore = defineStore("auth", () => {
       const resp = await loadingPromise.value;
 
       user.value = resp.data.data;
-
-      // permissions.value = resp.data.data.permissions;
+      
+      // Ensure we always have permissions array
+      if (!user.value.permissions) {
+        user.value.permissions = [];
+      }
+      
+      // Ensure we always have roles array
+      if (!user.value.roles) {
+        user.value.roles = [];
+      }
 
       authenticated.value = true;
       
@@ -144,14 +157,37 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  // Check if user has a specific role
+  const hasRole = (roleIdentifier) => {
+    if (user.value?.roles) {
+      if (typeof roleIdentifier === 'number') {
+        // If role ID is provided, check by ID
+        return user.value.roles.some(r => r.id === roleIdentifier);
+      } else {
+        // If role name is provided, check by name
+        return user.value.roles.some(r => 
+          typeof r === 'string' 
+            ? r === roleIdentifier 
+            : r.name === roleIdentifier
+        );
+      }
+    }
+    
+    return false;
+  };
+
   // Check if user has required permissions for a page
   const hasPermission = (requiredPermission) => {
-    // For admin users, grant all permissions
-    if (isAdmin.value) return true;
+    // For admin users (role id 1), grant all permissions
+    if (hasRole(1)) return true;
     
     // For specific permission checks
-    if (user.value?.permissions?.includes(requiredPermission)) {
-      return true;
+    if (user.value?.permissions) {
+      return user.value.permissions.some(p => 
+        typeof p === 'string' 
+          ? p === requiredPermission 
+          : p.name === requiredPermission
+      );
     }
     
     return false;
@@ -159,13 +195,15 @@ export const useAuthStore = defineStore("auth", () => {
 
   return {
     user,
-    loggingOut,
     authenticated,
-    isAdmin,
-    logout,
-    login,
-    register,
     fetchProfile,
-    hasPermission
+    login,
+    logout,
+    loggingOut,
+    register,
+    hasRole,
+    hasPermission,
+    permissions,
+    roles
   };
 });

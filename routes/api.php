@@ -19,6 +19,8 @@ use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\Api\RevenueController;
 use App\Http\Controllers\Api\ExpenseController;
+use App\Http\Controllers\Api\UserAssistantController;
+use App\Http\Controllers\Api\UserManagementController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -197,6 +199,33 @@ Route::name('api.')
 
     //! Categories
     Route::apiResource('categories', CategoryController::class);
+    
+    // User Management
+    Route::prefix('user-management')->group(function () {
+      // Get all users
+      Route::get('/users', [UserManagementController::class, 'index'])
+            ->middleware(['can:view users']);
+      
+      // Create a new user
+      Route::post('/users', [UserManagementController::class, 'store'])
+            ->middleware(['can:create users']);
+      
+      // Update an existing user
+      Route::put('/users/{id}', [UserManagementController::class, 'update'])
+            ->middleware(['can:update users']);
+      
+      // Delete a user
+      Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])
+            ->middleware(['can:delete users']);
+      
+      // Get available assistants for linking with users
+      Route::get('/available-assistants', [UserManagementController::class, 'getAvailableAssistants'])
+            ->middleware(['can:view assistants']);
+      
+      // Get roles and permissions
+      Route::get('/roles-permissions', [UserManagementController::class, 'getRolesAndPermissions'])
+            ->middleware(['can:view roles']);
+    });
   });
 
 // Expenses routes
@@ -350,14 +379,29 @@ Route::middleware(['auth:sanctum'])
   });
 
 // Assistant Management Routes
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/assistants', [AssistantController::class, 'index']);
-    Route::post('/assistants', [AssistantController::class, 'store']);
-    Route::get('/assistants/{id}', [AssistantController::class, 'show']);
-    Route::put('/assistants/{id}', [AssistantController::class, 'update']);
-    Route::delete('/assistants/{id}', [AssistantController::class, 'destroy']);
+Route::middleware(['auth:sanctum'])->prefix('assistants')->group(function () {
+    Route::get('/', [AssistantController::class, 'index']);
+    Route::post('/', [AssistantController::class, 'store']);
+    Route::get('/{id}', [AssistantController::class, 'show']);
+    Route::put('/{id}', [AssistantController::class, 'update']);
+    Route::delete('/{id}', [AssistantController::class, 'destroy']);
+    Route::get('/{id}/permissions', [AssistantController::class, 'getPermissions']);
+    Route::post('/{id}/permissions', [AssistantController::class, 'updatePermissions']);
+});
+
+// User-Assistant management routes (for the new user-based permission system)
+Route::middleware(['auth:sanctum'])->prefix('user-management')->group(function () {
+    // Users with roles and permissions
+    Route::get('/users', [UserAssistantController::class, 'index']);
+    Route::post('/users', [UserAssistantController::class, 'store']);
+    Route::get('/users/{id}', [UserAssistantController::class, 'show']);
+    Route::put('/users/{id}', [UserAssistantController::class, 'update']);
+    Route::delete('/users/{id}', [UserAssistantController::class, 'destroy']);
+    Route::post('/users/{id}/permissions', [UserAssistantController::class, 'updatePermissions']);
     
-    // Permission management for assistants
-    Route::get('/assistants/{id}/permissions', [AssistantController::class, 'getPermissions']);
-    Route::put('/assistants/{id}/permissions', [AssistantController::class, 'updatePermissions']);
+    // Get available assistants for linking to users
+    Route::get('/available-assistants', [UserAssistantController::class, 'getAvailableAssistants']);
+    
+    // Get roles and permissions
+    Route::get('/roles-permissions', [UserAssistantController::class, 'getRolesAndPermissions']);
 });

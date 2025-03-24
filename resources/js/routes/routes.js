@@ -179,10 +179,20 @@ const routes = [
             component: () => import("../pages/admin/expenses/index.vue"),
           },
           {
+            path: "/assistants/manage",
+            name: "assistants.manage",
+            component: () => import("../pages/assistants/manage.vue"),
+          },
+          {
             path: "/assistants",
             name: "assistants.index",
 
             component: () => import("../pages/assistants/index.vue"),
+          },
+          {
+            path: "/user-management",
+            name: "user-management",
+            component: () => import("../pages/user-management/index.vue"),
           },
           // Transaction Categories
           {

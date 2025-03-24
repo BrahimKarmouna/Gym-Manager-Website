@@ -20,11 +20,11 @@ class Assistant extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
         'phone',
         'role',
         'gym_id',
         'user_id',
+        'user_account_id',
         'photo',
         'active',
         'last_login',
@@ -37,7 +37,6 @@ class Assistant extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
@@ -48,7 +47,6 @@ class Assistant extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
         'active' => 'boolean',
         'last_login' => 'datetime',
     ];
@@ -66,7 +64,44 @@ class Assistant extends Authenticatable
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get the user account linked to this assistant.
+     */
+    public function userAccount()
+    {
+        return $this->belongsTo(User::class, 'user_account_id');
+    }
+
+    /**
+     * Get permissions from the user account if linked.
+     * 
+     * @return array
+     */
+    public function getPermissionsViaUser()
+    {
+        if ($this->userAccount) {
+            return $this->userAccount->getAllPermissions()->pluck('name')->toArray();
+        }
+        
+        return [];
+    }
+
+    /**
+     * Check if this assistant has a specific permission.
+     * 
+     * @param string $permission
+     * @return bool
+     */
+    public function hasPermissionViaUser(string $permission): bool
+    {
+        if ($this->userAccount) {
+            return $this->userAccount->hasPermissionTo($permission);
+        }
+        
+        return false;
     }
 
     /**

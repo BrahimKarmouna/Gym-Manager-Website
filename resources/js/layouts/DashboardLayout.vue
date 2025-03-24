@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh LpR lFf">
+  <q-layout v-if="$permission('view-dashboard')" view="hHh LpR lFf">
     <!-- Modern Header -->
     <q-header reveal bordered class="bg-white/90 backdrop-blur-lg shadow-sm border-b border-gray-100">
       <q-toolbar class="h-[70px] px-6">
@@ -61,9 +61,9 @@
                   </div>
                 </q-item-section>
               </q-item>
-              
+
               <q-separator />
-              
+
               <!-- Menu Items -->
               <q-item clickable :to="{ name: 'profile.index' }" class="p-3 hover:bg-gray-50">
                 <q-item-section avatar>
@@ -71,14 +71,14 @@
                 </q-item-section>
                 <q-item-section>Your Profile</q-item-section>
               </q-item>
-              
+
               <q-item clickable :to="{ name: 'user.orders.index' }" class="p-3 hover:bg-gray-50">
                 <q-item-section avatar>
                   <q-icon name="shopping_bag" class="text-gray-600" />
                 </q-item-section>
                 <q-item-section>My Orders</q-item-section>
               </q-item>
-              
+
               <q-item clickable @click="confirmLogout" class="p-3 hover:bg-gray-50">
                 <q-item-section avatar>
                   <q-icon name="logout" class="text-gray-600" />
@@ -108,7 +108,7 @@
         Fitness Redefined
       </div>
       </div>
-      
+
       <!-- Navigation Links -->
       <div class="p-4">
       <q-list padding class="rounded-2xl bg-white shadow-sm">
@@ -119,7 +119,7 @@
         class="my-1 px-4 py-3 rounded-xl font-medium text-gray-700 transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:translate-x-1"
         />
       </q-list>
-      
+
       <!-- Admin Section - Only Show for Admin Users -->
       <div v-if="authStore.user && authStore.user.isAdmin" class="mt-8 p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 backdrop-blur-sm">
         <div class="text-xs font-bold uppercase text-gray-500 mb-3 px-2">Administration</div>
@@ -184,6 +184,12 @@ const linksList = [
 
   { title: "Expenses", icon: "receipt_long", to: { name: "expenses.index" } },
   { title: "Assistants", icon: "group_add", to: { name: "assistants.index" } },
+  {
+    title: "User Management",
+    icon: "manage_accounts",
+    to: { name: "user-management" },
+    requiredPermission: "view users"
+  },
 ];
 
 export default defineComponent({

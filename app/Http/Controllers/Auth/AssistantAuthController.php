@@ -34,24 +34,24 @@ class AssistantAuthController extends Controller
             'password' => $request->password
         ], $request->remember)) {
             $assistant = Auth::guard('assistant')->user();
-            
+
             \Log::channel('daily')->info('Assistant authenticated successfully', [
                 'id' => $assistant->id,
                 'name' => $assistant->name,
                 'email' => $assistant->email
             ]);
-            
+
             // Update last login time
             $assistant->last_login = now();
             $assistant->save();
-            
+
             // Generate sanctum token for API authentication
             $token = $assistant->createToken('assistant-token')->plainTextToken;
-            
+
             \Log::channel('daily')->info('Token generated for assistant', [
                 'token_length' => strlen($token)
             ]);
-            
+
             return response()->json([
                 'message' => 'Successfully logged in as assistant',
                 'assistant' => $assistant,
@@ -59,11 +59,11 @@ class AssistantAuthController extends Controller
                 'token' => $token
             ]);
         }
-        
+
         \Log::channel('daily')->error('Authentication failed for assistant', [
             'email' => $request->email
         ]);
-        
+
         throw ValidationException::withMessages([
             'email' => ['These credentials do not match our records.'],
         ]);
@@ -75,41 +75,46 @@ class AssistantAuthController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('assistant')->logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return response()->json(['message' => 'Successfully logged out']);
     }
-    
+
     /**
      * Get the currently authenticated assistant
      */
     public function me(Request $request)
     {
+
+         $user = auth()->user();
         // First try sanctum token authentication for API requests
         if ($request->bearerToken()) {
             $assistant = $request->user();
-            
+
+
+
+
             if ($assistant && $assistant instanceof \App\Models\Assistant) {
                 return response()->json([
                     'assistant' => $assistant,
-                    'role' => $assistant->role,
+                    'permissions' => $user->hasPermissions(),
                     'authenticated_via' => 'sanctum_token'
                 ]);
             }
         }
-        
+
         // Fallback to session-based authentication
         if (Auth::guard('assistant')->check()) {
             $assistant = Auth::guard('assistant')->user();
             return response()->json([
                 'assistant' => $assistant,
-                'role' => $assistant->role,
+                'permissions' => $user->hasPermissions(),
                 'authenticated_via' => 'session'
             ]);
         }
-        
+
         return response()->json(['message' => 'Not authenticated as assistant'], 401);
     }
 }

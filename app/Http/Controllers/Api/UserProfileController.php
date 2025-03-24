@@ -16,9 +16,10 @@ class UserProfileController extends Controller
 
   public function me(Request $request)
   {
-    $user = $request->user();
+    $user = auth()->user();
 
     $user->append('profile_photo_url');
+    $user->permissions = $user->getAllPermissions()->pluck('name');
 
     return UserResource::make($request->user());
   }
