@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
     'profile_photo_path',
     'is_admin',
     'role',
+    'created_by',
   ];
 
   /**
@@ -54,6 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
       'email_verified_at' => 'datetime',
       'password' => 'hashed',
       'is_admin' => 'boolean',
+      'created_by' => 'integer',
     ];
   }
 
@@ -142,6 +144,22 @@ class User extends Authenticatable implements MustVerifyEmail
   public function hasUserRole(string $role): bool
   {
     return $this->role === $role;
+  }
+
+  /**
+   * Get the user who created this user.
+   */
+  public function creator()
+  {
+    return $this->belongsTo(User::class, 'created_by');
+  }
+
+  /**
+   * Get users created by this user.
+   */
+  public function createdUsers()
+  {
+    return $this->hasMany(User::class, 'created_by');
   }
 
   public static function boot(): void

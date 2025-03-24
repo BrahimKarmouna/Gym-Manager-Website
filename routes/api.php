@@ -203,15 +203,15 @@ Route::name('api.')
     // User Management
     Route::middleware(['auth:sanctum'])->prefix('user-management')->group(function () {
       // Users with roles and permissions
-      Route::get('/users', [UserAssistantController::class, 'index']);
-      Route::post('/users', [UserAssistantController::class, 'store']);
-      Route::get('/users/{id}', [UserAssistantController::class, 'show']);
-      Route::put('/users/{id}', [UserAssistantController::class, 'update']);
-      Route::delete('/users/{id}', [UserAssistantController::class, 'destroy']);
-
+      Route::get('/users', [UserManagementController::class, 'index']);
+      Route::post('/users', [UserManagementController::class, 'store']);
+      Route::get('/users/{id}', [UserManagementController::class, 'show']);
+      Route::put('/users/{id}', [UserManagementController::class, 'update']);
+      Route::delete('/users/{id}', [UserManagementController::class, 'destroy']);
+      
       // Roles and permissions
       Route::get('/roles-permissions', [UserManagementController::class, 'getRolesAndPermissions']);
-
+      
       // Assistants
       Route::get('/assistants', [UserManagementController::class, 'getAvailableAssistants']);
     });
@@ -381,16 +381,16 @@ Route::middleware(['auth:sanctum'])->prefix('assistants')->group(function () {
 // User-Assistant management routes (for the new user-based permission system)
 Route::middleware(['auth:sanctum'])->prefix('user-management')->group(function () {
   // Users with roles and permissions
-  Route::get('/users', [UserAssistantController::class, 'index']);
-  Route::post('/users', [UserAssistantController::class, 'store']);
-  Route::get('/users/{id}', [UserAssistantController::class, 'show']);
-  Route::put('/users/{id}', [UserAssistantController::class, 'update']);
-  Route::delete('/users/{id}', [UserAssistantController::class, 'destroy']);
-  Route::post('/users/{id}/permissions', [UserAssistantController::class, 'updatePermissions']);
+  Route::get('/users', [UserManagementController::class, 'index']);
+  Route::post('/users', [UserManagementController::class, 'store']);
+  Route::get('/users/{id}', [UserManagementController::class, 'show']);
+  Route::put('/users/{id}', [UserManagementController::class, 'update']);
+  Route::delete('/users/{id}', [UserManagementController::class, 'destroy']);
+  Route::post('/users/{id}/permissions', [UserManagementController::class, 'updatePermissions']);
 
   // Get available assistants for linking to users
-  Route::get('/available-assistants', [UserAssistantController::class, 'getAvailableAssistants']);
+  Route::get('/available-assistants', [UserManagementController::class, 'getAvailableAssistants']);
 
   // Get roles and permissions
-  Route::get('/roles-permissions', [UserAssistantController::class, 'getRolesAndPermissions']);
+  Route::get('/roles-permissions', [UserManagementController::class, 'getRolesAndPermissions']);
 });

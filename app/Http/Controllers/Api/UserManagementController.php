@@ -22,22 +22,31 @@ class UserManagementController extends Controller
   public function index(Request $request)
   {
     // Check if user has permission to view users
-    if (!$request->user()->hasRole(1) && !$request->user()->hasPermissionTo('view-users')) {
+    if (!$request->user()->hasRole(['admin', 'super-admin']) && !$request->user()->hasPermissionTo('view-users')) {
       return response()->json(['message' => 'Unauthorized to view users'], 403);
     }
 
-    // Get all users with their assistants
-    $users = User::with(['assistant', 'roles', 'permissions'])->get();
+    // Get users based on permissions
+    $query = User::with(['assistant', 'roles', 'permissions', 'creator']);
+
+    // If not admin/super-admin, only show users created by the authenticated user
+    if (!$request->user()->hasRole(['admin', 'super-admin'])) {
+      $query->where('created_by', $request->user()->id);
+    }
+
+    $users = $query->get();
 
     // Clean up the response format
     $usersFormatted = $users->map(function ($user) {
       $userData = $user->toArray();
-      $userData['roleId'] = $user->roles->first()->id ?? null;
-      $userData['roleName'] = $user->roles->first()->name ?? 'user';
+      $role = $user->roles->first();
+      $userData['role_id'] = $role ? $role->id : null;
+      $userData['role'] = $role ? $role->name : 'user';
+      $userData['creator_name'] = $user->creator ? $user->creator->name : null;
       return $userData;
     });
 
-    return response()->json($usersFormatted);
+    return response()->json(['data' => $usersFormatted]);
   }
 
   /**
@@ -49,7 +58,7 @@ class UserManagementController extends Controller
   public function store(Request $request)
   {
     // Check if user has permission to create users
-    if (!$request->user()->hasRole(1) && !$request->user()->hasPermissionTo('create users')) {
+    if (!$request->user()->hasRole(['admin', 'super-admin']) && !$request->user()->hasPermissionTo('create users')) {
       return response()->json(['message' => 'Unauthorized to create users'], 403);
     }
 
@@ -72,14 +81,25 @@ class UserManagementController extends Controller
       'name' => $request->input('name'),
       'email' => $request->input('email'),
       'password' => Hash::make($request->input('password')),
+      'created_by' => $request->user()->id, // Set the creator
     ]);
 
     // Assign role if provided (by ID)
     if ($request->filled('role_id')) {
+      // If not admin/super-admin, ensure they can't assign higher roles
+      if (!$request->user()->hasRole(['admin', 'super-admin'])) {
+        $role = Role::find($request->input('role_id'));
+        if ($role && in_array($role->name, ['admin', 'super-admin'])) {
+          return response()->json(['message' => 'Unauthorized to assign admin roles'], 403);
+        }
+      }
       $user->roles()->sync([$request->input('role_id')]);
     } else {
-      // Default to admin role (ID 1) for directly created users
-      $user->roles()->sync([1]);
+      // Default to user role for directly created users
+      $defaultRole = Role::where('name', 'user')->first();
+      if ($defaultRole) {
+        $user->roles()->sync([$defaultRole->id]);
+      }
     }
 
     // Assign permissions if provided
@@ -98,10 +118,12 @@ class UserManagementController extends Controller
     }
 
     // Reload user with relations
-    $userWithRelations = User::with(['assistant', 'roles', 'permissions'])->find($user->id);
+    $userWithRelations = User::with(['assistant', 'roles', 'permissions', 'creator'])->find($user->id);
     $responseData = $userWithRelations->toArray();
-    $responseData['roleId'] = $userWithRelations->roles->first()->id ?? null;
-    $responseData['roleName'] = $userWithRelations->roles->first()->name ?? 'user';
+    $role = $userWithRelations->roles->first();
+    $responseData['role_id'] = $role ? $role->id : null;
+    $responseData['role'] = $role ? $role->name : 'user';
+    $responseData['creator_name'] = $userWithRelations->creator ? $userWithRelations->creator->name : null;
 
     return response()->json([
       'message' => 'User created successfully',
@@ -118,12 +140,15 @@ class UserManagementController extends Controller
    */
   public function update(Request $request, $id)
   {
-    // Check if user has permission to update users
-    if (!$request->user()->hasRole(1) && !$request->user()->hasPermissionTo('update users')) {
-      return response()->json(['message' => 'Unauthorized to update users'], 403);
-    }
-
     $user = User::findOrFail($id);
+
+    // Check if user has permission to update users
+    if (!$request->user()->hasRole(['admin', 'super-admin'])) {
+      // Regular users can only update users they created
+      if ($user->created_by !== $request->user()->id) {
+        return response()->json(['message' => 'Unauthorized to update this user'], 403);
+      }
+    }
 
     $validator = Validator::make($request->all(), [
       'name' => 'sometimes|string|max:255',
@@ -163,7 +188,13 @@ class UserManagementController extends Controller
 
     // Handle role assignment by ID
     if ($request->filled('role_id')) {
-      // Set role using role ID
+      // If not admin/super-admin, ensure they can't assign higher roles
+      if (!$request->user()->hasRole(['admin', 'super-admin'])) {
+        $role = Role::find($request->input('role_id'));
+        if ($role && in_array($role->name, ['admin', 'super-admin'])) {
+          return response()->json(['message' => 'Unauthorized to assign admin roles'], 403);
+        }
+      }
       $user->roles()->sync([$request->input('role_id')]);
     }
 
@@ -189,10 +220,12 @@ class UserManagementController extends Controller
     }
 
     // Reload user with relations
-    $updatedUser = User::with(['assistant', 'roles', 'permissions'])->find($user->id);
+    $updatedUser = User::with(['assistant', 'roles', 'permissions', 'creator'])->find($user->id);
     $responseData = $updatedUser->toArray();
-    $responseData['roleId'] = $updatedUser->roles->first()->id ?? null;
-    $responseData['roleName'] = $updatedUser->roles->first()->name ?? 'user';
+    $role = $updatedUser->roles->first();
+    $responseData['role_id'] = $role ? $role->id : null;
+    $responseData['role'] = $role ? $role->name : 'user';
+    $responseData['creator_name'] = $updatedUser->creator ? $updatedUser->creator->name : null;
 
     return response()->json([
       'message' => 'User updated successfully',
@@ -208,12 +241,15 @@ class UserManagementController extends Controller
    */
   public function destroy(Request $request, $id)
   {
-    // Check if user has permission to delete users
-    if (!$request->user()->hasRole(1) && !$request->user()->hasPermissionTo('delete users')) {
-      return response()->json(['message' => 'Unauthorized to delete users'], 403);
-    }
-
     $user = User::findOrFail($id);
+
+    // Check if user has permission to delete users
+    if (!$request->user()->hasRole(['admin', 'super-admin'])) {
+      // Regular users can only delete users they created
+      if ($user->created_by !== $request->user()->id) {
+        return response()->json(['message' => 'Unauthorized to delete this user'], 403);
+      }
+    }
 
     // Unlink any assistant linked to this user
     Assistant::where('user_account_id', $user->id)->update(['user_account_id' => null]);
@@ -250,12 +286,25 @@ class UserManagementController extends Controller
   public function getRolesAndPermissions(Request $request)
   {
     // Check if user has permission to view roles and permissions
-    if (!$request->user()->hasRole(1) && !$request->user()->hasPermissionTo('view roles')) {
+    if (!$request->user()->hasRole(['admin', 'super-admin']) && !$request->user()->hasPermissionTo('view roles')) {
       return response()->json(['message' => 'Unauthorized to view roles and permissions'], 403);
     }
 
-    $roles = Role::all();
-    $permissions = Permission::all();
+    $roles = Role::all()->map(function ($role) {
+      return [
+        'id' => $role->id,
+        'name' => $role->name,
+        'label' => ucwords(str_replace('-', ' ', $role->name))
+      ];
+    });
+
+    $permissions = Permission::all()->map(function ($permission) {
+      return [
+        'id' => $permission->id,
+        'name' => $permission->name,
+        'label' => ucwords(str_replace('-', ' ', $permission->name))
+      ];
+    });
 
     return response()->json([
       'roles' => $roles,
