@@ -46,34 +46,34 @@ Route::get('/user', function (Request $request) {
 Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('/data-migration/assign-clients', [DataMigrationController::class, 'assignClientsToCurrentUser']);
   Route::get('/data-migration/list-users', [DataMigrationController::class, 'listUsers']);
-  
+
   // Gym User Management
   Route::prefix('gyms')->group(function () {
     // Get gyms the authenticated user has access to
     Route::get('/my-gyms', [GymUserController::class, 'index']);
-    
+
     // Get the user's associated gyms
     Route::get('/user-gyms', [AssistantController::class, 'getUserGyms']);
-    
+
     // Get all gyms (admin only)
     Route::get('/all', [GymUserController::class, 'allGyms']);
-    
+
     // Basic gym CRUD operations
     Route::get('/', [GymController::class, 'index']);
     Route::post('/', [GymController::class, 'store']);
     Route::get('/{id}', [GymController::class, 'show']);
     Route::put('/{id}', [GymController::class, 'update']);
     Route::delete('/{id}', [GymController::class, 'destroy']);
-    
+
     // Assign user to gym (admin only)
     Route::post('/assign-user', [GymUserController::class, 'assignUserToGym']);
-    
+
     // Remove user from gym (admin only)
     Route::post('/remove-user', [GymUserController::class, 'removeUserFromGym']);
-    
+
     // Get users with access to a specific gym
     Route::get('/{gymId}/users', [GymUserController::class, 'gymUsers']);
-    
+
     // Testing: assign current user to all gyms
     Route::get('/assign-me-to-all', [GymUserController::class, 'assignCurrentUserToAllGyms']);
   });
@@ -88,7 +88,7 @@ Route::delete('/clients/{id}', ClientController::class . '@destroy');
 Route::get('/clients/search', [ClientController::class, 'search']);
 
 // payments
-Route::get('/payments', PaymentController::class . '@index');
+Route::get('/payments', [PaymentController::class, 'index']);
 Route::get('/payments/{id}', PaymentController::class . '@show');
 Route::post('/payments', PaymentController::class . '@store');
 Route::put('/payments/{id}', PaymentController::class . '@update');
@@ -166,15 +166,15 @@ Route::get('test', [UserProfileController::class, 'index'])->name('test.page');
 
 // Assistant Login routes
 Route::group([], function () {
-    Route::post('/assistant/login', [App\Http\Controllers\Auth\AssistantAuthController::class, 'login']);
-    Route::post('/assistant/logout', [App\Http\Controllers\Auth\AssistantAuthController::class, 'logout'])->middleware('auth:sanctum');
-    Route::get('/assistant/me', [App\Http\Controllers\Auth\AssistantAuthController::class, 'me'])->middleware('auth:sanctum');
+  Route::post('/assistant/login', [App\Http\Controllers\Auth\AssistantAuthController::class, 'login']);
+  Route::post('/assistant/logout', [App\Http\Controllers\Auth\AssistantAuthController::class, 'logout'])->middleware('auth:sanctum');
+  Route::get('/assistant/me', [App\Http\Controllers\Auth\AssistantAuthController::class, 'me'])->middleware('auth:sanctum');
 });
 
 // Test routes for assistant authentication (for debugging purposes only)
 Route::prefix('test-assistant')->group(function () {
-    Route::get('/create', [App\Http\Controllers\Auth\TestAssistantController::class, 'createTestAssistant']);
-    Route::get('/login', [App\Http\Controllers\Auth\TestAssistantController::class, 'testLogin']);
+  Route::get('/create', [App\Http\Controllers\Auth\TestAssistantController::class, 'createTestAssistant']);
+  Route::get('/login', [App\Http\Controllers\Auth\TestAssistantController::class, 'testLogin']);
 });
 
 // Auth
@@ -199,32 +199,21 @@ Route::name('api.')
 
     //! Categories
     Route::apiResource('categories', CategoryController::class);
-    
+
     // User Management
-    Route::prefix('user-management')->group(function () {
-      // Get all users
-      Route::get('/users', [UserManagementController::class, 'index'])
-            ->middleware(['can:view users']);
-      
-      // Create a new user
-      Route::post('/users', [UserManagementController::class, 'store'])
-            ->middleware(['can:create users']);
-      
-      // Update an existing user
-      Route::put('/users/{id}', [UserManagementController::class, 'update'])
-            ->middleware(['can:update users']);
-      
-      // Delete a user
-      Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])
-            ->middleware(['can:delete users']);
-      
-      // Get available assistants for linking with users
-      Route::get('/available-assistants', [UserManagementController::class, 'getAvailableAssistants'])
-            ->middleware(['can:view assistants']);
-      
-      // Get roles and permissions
-      Route::get('/roles-permissions', [UserManagementController::class, 'getRolesAndPermissions'])
-            ->middleware(['can:view roles']);
+    Route::middleware(['auth:sanctum'])->prefix('user-management')->group(function () {
+      // Users with roles and permissions
+      Route::get('/users', [UserAssistantController::class, 'index']);
+      Route::post('/users', [UserAssistantController::class, 'store']);
+      Route::get('/users/{id}', [UserAssistantController::class, 'show']);
+      Route::put('/users/{id}', [UserAssistantController::class, 'update']);
+      Route::delete('/users/{id}', [UserAssistantController::class, 'destroy']);
+
+      // Roles and permissions
+      Route::get('/roles-permissions', [UserManagementController::class, 'getRolesAndPermissions']);
+
+      // Assistants
+      Route::get('/assistants', [UserManagementController::class, 'getAvailableAssistants']);
     });
   });
 
@@ -380,28 +369,28 @@ Route::middleware(['auth:sanctum'])
 
 // Assistant Management Routes
 Route::middleware(['auth:sanctum'])->prefix('assistants')->group(function () {
-    Route::get('/', [AssistantController::class, 'index']);
-    Route::post('/', [AssistantController::class, 'store']);
-    Route::get('/{id}', [AssistantController::class, 'show']);
-    Route::put('/{id}', [AssistantController::class, 'update']);
-    Route::delete('/{id}', [AssistantController::class, 'destroy']);
-    Route::get('/{id}/permissions', [AssistantController::class, 'getPermissions']);
-    Route::post('/{id}/permissions', [AssistantController::class, 'updatePermissions']);
+  Route::get('/', [AssistantController::class, 'index']);
+  Route::post('/', [AssistantController::class, 'store']);
+  Route::get('/{id}', [AssistantController::class, 'show']);
+  Route::put('/{id}', [AssistantController::class, 'update']);
+  Route::delete('/{id}', [AssistantController::class, 'destroy']);
+  Route::get('/{id}/permissions', [AssistantController::class, 'getPermissions']);
+  Route::post('/{id}/permissions', [AssistantController::class, 'updatePermissions']);
 });
 
 // User-Assistant management routes (for the new user-based permission system)
 Route::middleware(['auth:sanctum'])->prefix('user-management')->group(function () {
-    // Users with roles and permissions
-    Route::get('/users', [UserAssistantController::class, 'index']);
-    Route::post('/users', [UserAssistantController::class, 'store']);
-    Route::get('/users/{id}', [UserAssistantController::class, 'show']);
-    Route::put('/users/{id}', [UserAssistantController::class, 'update']);
-    Route::delete('/users/{id}', [UserAssistantController::class, 'destroy']);
-    Route::post('/users/{id}/permissions', [UserAssistantController::class, 'updatePermissions']);
-    
-    // Get available assistants for linking to users
-    Route::get('/available-assistants', [UserAssistantController::class, 'getAvailableAssistants']);
-    
-    // Get roles and permissions
-    Route::get('/roles-permissions', [UserAssistantController::class, 'getRolesAndPermissions']);
+  // Users with roles and permissions
+  Route::get('/users', [UserAssistantController::class, 'index']);
+  Route::post('/users', [UserAssistantController::class, 'store']);
+  Route::get('/users/{id}', [UserAssistantController::class, 'show']);
+  Route::put('/users/{id}', [UserAssistantController::class, 'update']);
+  Route::delete('/users/{id}', [UserAssistantController::class, 'destroy']);
+  Route::post('/users/{id}/permissions', [UserAssistantController::class, 'updatePermissions']);
+
+  // Get available assistants for linking to users
+  Route::get('/available-assistants', [UserAssistantController::class, 'getAvailableAssistants']);
+
+  // Get roles and permissions
+  Route::get('/roles-permissions', [UserAssistantController::class, 'getRolesAndPermissions']);
 });

@@ -103,7 +103,10 @@
 
               <div class="text-white text-center mt-4">
                 <p>
-                  <router-link to="/assistant-login" class="text-blue-400 hover:underline">
+                  <router-link
+                    to="/assistant-login"
+                    class="text-blue-400 hover:underline"
+                  >
                     Assistant Login
                   </router-link>
                 </p>
@@ -143,11 +146,12 @@
     </div>
   </FullScreenLayout>
 </template>
+
 <script setup>
 import { api } from "@/boot/axios";
 import { useForm } from "@/composables/useForm";
 import { useRouter } from "vue-router";
-
+import FullScreenLayout from '../../components/layout/FullScreenLayout.vue'
 const router = useRouter();
 
 const form = useForm({

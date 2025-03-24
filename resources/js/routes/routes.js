@@ -7,7 +7,7 @@ const routes = [
   // Auth
   {
     path: "/",
-    component: () => import("../layouts/DashboardLayout.vue"),
+    component: () => import("../layouts/AuthLayout.vue"),
 
     children: [
       {
@@ -19,7 +19,7 @@ const routes = [
         },
         component: () => import("../pages/auth/LoginPage.vue"),
       },
-      
+
       // Assistant login
       {
         path: "/assistant-login",
@@ -29,7 +29,6 @@ const routes = [
         },
         component: () => import("../pages/auth/AssistantLoginPage.vue"),
       },
-      
       //for guest user
       {
         path: "products",

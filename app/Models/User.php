@@ -75,16 +75,6 @@ class User extends Authenticatable implements MustVerifyEmail
     return $this->hasMany(Client::class);
   }
 
-  public function permissions()
-  {
-    return $this->belongsToMany(Permission::class, 'model_has_permissions', 'model_id', 'permission_id');
-  }
-
-  public function roles()
-  {
-    return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id');
-  }
-
   /**
    * Get all gyms this user has access to
    */
