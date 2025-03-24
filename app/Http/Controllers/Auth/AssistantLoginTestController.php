@@ -42,7 +42,7 @@ class AssistantLoginTestController extends Controller
         ], $request->filled('remember'))) {
             $request->session()->regenerate();
             
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/');
         }
         
         return back()->withErrors([

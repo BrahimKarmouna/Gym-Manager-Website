@@ -47,7 +47,6 @@
     <div v-if="isLoading" class="flex justify-center items-center h-64">
       <q-spinner-dots color="primary" size="3em" />
     </div>
-
     <template v-else>
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

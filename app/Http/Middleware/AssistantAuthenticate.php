@@ -22,6 +22,15 @@ class AssistantAuthenticate extends Middleware
         // Always use the assistant guard
         $guards = ['assistant'];
         
+        // First check for token authentication
+        if ($request->bearerToken()) {
+            $assistant = $request->user();
+            if ($assistant && $assistant instanceof \App\Models\Assistant) {
+                return $next($request);
+            }
+        }
+        
+        // Then check for session authentication
         if (!Auth::guard('assistant')->check()) {
             if ($request->expectsJson()) {
                 return response()->json(['message' => 'Unauthorized'], 401);

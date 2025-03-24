@@ -29,7 +29,11 @@ Route::get('/assistant-direct-login', [App\Http\Controllers\Auth\AssistantDirect
 Route::get('/assistant/login', [App\Http\Controllers\Auth\AssistantLoginController::class, 'showLoginForm'])->name('assistant.login')->middleware('web');
 Route::post('/assistant/login', [App\Http\Controllers\Auth\AssistantLoginController::class, 'login'])->name('assistant.login.submit')->middleware('web');
 Route::post('/assistant/logout', [App\Http\Controllers\Auth\AssistantLoginController::class, 'logout'])->name('assistant.logout')->middleware('web');
-Route::get('/assistant/dashboard', [App\Http\Controllers\Auth\AssistantDirectLoginController::class, 'dashboard'])->name('assistant.dashboard')->middleware(['web', 'auth:assistant']);
+
+// Added auth.basic fallback for assistant dashboard to prevent Unauthenticated errors
+Route::group(['middleware' => ['web', 'auth:assistant']], function () {
+    Route::get('/assistant', [App\Http\Controllers\Auth\AssistantDirectLoginController::class, 'dashboard'])->name('assistant.dashboard');
+});
 
 // Diagnostic routes for assistant authentication
 Route::get('/assistant-auth-diagnostic', [App\Http\Controllers\Auth\AssistantAuthDiagnosticController::class, 'runDiagnostics']);

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('phone')->nullable();
-            $table->string('role')->default('trainer'); // trainer, receptionist, manager
+            $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->foreignId('gym_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Owner who created this assistant
             $table->string('photo')->nullable();
