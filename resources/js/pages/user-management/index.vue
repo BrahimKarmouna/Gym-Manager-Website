@@ -8,13 +8,22 @@
             <h1 class="text-2xl font-bold text-gray-900">User Management</h1>
             <p class="mt-1 text-sm text-gray-600">Manage your system users, roles, and permissions</p>
           </div>
-          <q-btn
-            color="primary"
-            icon="add"
-            label="New User"
-            @click="openUserForm()"
-            class="bg-gradient-to-r from-blue-600 to-indigo-600"
-          />
+          <div class="flex items-center space-x-4">
+            <q-btn
+              color="secondary"
+              icon="badge"
+              label="Manage Roles"
+              :to="{ name: 'user-management.roles' }"
+              class="bg-gradient-to-r from-purple-600 to-indigo-600"
+            />
+            <q-btn
+              color="primary"
+              icon="add"
+              label="New User"
+              @click="openUserForm()"
+              class="bg-gradient-to-r from-blue-600 to-indigo-600"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -203,9 +212,9 @@
           <template v-slot:body-cell-role="props">
             <q-td :props="props">
               <q-chip
-                :color="getRoleColor(props.row.roles[0]?.name)"
+                :color="props.row.roles[0]?.color || 'grey'"
                 text-color="white"
-                size="sm"
+                dense
                 class="text-xs"
               >
                 {{ props.row.roles[0]?.name || 'No Role' }}
@@ -335,11 +344,7 @@
             </q-card>
 
             <!-- Role & Permissions Section -->
-            <!-- <q-card
-              flat
-              bordered
-              class="q-mb-md"
-            >
+            <q-card flat bordered class="q-mb-md">
               <q-card-section class="bg-blue-1">
                 <div class="text-subtitle1 q-mb-sm text-weight-bold">Role & Permissions</div>
               </q-card-section>
@@ -347,72 +352,76 @@
                 <div class="row q-col-gutter-md">
                   <div class="col-12 col-md-6">
                     <q-select
-                      v-model="userForm.role_id"
+                      v-model="userForm.role"
                       :options="roleOptions"
                       label="Role"
                       outlined
                       emit-value
                       map-options
-                      :disable="!hasRolesLoaded"
+                      :rules="[val => !!val || 'Role is required']"
                     >
-                      <template v-slot:no-option>
-                        <q-item>
-                          <q-item-section class="text-grey">
-                            No roles available
+                      <template v-slot:option="scope">
+                        <q-item v-bind="scope.itemProps">
+                          <q-item-section>
+                            <q-item-label>{{ scope.opt.label }}</q-item-label>
+                            <q-item-label caption>{{ scope.opt.description || 'No description available' }}</q-item-label>
                           </q-item-section>
                         </q-item>
                       </template>
                     </q-select>
                   </div>
-                  <div class="col-12 col-md-6">
-                    <q-select
-                      v-model="userForm.assistant_id"
-                      :options="assistantOptions"
-                      label="Link to Assistant (Optional)"
-                      outlined
-                      emit-value
-                      map-options
-                      clearable
-                      :disable="!hasAssistantsLoaded"
-                    >
-                      <template v-slot:no-option>
-                        <q-item>
-                          <q-item-section class="text-grey">
-                            No assistants available
-                          </q-item-section>
-                        </q-item>
-                      </template>
-                    </q-select>
+                  
+                  <div class="col-12 col-md-6 flex items-center">
+                    <q-toggle
+                      v-model="userForm.is_admin"
+                      label="Administrator Account"
+                      color="primary"
+                    />
                   </div>
                 </div>
 
                 <div class="q-mt-md">
-                  <div class="text-subtitle2 q-mb-sm text-weight-bold">Permissions</div>
-                  <q-card
-                    flat
-                    bordered
-                  >
-                    <q-card-section class="q-pa-sm">
-                      <div class="row q-col-gutter-sm">
-                        <div
-                          v-for="(permission, index) in permissionOptions"
-                          :key="index"
-                          class="col-12 col-sm-6 col-md-4"
-                        >
-                          <q-checkbox
-                            v-model="userForm.permissions"
-                            :val="permission.value"
-                            :label="permission.label"
-                            :disable="!hasPermissionsLoaded"
-                            color="primary"
-                          />
-                        </div>
+                  <div class="text-subtitle2 q-mb-sm">
+                    <div class="flex items-center justify-between">
+                      <span class="text-weight-bold">Additional Permissions</span>
+                      <q-btn
+                        flat
+                        dense
+                        color="primary"
+                        label="Select All"
+                        @click="toggleAllPermissions"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div class="row q-col-gutter-md">
+                    <template v-for="(group, groupName) in groupedPermissions" :key="groupName">
+                      <div class="col-12 col-md-6 col-lg-4">
+                        <q-card flat bordered>
+                          <q-card-section class="bg-grey-2">
+                            <div class="text-subtitle2 text-weight-medium">{{ formatGroupName(groupName) }}</div>
+                          </q-card-section>
+                          <q-card-section class="q-pa-sm">
+                            <q-list dense>
+                              <q-item v-for="perm in group" :key="perm.value">
+                                <q-item-section>
+                                  <q-checkbox
+                                    v-model="userForm.permissions"
+                                    :val="perm.value"
+                                    :label="perm.label"
+                                    :disable="userForm.is_admin"
+                                  />
+                                </q-item-section>
+                              </q-item>
+                            </q-list>
+                          </q-card-section>
+                        </q-card>
                       </div>
-                    </q-card-section>
-                  </q-card>
+                    </template>
+                  </div>
                 </div>
               </q-card-section>
-            </q-card> -->
+            </q-card>
 
             <!-- Actions -->
             <div class="row justify-end q-mt-lg">
@@ -525,9 +534,8 @@ export default defineComponent({
       name: '',
       email: '',
       password: '',
-      role_id: null,
+      role: null,
       permissions: [],
-      assistant_id: null,
       is_admin: false
     });
 
@@ -560,11 +568,13 @@ export default defineComponent({
         const response = await api.get('/user-management/roles-permissions');
         roleOptions.value = response.data.roles.map(role => ({
           label: role.name,
-          value: role.id
+          value: role.id,
+          description: role.description
         }));
         permissionOptions.value = response.data.permissions.map(permission => ({
           label: permission.name,
-          value: permission.id
+          value: permission.id,
+          group: permission.group
         }));
         hasRolesLoaded.value = true;
         hasPermissionsLoaded.value = true;
@@ -601,9 +611,8 @@ export default defineComponent({
         name: '',
         email: '',
         password: '',
-        role_id: null,
+        role: null,
         permissions: [],
-        assistant_id: null,
         is_admin: false
       };
 
@@ -613,9 +622,8 @@ export default defineComponent({
           ...userForm.value,
           name: user.name,
           email: user.email,
-          role_id: user.role_id || (user.roles && user.roles.length > 0 ? user.roles[0].id : null),
+          role: user.role_id || (user.roles && user.roles.length > 0 ? user.roles[0].id : null),
           permissions: user.permissions?.map(p => typeof p === 'object' ? p.id : p) || [],
-          assistant_id: user.assistant_id,
           is_admin: user.is_admin
         };
       } else {
@@ -701,6 +709,29 @@ export default defineComponent({
       }
     };
 
+    const toggleAllPermissions = () => {
+      if (userForm.value.permissions.length === permissionOptions.value.length) {
+        userForm.value.permissions = [];
+      } else {
+        userForm.value.permissions = permissionOptions.value.map(p => p.value);
+      }
+    };
+
+    const groupedPermissions = computed(() => {
+      const groups = {};
+      permissionOptions.value.forEach(permission => {
+        if (!groups[permission.group]) {
+          groups[permission.group] = [];
+        }
+        groups[permission.group].push(permission);
+      });
+      return groups;
+    });
+
+    const formatGroupName = (groupName) => {
+      return groupName.replace('_', ' ').replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+    };
+
     // Initialize
     onMounted(async () => {
       await Promise.all([
@@ -738,7 +769,10 @@ export default defineComponent({
       openUserForm,
       saveUser,
       confirmDeleteUser,
-      deleteUser
+      deleteUser,
+      toggleAllPermissions,
+      groupedPermissions,
+      formatGroupName
     };
   }
 });
