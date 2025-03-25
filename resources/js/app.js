@@ -33,7 +33,6 @@ app.use(Quasar, {
 app.use(pinia);
 app.use(VueApexCharts);
 
-
 app.use({
   install(app) {
     const context = {
@@ -56,3 +55,7 @@ app.config.globalProperties.$permission = hasPermission;
 
 // Assumes you have a <div id="app"></div> in your index.html
 app.mount("#app");
+
+app.config.errorHandler = (err, vm, info) => {
+  console.error(err, vm, info);
+};

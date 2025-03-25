@@ -1,4 +1,4 @@
-import { AuthMiddleware } from "../middlewares/AuthMiddleware";
+import { AuthorizationMiddleware } from "@/middlewares/AuthorizationMiddleware";
 import { GuestMiddleware } from "../middlewares/GuestMiddleware";
 import { VerifyMiddleware } from "../middlewares/VerifyMiddleware";
 import { RouterView } from "vue-router";
@@ -100,8 +100,6 @@ const routes = [
     alias: "/admin",
     component: () => import("../layouts/DashboardLayout.vue"),
 
-   
-
     children: [
       // Profile
       {
@@ -149,6 +147,9 @@ const routes = [
             name: "dashboard.index",
             component: () =>
               import("../../../resources/pages/Dashboard/Dashboard.vue"),
+            meta: {
+              middleware: [AuthorizationMiddleware("view-dashboard")],
+            },
           },
           // for admin
           {
@@ -214,6 +215,11 @@ const routes = [
                   import("../../pages/insurance_plans/index.vue"),
               },
             ],
+          },
+          {
+            path: "403",
+            name: "unauthorized",
+            component: () => import("../../pages/errors/403.vue"),
           },
 
           // {

@@ -163,7 +163,7 @@
         class="bg-white"
       >
         <q-table
-          :rows="filteredUsers"
+          :rows="users"
           :columns="columns"
           row-key="id"
           :loading="loading"
@@ -252,7 +252,6 @@
     <q-dialog
       v-model="showUserForm"
       persistent
-      maximized
       transition-show="slide-up"
       transition-hide="slide-down"
     >
@@ -336,7 +335,7 @@
             </q-card>
 
             <!-- Role & Permissions Section -->
-            <q-card
+            <!-- <q-card
               flat
               bordered
               class="q-mb-md"
@@ -413,7 +412,7 @@
                   </q-card>
                 </div>
               </q-card-section>
-            </q-card>
+            </q-card> -->
 
             <!-- Actions -->
             <div class="row justify-end q-mt-lg">

@@ -62,19 +62,14 @@ class UserManagementController extends Controller
       return response()->json(['message' => 'Unauthorized to create users'], 403);
     }
 
-    $validator = Validator::make($request->all(), [
+    $request->validate([
       'name' => 'required|string|max:255',
       'email' => 'required|string|email|max:255|unique:users',
       'password' => 'required|string|min:8',
-      'role_id' => 'sometimes|exists:roles,id',
       'assistant_id' => 'nullable|exists:assistants,id',
-      'permissions' => 'sometimes|array',
-      'permissions.*' => 'exists:permissions,id',
+      // 'permissions' => 'sometimes|array',
+      // 'permissions.*' => 'exists:permissions,id',
     ]);
-
-    if ($validator->fails()) {
-      return response()->json(['errors' => $validator->errors()], 422);
-    }
 
     // Create user
     $user = User::create([
@@ -84,29 +79,29 @@ class UserManagementController extends Controller
       'created_by' => $request->user()->id, // Set the creator
     ]);
 
-    // Assign role if provided (by ID)
-    if ($request->filled('role_id')) {
-      // If not admin/super-admin, ensure they can't assign higher roles
-      if (!$request->user()->hasRole(['admin', 'super-admin'])) {
-        $role = Role::find($request->input('role_id'));
-        if ($role && in_array($role->name, ['admin', 'super-admin'])) {
-          return response()->json(['message' => 'Unauthorized to assign admin roles'], 403);
-        }
-      }
-      $user->roles()->sync([$request->input('role_id')]);
-    } else {
-      // Default to user role for directly created users
-      $defaultRole = Role::where('name', 'user')->first();
-      if ($defaultRole) {
-        $user->roles()->sync([$defaultRole->id]);
-      }
-    }
+    // // Assign role if provided (by ID)
+    // if ($request->filled('role_id')) {
+    //   // If not admin/super-admin, ensure they can't assign higher roles
+    //   if (!$request->user()->hasRole(['admin', 'super-admin'])) {
+    //     $role = Role::find($request->input('role_id'));
+    //     if ($role && in_array($role->name, ['admin', 'super-admin'])) {
+    //       return response()->json(['message' => 'Unauthorized to assign admin roles'], 403);
+    //     }
+    //   }
+    //   $user->roles()->sync([$request->input('role_id')]);
+    // } else {
+    //   // Default to user role for directly created users
+    //   $defaultRole = Role::where('name', 'user')->first();
+    //   if ($defaultRole) {
+    //     $user->roles()->sync([$defaultRole->id]);
+    //   }
+    // }
 
-    // Assign permissions if provided
-    if ($request->filled('permissions')) {
-      $permissions = Permission::whereIn('id', $request->input('permissions'))->get();
-      $user->syncPermissions($permissions);
-    }
+    // // Assign permissions if provided
+    // if ($request->filled('permissions')) {
+    //   $permissions = Permission::whereIn('id', $request->input('permissions'))->get();
+    //   $user->syncPermissions($permissions);
+    // }
 
     // Link assistant if provided
     if ($request->filled('assistant_id')) {
@@ -117,17 +112,9 @@ class UserManagementController extends Controller
       }
     }
 
-    // Reload user with relations
-    $userWithRelations = User::with(['assistant', 'roles', 'permissions', 'creator'])->find($user->id);
-    $responseData = $userWithRelations->toArray();
-    $role = $userWithRelations->roles->first();
-    $responseData['role_id'] = $role ? $role->id : null;
-    $responseData['role'] = $role ? $role->name : 'user';
-    $responseData['creator_name'] = $userWithRelations->creator ? $userWithRelations->creator->name : null;
-
     return response()->json([
       'message' => 'User created successfully',
-      'user' => $responseData
+      'user' => $user
     ], 201);
   }
 

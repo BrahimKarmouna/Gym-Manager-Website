@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 class AccountController extends Controller
 {
 
+
   public function index(Request $request)
   {
     $accounts = Account::latest()->where('user_id', auth()->id())->with('incomes', 'expenses', 'transfers')->get();

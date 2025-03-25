@@ -174,17 +174,22 @@
           padding
           class="rounded-2xl bg-white shadow-sm"
         >
-          <EssentialLink
+          <template
             v-for="link in essentialLinks"
             :key="link.title"
-            v-bind="link"
-            class="my-1 px-4 py-3 rounded-xl font-medium text-gray-700 transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:translate-x-1"
-          />
+          >
+            <template v-if="link.permission && $permission(link.permission)">
+              <EssentialLink
+                v-bind="link"
+                class="my-1 px-4 py-3 rounded-xl font-medium text-gray-700 transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:translate-x-1"
+              />
+            </template>
+          </template>
         </q-list>
 
         <!-- Admin Section - Only Show for Admin Users -->
         <div
-          v-if="authStore.user && authStore.user.isAdmin"
+          v-if="authStore.user"
           class="mt-8 p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 backdrop-blur-sm"
         >
           <div class="text-xs font-bold uppercase text-gray-500 mb-3 px-2">Administration</div>
@@ -245,32 +250,37 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 
 const linksList = [
-  { title: "Dashboard", icon: "sym_r_dashboard", to: { name: "dashboard.index" } },
-  { title: "Clients", icon: "sym_r_person", to: { name: "account.index-account" } },
-  { title: "Payments", icon: "sym_r_payments", to: { name: "transaction.index" } },
-  { title: "Insurance", icon: "sym_r_shield", to: { name: "insurance.index" } },
   {
-    title: "Plans", icon: "sym_r_category", children: [
-      { title: "Payment Plans", to: { name: "incomes.index" } },
-      { title: "Insurance Plans", to: { name: "expenses_plan.index" } }
+    title: "Dashboard",
+    icon: "sym_r_dashboard",
+    to: { name: "dashboard.index" },
+    permission: "view-dashboard",
+  },
+  { title: "Clients", icon: "sym_r_person", to: { name: "account.index-account" }, permission: "view-clients" },
+  { title: "Payments", icon: "sym_r_payments", to: { name: "transaction.index" }, permission: "view-payments" },
+  { title: "Insurance", icon: "sym_r_shield", to: { name: "insurance.index" }, permission: "view-insurance" },
+  {
+    title: "Plans", icon: "sym_r_category", permission: "view-plans", children: [
+      { title: "Payment Plans", to: { name: "incomes.index" }, permission: "manage-plans" },
+      { title: "Insurance Plans", to: { name: "expenses_plan.index" }, permission: "manage-plans" },
     ]
   },
   {
-    title: "Products", icon: "sym_r_box", children: [
-      { title: "My products", icon: "sym_r_package", to: { name: "my_products" } },
-      { title: "Orders", icon: "sym_r_inventory_2", to: { name: "my_products" } },
-      { title: "Sells", icon: "sym_r_sell", to: { name: "sells" } },
+    title: "Products", icon: "sym_r_box", permission: "view-products", children: [
+      { title: "My products", icon: "sym_r_package", to: { name: "my_products" }, permission: "view-products" },
+      { title: "Orders", icon: "sym_r_inventory_2", to: { name: "my_products" }, permission: "view orders" },
+      { title: "Sells", icon: "sym_r_sell", to: { name: "sells" }, permission: "view sells" },
     ]
   },
 
 
-  { title: "Expenses", icon: "receipt_long", to: { name: "expenses.index" } },
-  { title: "Assistants", icon: "group_add", to: { name: "assistants.index" } },
+  { title: "Expenses", icon: "receipt_long", to: { name: "expenses.index" }, permission: "view-expenses" },
+  { title: "Assistants", icon: "group_add", to: { name: "assistants.index" }, permission: "view-assistants" },
   {
     title: "User Management",
     icon: "manage_accounts",
     to: { name: "user-management" },
-    requiredPermission: "view users"
+    permission: "manage-users",
   },
 ];
 
