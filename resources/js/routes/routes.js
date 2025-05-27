@@ -191,6 +191,14 @@ const routes = [
             name: "user-management",
             component: () => import("../pages/user-management/index.vue"),
           },
+          {
+            path: "/user-management/roles",
+            name: "user-management.roles",
+            component: () => import("../pages/user-management/roles.vue"),
+            meta: {
+              middleware: [AuthorizationMiddleware("manage-roles")]
+            }
+          },
           // Transaction Categories
           {
             path: "plans",
