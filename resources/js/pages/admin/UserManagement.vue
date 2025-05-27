@@ -1,9 +1,8 @@
-
 <template>
   <q-page class="q-pa-md">
     <div class="flex justify-between items-center q-mb-lg">
       <h1 class="text-2xl text-gray-800 font-bold">User Management</h1>
-      <q-btn color="primary" icon="add" label="Add New User" @click="showAddModal = true" />
+      <q-btn color="primary" icon="add" label="Add New User" @click="openAddUserModal" />
     </div>
 
     <!-- Stats Cards -->
@@ -99,7 +98,7 @@
           <div class="text-center q-pa-xl">
             <q-icon name="person_off" size="3rem" color="grey" />
             <p class="text-grey-7">No users found</p>
-            <q-btn color="primary" label="Add First User" @click="showAddModal = true" class="q-mt-md" />
+            <q-btn color="primary" label="Add First User" @click="openAddUserModal" class="q-mt-md" />
           </div>
         </template>
       </q-table>
@@ -185,7 +184,17 @@
                 outlined
                 dense
                 :rules="[val => !!val || 'Role is required']"
-              />
+                lazy-rules
+              >
+                <template v-slot:option="scope">
+                  <q-item v-bind="scope.itemProps">
+                    <q-item-section>
+                      <q-item-label>{{ scope.opt.name }}</q-item-label>
+                      <q-item-label caption>{{ scope.opt.description || 'No description available' }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
               
               <!-- Assistant selection -->
               <q-select
@@ -228,6 +237,57 @@
                     <div class="text-sm text-gray-600">{{ selectedAssistant.email }}</div>
                   </div>
                 </div>
+                
+                <!-- Permission selection for assistant -->
+                <div class="mt-4">
+                  <q-checkbox v-model="showPermissionsInUserForm" label="Configure assistant permissions" />
+                  
+                  <div v-if="showPermissionsInUserForm" class="mt-3">
+                    <div v-if="permissionsLoading" class="text-center q-pa-md">
+                      <q-spinner color="primary" size="2em" />
+                      <p class="q-mt-sm">Loading permissions...</p>
+                    </div>
+                    
+                    <div v-else>
+                      <q-list separator>
+                        <template v-for="(group, resource) in groupedPermissions" :key="resource">
+                          <q-expansion-item
+                            :label="formatResourceName(resource)"
+                            header-class="text-primary font-medium"
+                            expand-icon-class="text-primary"
+                            :default-opened="false"
+                          >
+                            <q-card>
+                              <q-card-section>
+                                <div class="flex justify-between items-center q-mb-sm">
+                                  <div class="text-subtitle2">Permissions</div>
+                                  <q-btn
+                                    flat
+                                    size="sm"
+                                    dense
+                                    :color="isAllGroupSelected(group) ? 'negative' : 'primary'"
+                                    :label="isAllGroupSelected(group) ? 'Deselect All' : 'Select All'"
+                                    @click="toggleGroupPermissions(group)"
+                                  />
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                  <div v-for="permission in group" :key="permission.id" class="flex items-center justify-between p-2 border rounded hover:bg-gray-50">
+                                    <div class="flex-1">
+                                      <div class="font-medium">{{ formatPermissionName(permission.name.split('.')[1]) }}</div>
+                                      <div class="text-xs text-gray-500">{{ getPermissionDescription(permission) }}</div>
+                                    </div>
+                                    <q-checkbox v-model="selectedPermissions" :val="permission.id" color="primary" class="ml-2" />
+                                  </div>
+                                </div>
+                              </q-card-section>
+                            </q-card>
+                          </q-expansion-item>
+                        </template>
+                      </q-list>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -253,58 +313,80 @@
         <q-separator />
         
         <q-card-section class="q-pa-md">
-          <!-- User info -->
-          <div v-if="selectedUser" class="flex items-center gap-4 mb-4 bg-gray-100 p-3 rounded">
-            <q-avatar size="lg">
-              <img :src="selectedUser.profile_photo_path ? `/storage/${selectedUser.profile_photo_path}` : '/img/default-avatar.png'" :alt="selectedUser.name">
-            </q-avatar>
-            <div>
-              <div class="text-h6">{{ selectedUser.name }}</div>
-              <div class="text-subtitle1">{{ selectedUser.email }}</div>
-              <q-badge :color="getRoleBadgeColor(selectedUser.role)" text-color="white" class="q-px-sm q-mt-sm">
-                {{ getRoleLabel(selectedUser.role) }}
-              </q-badge>
-            </div>
-          </div>
-          
-          <!-- Assistant info if linked -->
-          <div v-if="selectedUser && selectedUser.assistant" class="mb-4 bg-blue-50 p-3 rounded">
-            <div class="text-subtitle1 font-bold mb-2">Linked Assistant</div>
-            <div class="flex items-center gap-3">
-              <q-avatar size="md">
-                <img :src="selectedUser.assistant.photo ? `/storage/${selectedUser.assistant.photo}` : '/img/default-avatar.png'" :alt="selectedUser.assistant.name">
-              </q-avatar>
-              <div>
-                <div class="font-bold">{{ selectedUser.assistant.name }}</div>
-                <div class="text-sm text-gray-600">{{ selectedUser.assistant.email }}</div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Permissions list -->
-          <div class="text-subtitle1 font-bold mb-2">Permissions</div>
-          
-          <div v-if="loading" class="text-center q-pa-md">
+          <div v-if="permissionsLoading" class="text-center q-pa-md">
             <q-spinner color="primary" size="3em" />
-            <p>Loading permissions...</p>
+            <p class="q-mt-sm">Loading permissions...</p>
           </div>
           
           <div v-else>
-            <div v-for="(group, resource) in groupedPermissions" :key="resource" class="q-mb-md">
-              <div class="flex items-center justify-between bg-gray-100 p-2 rounded">
-                <div class="font-bold">{{ formatResourceName(resource) }}</div>
-                <q-checkbox 
-                  v-model="groupSelectAll[resource]" 
-                  @update:model-value="toggleGroupPermissions(group)"
-                  :indeterminate="!isAllGroupSelected(group) && hasSelectedPermissions(group)"
-                />
+            <!-- User info -->
+            <div v-if="selectedUser" class="flex items-center gap-4 mb-4 bg-gray-100 p-3 rounded">
+              <q-avatar size="lg">
+                <img :src="selectedUser.profile_photo_path ? `/storage/${selectedUser.profile_photo_path}` : '/img/default-avatar.png'" :alt="selectedUser.name">
+              </q-avatar>
+              <div>
+                <div class="text-h6">{{ selectedUser.name }}</div>
+                <div class="text-subtitle1">{{ selectedUser.email }}</div>
+                <q-badge :color="getRoleBadgeColor(selectedUser.role)" text-color="white" class="q-px-sm q-mt-sm">
+                  {{ getRoleLabel(selectedUser.role) }}
+                </q-badge>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 q-mt-sm">
-                <div v-for="permission in group" :key="permission.id" class="flex items-center justify-between p-2 border rounded">
-                  <div>{{ formatPermissionName(permission.name.split('.')[1]) }}</div>
-                  <q-checkbox v-model="selectedPermissions" :val="permission.id" />
+            </div>
+            
+            <!-- Assistant info if linked -->
+            <div v-if="selectedUser && selectedUser.assistant" class="mb-4 bg-blue-50 p-3 rounded">
+              <div class="text-subtitle1 font-bold mb-2">Linked Assistant</div>
+              <div class="flex items-center gap-3">
+                <q-avatar size="md">
+                  <img :src="selectedUser.assistant.photo ? `/storage/${selectedUser.assistant.photo}` : '/img/default-avatar.png'" :alt="selectedUser.assistant.name">
+                </q-avatar>
+                <div>
+                  <div class="font-bold">{{ selectedUser.assistant.name }}</div>
+                  <div class="text-sm text-gray-600">{{ selectedUser.assistant.email }}</div>
                 </div>
               </div>
+            </div>
+            
+            <!-- Permissions list -->
+            <div class="text-subtitle1 font-bold mb-2">Permissions</div>
+            
+            <div class="q-mb-md">
+              <q-list separator>
+                <template v-for="(group, resource) in groupedPermissions" :key="resource">
+                  <q-expansion-item
+                    :label="formatResourceName(resource)"
+                    header-class="text-primary font-medium"
+                    expand-icon-class="text-primary"
+                    :default-opened="false"
+                  >
+                    <q-card>
+                      <q-card-section>
+                        <div class="flex justify-between items-center q-mb-sm">
+                          <div class="text-subtitle2">Permissions</div>
+                          <q-btn
+                            flat
+                            size="sm"
+                            dense
+                            :color="isAllGroupSelected(group) ? 'negative' : 'primary'"
+                            :label="isAllGroupSelected(group) ? 'Deselect All' : 'Select All'"
+                            @click="toggleGroupPermissions(group)"
+                          />
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          <div v-for="permission in group" :key="permission.id" class="flex items-center justify-between p-2 border rounded hover:bg-gray-50">
+                            <div class="flex-1">
+                              <div class="font-medium">{{ formatPermissionName(permission.name.split('.')[1]) }}</div>
+                              <div class="text-xs text-gray-500">{{ getPermissionDescription(permission) }}</div>
+                            </div>
+                            <q-checkbox v-model="selectedPermissions" :val="permission.id" color="primary" class="ml-2" />
+                          </div>
+                        </div>
+                      </q-card-section>
+                    </q-card>
+                  </q-expansion-item>
+                </template>
+              </q-list>
             </div>
           </div>
         </q-card-section>
@@ -358,10 +440,12 @@ export default {
     const loading = ref(false);
     const saving = ref(false);
     const deleting = ref(false);
+    const permissionsLoading = ref(false);
     const showAddModal = ref(false);
     const showEditModal = ref(false);
     const showPermissionsModal = ref(false);
     const showDeleteModal = ref(false);
+    const showUserDialog = ref(false);
     const searchQuery = ref('');
     const roleFilter = ref(null);
     const assistantFilter = ref(null);
@@ -374,6 +458,16 @@ export default {
     const groupedPermissions = ref({});
     const groupSelectAll = ref({});
     const sorting = ref({ field: 'name', order: 'asc' });
+    const columns = [
+      { name: 'photo', label: '', field: 'photo', align: 'center', sortable: false },
+      { name: 'name', label: 'Name', field: 'name', sortable: true },
+      { name: 'email', label: 'Email', field: 'email', sortable: true },
+      { name: 'role', label: 'Role', field: 'role', sortable: true },
+      { name: 'assistant', label: 'Assistant', field: 'assistant', sortable: true },
+      { name: 'createdBy', label: 'Created By', field: 'createdBy', sortable: true },
+      { name: 'actions', label: 'Actions', field: 'actions', align: 'center', sortable: false }
+    ];
+    const showPermissionsInUserForm = ref(false);
     
     const formData = reactive({
       id: null,
@@ -386,8 +480,6 @@ export default {
     });
     
     // Computed properties
-    const showUserDialog = computed(() => showAddModal.value || showEditModal.value);
-    
     const activeUsers = computed(() => {
       return users.value.filter(user => user.email_verified_at !== null);
     });
@@ -457,21 +549,11 @@ export default {
       return result;
     });
     
-    const columns = [
-      { name: 'photo', label: '', field: 'photo', align: 'center', sortable: false },
-      { name: 'name', label: 'Name', field: 'name', sortable: true },
-      { name: 'email', label: 'Email', field: 'email', sortable: true },
-      { name: 'role', label: 'Role', field: 'role', sortable: true },
-      { name: 'assistant', label: 'Assistant', field: 'assistant', sortable: true },
-      { name: 'createdBy', label: 'Created By', field: 'createdBy', sortable: true },
-      { name: 'actions', label: 'Actions', field: 'actions', align: 'center', sortable: false }
-    ];
-    
     // Methods
     const fetchUsers = async () => {
       loading.value = true;
       try {
-        const response = await axios.get('/api/users');
+        const response = await axios.get('/api/user-management/users');
         users.value = response.data.data;
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -480,43 +562,33 @@ export default {
       }
     };
     
-    const fetchRoles = async () => {
+    const fetchRolesAndPermissions = async () => {
       try {
-        const response = await axios.get('/api/roles');
-        availableRoles.value = response.data;
+        const response = await axios.get('/api/user-management/roles-permissions');
+        availableRoles.value = response.data.roles;
+        allPermissions.value = response.data.permissions;
       } catch (error) {
-        console.error('Error fetching roles:', error);
+        console.error('Error fetching roles and permissions:', error);
       }
     };
     
-    const fetchAssistants = async () => {
+    const fetchAvailableAssistants = async () => {
       try {
-        const response = await axios.get('/api/assistants');
-        availableAssistants.value = response.data.data.filter(assistant => !assistant.user_account_id);
+        const response = await axios.get('/api/user-management/available-assistants');
+        availableAssistants.value = response.data;
       } catch (error) {
-        console.error('Error fetching assistants:', error);
-      }
-    };
-    
-    const fetchPermissions = async () => {
-      try {
-        const response = await axios.get('/api/permissions');
-        allPermissions.value = response.data;
-        groupedPermissions.value = groupPermissionsByResource(response.data);
-        
-        // Initialize group select all state
-        Object.keys(groupedPermissions.value).forEach(resource => {
-          groupSelectAll.value[resource] = false;
-        });
-      } catch (error) {
-        console.error('Error fetching permissions:', error);
+        console.error('Error fetching available assistants:', error);
       }
     };
     
     const fetchUserPermissions = async (userId) => {
       try {
-        const response = await axios.get(`/api/users/${userId}/permissions`);
+        // This endpoint should return the user's permissions
+        const response = await axios.get(`/api/user-management/users/${userId}/permissions`);
         selectedPermissions.value = response.data.map(p => p.id);
+        
+        // Group permissions by resource
+        groupedPermissions.value = groupPermissionsByResource(allPermissions.value);
         
         // Update group select all state
         updateGroupSelectAllState();
@@ -543,16 +615,21 @@ export default {
           formDataToSend.append('photo', photoFile.value);
         }
         
+        // Add selected permissions if assistant is selected and permissions are being configured
+        if (formData.assistant_id && showPermissionsInUserForm.value && selectedPermissions.value.length > 0) {
+          formDataToSend.append('permissions', JSON.stringify(selectedPermissions.value));
+        }
+        
         let response;
         if (showEditModal.value) {
-          response = await axios.post(`/api/users/${formData.id}`, formDataToSend, {
+          response = await axios.post(`/api/user-management/users/${formData.id}`, formDataToSend, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'X-HTTP-Method-Override': 'PUT'
             }
           });
         } else {
-          response = await axios.post('/api/users', formDataToSend, {
+          response = await axios.post('/api/user-management/users', formDataToSend, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -607,12 +684,12 @@ export default {
     
     const viewPermissions = async (user) => {
       selectedUser.value = user;
-      loading.value = true;
+      permissionsLoading.value = true;
       
       try {
         // Fetch all permissions if not already loaded
         if (allPermissions.value.length === 0) {
-          await fetchPermissions();
+          await fetchRolesAndPermissions();
         }
         
         // Fetch user's permissions
@@ -622,7 +699,7 @@ export default {
       } catch (error) {
         console.error('Error loading permissions:', error);
       } finally {
-        loading.value = false;
+        permissionsLoading.value = false;
       }
     };
     
@@ -630,7 +707,7 @@ export default {
       saving.value = true;
       
       try {
-        await axios.post(`/api/users/${selectedUser.value.id}/permissions`, {
+        await axios.post(`/api/user-management/users/${selectedUser.value.id}/permissions`, {
           permissions: selectedPermissions.value
         });
         
@@ -651,7 +728,7 @@ export default {
       deleting.value = true;
       
       try {
-        await axios.delete(`/api/users/${selectedUser.value.id}`);
+        await axios.delete(`/api/user-management/users/${selectedUser.value.id}`);
         
         // Remove from users list
         const index = users.value.findIndex(user => user.id === selectedUser.value.id);
@@ -667,7 +744,7 @@ export default {
       }
     };
     
-    const assistantSelected = (assistantId) => {
+    const assistantSelected = async (assistantId) => {
       if (assistantId) {
         selectedAssistant.value = availableAssistants.value.find(a => a.id === assistantId);
         
@@ -675,9 +752,35 @@ export default {
         if (selectedAssistant.value) {
           formData.name = selectedAssistant.value.name;
           formData.email = selectedAssistant.value.email;
+          
+          // Load permissions for this assistant
+          permissionsLoading.value = true;
+          try {
+            // Fetch all permissions if not already loaded
+            if (allPermissions.value.length === 0) {
+              await fetchRolesAndPermissions();
+            }
+            
+            // Group permissions by resource
+            groupedPermissions.value = groupPermissionsByResource(allPermissions.value);
+            
+            // Clear selected permissions
+            selectedPermissions.value = [];
+            
+            // Update group select all state
+            updateGroupSelectAllState();
+            
+            // Show permissions section automatically
+            showPermissionsInUserForm.value = true;
+          } catch (error) {
+            console.error('Error loading permissions:', error);
+          } finally {
+            permissionsLoading.value = false;
+          }
         }
       } else {
         selectedAssistant.value = null;
+        showPermissionsInUserForm.value = false;
       }
     };
     
@@ -698,6 +801,8 @@ export default {
       showEditModal.value = false;
       showPermissionsModal.value = false;
       showDeleteModal.value = false;
+      showUserDialog.value = false;
+      showPermissionsInUserForm.value = false;
       
       // Reset form data
       Object.keys(formData).forEach(key => {
@@ -709,6 +814,24 @@ export default {
       photoFile.value = null;
       userPhotoPreview.value = null;
       selectedPermissions.value = [];
+    };
+    
+    const openAddUserModal = () => {
+      // Reset form data first
+      Object.keys(formData).forEach(key => {
+        formData[key] = null;
+      });
+      
+      selectedUser.value = null;
+      selectedAssistant.value = null;
+      photoFile.value = null;
+      userPhotoPreview.value = null;
+      selectedPermissions.value = [];
+      
+      // Then open the modal
+      showAddModal.value = true;
+      showUserDialog.value = true;
+      showEditModal.value = false;
     };
     
     // Helper methods
@@ -766,6 +889,26 @@ export default {
       return action.charAt(0).toUpperCase() + action.slice(1).replace(/-/g, ' ');
     };
     
+    const getPermissionDescription = (permission) => {
+      // Map of permission actions to descriptions
+      const actionDescriptions = {
+        'view': 'Can view and access this resource',
+        'create': 'Can create new items in this resource',
+        'edit': 'Can modify existing items in this resource',
+        'delete': 'Can remove items from this resource',
+        'manage': 'Has full control over this resource',
+        'approve': 'Can approve items in this resource',
+        'reject': 'Can reject items in this resource',
+        'export': 'Can export data from this resource',
+        'import': 'Can import data into this resource'
+      };
+      
+      // Extract the action part from permission name (e.g., "view" from "clients.view")
+      const action = permission.name.split('.')[1];
+      
+      return actionDescriptions[action] || 'Access to this functionality';
+    };
+    
     const getRoleLabel = (role) => {
       const roleObj = availableRoles.value.find(r => r.id === role || r.name === role);
       return roleObj ? roleObj.name : role;
@@ -780,21 +923,20 @@ export default {
         'user': 'grey'
       };
       
-      const roleName = typeof role === 'object' ? role.name : role;
-      return roleMap[roleName.toLowerCase()] || 'grey';
-    };
-    
-    const formatDate = (dateString) => {
-      if (!dateString) return '';
-      return date.formatDate(dateString, 'MMM D, YYYY');
+      // Handle both string role names and role objects
+      const roleName = typeof role === 'object' ? 
+        (role.name ? role.name.toLowerCase() : '') : 
+        (typeof role === 'string' ? role.toLowerCase() : '');
+      
+      return roleMap[roleName] || 'grey';
     };
     
     // Lifecycle hooks
     onMounted(async () => {
       await Promise.all([
         fetchUsers(),
-        fetchRoles(),
-        fetchAssistants()
+        fetchRolesAndPermissions(),
+        fetchAvailableAssistants()
       ]);
     });
     
@@ -806,6 +948,7 @@ export default {
       loading,
       saving,
       deleting,
+      permissionsLoading,
       showAddModal,
       showEditModal,
       showPermissionsModal,
@@ -824,6 +967,7 @@ export default {
       groupSelectAll,
       sorting,
       columns,
+      showPermissionsInUserForm,
       
       // Computed
       activeUsers,
@@ -833,8 +977,8 @@ export default {
       
       // Methods
       fetchUsers,
-      fetchRoles,
-      fetchAssistants,
+      fetchRolesAndPermissions,
+      fetchAvailableAssistants,
       saveUser,
       editUser,
       viewPermissions,
@@ -844,15 +988,16 @@ export default {
       assistantSelected,
       handleFileUpload,
       closeModals,
+      openAddUserModal,
       groupPermissionsByResource,
       toggleGroupPermissions,
       isAllGroupSelected,
       hasSelectedPermissions,
       formatResourceName,
       formatPermissionName,
+      getPermissionDescription,
       getRoleLabel,
-      getRoleBadgeColor,
-      formatDate
+      getRoleBadgeColor
     };
   }
 };

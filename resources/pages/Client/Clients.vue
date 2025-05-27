@@ -86,7 +86,7 @@
               <td class="px-6 py-4">
                 <div class="flex items-center space-x-4">
                   <img
-                    :src="'storage/' + client.client_picture"
+                    :src="'/storage/' + client.client_picture"
                     class="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
                   />
                   <div>

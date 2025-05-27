@@ -37,7 +37,7 @@ const routes = [
         meta: {
           middleware: [GuestMiddleware],
         },
-        component: () => import("../pages/guest/products/index.vue"),
+        component: () => import("../../../resources/js/pages/products/ProductsPage.vue"),
       },
       {
         path: "product_show",
@@ -48,7 +48,6 @@ const routes = [
         },
         component: () => import("../pages/guest/products/show.vue"),
       },
-
       {
         path: "register",
         alias: "/",
@@ -179,13 +178,13 @@ const routes = [
           {
             path: "/assistants/manage",
             name: "assistants.manage",
-            component: () => import("../pages/assistants/manage.vue"),
+            component: () => import("../pages/assistants/old-manage.vue"),
           },
           {
             path: "/assistants",
             name: "assistants.index",
 
-            component: () => import("../pages/assistants/index.vue"),
+            component: () => import("../pages/assistants/old-index.vue"),
           },
           {
             path: "/user-management",

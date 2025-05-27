@@ -10,7 +10,8 @@ export const useCartStore = defineStore('cart', {
     error: null,
     couponCode: '',
     couponDiscount: 0,
-    checkoutStatus: null
+    checkoutStatus: null,
+    isCartOpen: false,
   }),
 
   getters: {
@@ -47,7 +48,9 @@ export const useCartStore = defineStore('cart', {
     // Format currency
     formatPrice: () => (price) => {
       return (Math.round(price * 100) / 100).toFixed(2);
-    }
+    },
+
+    count: (state) => state.items.length,
   },
 
   actions: {
@@ -184,6 +187,7 @@ export const useCartStore = defineStore('cart', {
     // Toggle cart visibility
     toggleCart() {
       this.showCart = !this.showCart;
+      this.isCartOpen = !this.isCartOpen;
     },
 
     // Show cart
@@ -343,6 +347,51 @@ export const useCartStore = defineStore('cart', {
           console.error('Error merging carts after login:', error);
         }
       }
+    },
+
+    addItem(product, quantity = 1) {
+      const existingItem = this.items.find(item => item.id === product.id);
+      
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        this.items.push({
+          ...product,
+          quantity,
+        });
+      }
+      
+      // Persist to localStorage
+      this.saveCart();
+      
+      return true;
+    },
+    
+    updateQuantity(productId, quantity) {
+      const item = this.items.find(item => item.id === productId);
+      if (item) {
+        item.quantity = quantity;
+        this.saveCart();
+      }
+    },
+    
+    removeItem(productId) {
+      const index = this.items.findIndex(item => item.id === productId);
+      if (index !== -1) {
+        this.items.splice(index, 1);
+        this.saveCart();
+      }
+    },
+    
+    loadCart() {
+      const savedCart = localStorage.getItem('gym-manager-cart');
+      if (savedCart) {
+        this.items = JSON.parse(savedCart);
+      }
+    },
+    
+    saveCart() {
+      localStorage.setItem('gym-manager-cart', JSON.stringify(this.items));
     }
   }
 });
