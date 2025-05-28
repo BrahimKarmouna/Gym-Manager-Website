@@ -14,7 +14,7 @@
         "mobiledetect/mobiledetectlib": "^4.8",
         "spatie/laravel-backup": "^9.2",
         "spatie/laravel-medialibrary": "^11.12",
-        "spatie/laravel-permission": "^6.15",
+        "spatie/laravel-permission": "^6.18",
         "spatie/laravel-query-builder": "^6.3"
     },
     "require-dev": {

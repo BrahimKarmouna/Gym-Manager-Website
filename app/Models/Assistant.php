@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Assistant extends Authenticatable
 {
@@ -113,5 +115,59 @@ class Assistant extends Authenticatable
     public function scopeActive($query)
     {
         return $query->where('active', true);
+    }
+    
+    /**
+     * Get the teams this assistant belongs to.
+     */
+    public function teams()
+    {
+        if ($this->userAccount) {
+            return $this->userAccount->teams()->wherePivot('role', 'assistant');
+        }
+        
+        return Team::whereHas('users', function ($query) {
+            $query->where('users.id', $this->user_id)
+                  ->wherePivot('role', 'assistant');
+        });
+    }
+    
+    /**
+     * Check if this assistant belongs to a specific team.
+     * 
+     * @param Team $team
+     * @return bool
+     */
+    public function belongsToTeam(Team $team): bool
+    {
+        if ($this->userAccount) {
+            return $this->userAccount->teams()
+                ->wherePivot('role', 'assistant')
+                ->where('teams.id', $team->id)
+                ->exists();
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Create or update a team association for this assistant.
+     * 
+     * @param Team $team
+     * @param array $permissions
+     * @return void
+     */
+    public function associateWithTeam(Team $team, array $permissions = []): void
+    {
+        if (!$this->userAccount) {
+            return;
+        }
+        
+        $this->userAccount->teams()->syncWithoutDetaching([
+            $team->id => [
+                'role' => 'assistant',
+                'permissions' => json_encode($permissions)
+            ]
+        ]);
     }
 }

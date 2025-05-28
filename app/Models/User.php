@@ -13,6 +13,7 @@ use Laravel\Cashier\Billable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -160,6 +161,60 @@ class User extends Authenticatable implements MustVerifyEmail
   public function createdUsers()
   {
     return $this->hasMany(User::class, 'created_by');
+  }
+
+  /**
+   * Get all teams that the user belongs to.
+   */
+  public function teams(): BelongsToMany
+  {
+    return $this->belongsToMany(Team::class)
+      ->withPivot('role', 'permissions')
+      ->withTimestamps();
+  }
+
+  /**
+   * Get all teams where the user is an assistant.
+   */
+  public function assistantTeams()
+  {
+    return $this->teams()->wherePivot('role', 'assistant');
+  }
+
+  /**
+   * Get all teams where the user is an admin.
+   */
+  public function adminTeams()
+  {
+    return $this->teams()->wherePivot('role', 'admin');
+  }
+
+  /**
+   * Check if the user is an assistant in any team.
+   *
+   * @return bool
+   */
+  public function isTeamAssistant(): bool
+  {
+    return $this->teams()->wherePivot('role', 'assistant')->exists();
+  }
+
+  /**
+   * Check if the user is an admin in any team.
+   *
+   * @return bool
+   */
+  public function isTeamAdmin(): bool
+  {
+    return $this->teams()->wherePivot('role', 'admin')->exists();
+  }
+
+  /**
+   * Get all teams owned by the user.
+   */
+  public function ownedTeams()
+  {
+    return $this->hasMany(Team::class, 'owner_id');
   }
 
   public static function boot(): void

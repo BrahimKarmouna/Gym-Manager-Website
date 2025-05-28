@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\RevenueController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\UserAssistantController;
 use App\Http\Controllers\Api\UserManagementController;
+use App\Http\Controllers\TeamController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -209,11 +210,23 @@ Route::name('api.')
       Route::put('/users/{id}', [UserManagementController::class, 'update']);
       Route::delete('/users/{id}', [UserManagementController::class, 'destroy']);
       
-      // Roles and permissions
+      // Get roles and permissions
       Route::get('/roles-permissions', [UserManagementController::class, 'getRolesAndPermissions']);
       
       // Assistants
       Route::get('/assistants', [UserManagementController::class, 'getAvailableAssistants']);
+      
+      // Teams
+      Route::get('/teams', [TeamController::class, 'index']);
+      Route::post('/teams', [TeamController::class, 'store']);
+      Route::get('/teams/{team}', [TeamController::class, 'show']);
+      Route::put('/teams/{team}', [TeamController::class, 'update']);
+      Route::delete('/teams/{team}', [TeamController::class, 'destroy']);
+      
+      // Team Members
+      Route::post('/teams/{team}/members', [TeamController::class, 'addMember']);
+      Route::put('/teams/{team}/members/{user}', [TeamController::class, 'updateMember']);
+      Route::delete('/teams/{team}/members/{user}', [TeamController::class, 'removeMember']);
     });
   });
 
@@ -393,4 +406,20 @@ Route::middleware(['auth:sanctum'])->prefix('user-management')->group(function (
 
   // Get roles and permissions
   Route::get('/roles-permissions', [UserManagementController::class, 'getRolesAndPermissions']);
+});
+
+// Team management routes
+Route::middleware(['auth:sanctum'])->group(function () {
+  // Teams CRUD operations
+  Route::get('/teams', [TeamController::class, 'index']);
+  Route::post('/teams', [TeamController::class, 'store']);
+  Route::get('/teams/{id}', [TeamController::class, 'show']);
+  Route::put('/teams/{id}', [TeamController::class, 'update']);
+  Route::delete('/teams/{id}', [TeamController::class, 'destroy']);
+  
+  // Team members management
+  Route::get('/teams/{team}/members', [TeamController::class, 'getMembers']);
+  Route::post('/teams/{team}/members', [TeamController::class, 'addMember']);
+  Route::put('/teams/{team}/members/{user}', [TeamController::class, 'updateMember']);
+  Route::delete('/teams/{team}/members/{user}', [TeamController::class, 'removeMember']);
 });

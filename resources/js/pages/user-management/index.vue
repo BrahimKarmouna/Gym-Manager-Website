@@ -370,13 +370,40 @@
                       </template>
                     </q-select>
                   </div>
-                  
+
                   <div class="col-12 col-md-6 flex items-center">
                     <q-toggle
                       v-model="userForm.is_admin"
                       label="Administrator Account"
                       color="primary"
                     />
+                  </div>
+                </div>
+                
+                <!-- Team Assignment (shown when role is assistant) -->
+                <div class="row q-col-gutter-md q-mt-md" v-if="userForm.role && isAssistantRole(userForm.role)">
+                  <div class="col-12">
+                    <div class="text-subtitle2 q-mb-sm text-weight-medium">Team Assignment</div>
+                    <q-select
+                      v-model="userForm.teams"
+                      :options="teamOptions"
+                      label="Assign to Teams"
+                      outlined
+                      multiple
+                      emit-value
+                      map-options
+                      use-chips
+                      :disable="userForm.is_admin"
+                    >
+                      <template v-slot:option="scope">
+                        <q-item v-bind="scope.itemProps">
+                          <q-item-section>
+                            <q-item-label>{{ scope.opt.label }}</q-item-label>
+                            <q-item-label caption>{{ scope.opt.description || 'No description' }}</q-item-label>
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    </q-select>
                   </div>
                 </div>
 
@@ -393,7 +420,7 @@
                       />
                     </div>
                   </div>
-                  
+
                   <div class="row q-col-gutter-md">
                     <template v-for="(group, groupName) in groupedPermissions" :key="groupName">
                       <div class="col-12 col-md-6 col-lg-4">
@@ -536,16 +563,19 @@ export default defineComponent({
       password: '',
       role: null,
       permissions: [],
-      is_admin: false
+      is_admin: false,
+      teams: []
     });
 
     // Options data
     const roleOptions = ref([]);
     const permissionOptions = ref([]);
     const assistantOptions = ref([]);
+    const teamOptions = ref([]);
     const hasRolesLoaded = ref(false);
     const hasPermissionsLoaded = ref(false);
     const hasAssistantsLoaded = ref(false);
+    const hasTeamsLoaded = ref(false);
 
     // Methods
     const fetchUsers = async () => {
@@ -590,8 +620,8 @@ export default defineComponent({
 
     const fetchAvailableAssistants = async () => {
       try {
-        const response = await api.get('/user-management/assistants');
-        assistantOptions.value = response.data.map(assistant => ({
+        const response = await api.get('/user-management/available-assistants');
+        assistantOptions.value = response.data.assistants.map(assistant => ({
           label: assistant.name,
           value: assistant.id
         }));
@@ -605,6 +635,31 @@ export default defineComponent({
         });
       }
     };
+    
+    const fetchTeams = async () => {
+      try {
+        const response = await api.get('/api/teams');
+        teamOptions.value = response.data.teams.map(team => ({
+          label: team.display_name || team.name,
+          value: team.id,
+          description: team.description
+        }));
+        hasTeamsLoaded.value = true;
+      } catch (err) {
+        console.error('Error fetching teams:', err);
+        $q.notify({
+          color: 'negative',
+          message: 'Failed to load teams',
+          icon: 'error'
+        });
+      }
+    };
+
+    const isAssistantRole = (roleId) => {
+      // Find the role by ID and check if it's an assistant role
+      const role = roleOptions.value.find(r => r.value === roleId);
+      return role && role.label.toLowerCase().includes('assistant');
+    };
 
     const openUserForm = (user = null) => {
       userForm.value = {
@@ -613,18 +668,41 @@ export default defineComponent({
         password: '',
         role: null,
         permissions: [],
-        is_admin: false
+        is_admin: false,
+        teams: []
       };
 
       if (user) {
         editingUser.value = user;
+        
+        // Handle role assignment properly
+        let roleId = null;
+        
+        // First, check if user has a role_id directly
+        if (user.role_id) {
+          roleId = user.role_id;
+        } 
+        // Then check if user has roles from Spatie
+        else if (user.roles && user.roles.length > 0) {
+          roleId = user.roles[0].id;
+        } 
+        // Finally, try to find a matching role by name if user has a string role
+        else if (user.role) {
+          const matchingRole = roleOptions.value.find(r => 
+            r.label.toLowerCase() === user.role.toLowerCase());
+          if (matchingRole) {
+            roleId = matchingRole.value;
+          }
+        }
+        
         userForm.value = {
           ...userForm.value,
           name: user.name,
           email: user.email,
-          role: user.role_id || (user.roles && user.roles.length > 0 ? user.roles[0].id : null),
+          role: roleId,
           permissions: user.permissions?.map(p => typeof p === 'object' ? p.id : p) || [],
-          is_admin: user.is_admin
+          is_admin: user.is_admin,
+          teams: user.teams?.map(t => t.id) || []
         };
       } else {
         editingUser.value = null;
@@ -637,12 +715,40 @@ export default defineComponent({
       saving.value = true;
 
       try {
-        const userData = { ...userForm.value };
-        if (!userData.password) delete userData.password;
-
-        // Keep role_id as is, no need to convert to role string
-        delete userData.role; // Remove any role string if present
-
+        // Create a clean object with only the data we need to send
+        const userData = {
+          name: userForm.value.name,
+          email: userForm.value.email,
+          is_admin: userForm.value.is_admin,
+          permissions: userForm.value.permissions || [],
+        };
+        
+        // Only include password if it's not empty
+        if (userForm.value.password) {
+          userData.password = userForm.value.password;
+        }
+        
+        // Handle role assignment - both for Spatie roles and the role field
+        if (userForm.value.role !== null) {
+          // Set role_id for Spatie role assignment
+          userData.role_id = userForm.value.role;
+          
+          // Also set the string role field based on the selected role
+          const selectedRole = roleOptions.value.find(r => r.value === userForm.value.role);
+          if (selectedRole) {
+            userData.role = selectedRole.label;
+          }
+        }
+        
+        // Add team assignments if the user is an assistant
+        if (isAssistantRole(userForm.value.role)) {
+          userData.teams = userForm.value.teams || [];
+          // If this is an assistant role, make sure we set the role field correctly
+          userData.role = 'assistant';
+        }
+        
+        console.log('Sending user data:', JSON.stringify(userData));
+        
         let response;
         if (editingUser.value) {
           response = await api.put(`/user-management/users/${editingUser.value.id}`, userData);
@@ -733,12 +839,11 @@ export default defineComponent({
     };
 
     // Initialize
-    onMounted(async () => {
-      await Promise.all([
-        fetchUsers(),
-        fetchRolesAndPermissions(),
-        fetchAvailableAssistants()
-      ]);
+    onMounted(() => {
+      fetchUsers();
+      fetchRolesAndPermissions();
+      fetchAvailableAssistants();
+      fetchTeams();
     });
 
     return {
@@ -760,9 +865,11 @@ export default defineComponent({
       roleOptions,
       permissionOptions,
       assistantOptions,
+      teamOptions,
       hasRolesLoaded,
       hasPermissionsLoaded,
       hasAssistantsLoaded,
+      hasTeamsLoaded,
 
       // Methods
       fetchUsers,
@@ -772,7 +879,8 @@ export default defineComponent({
       deleteUser,
       toggleAllPermissions,
       groupedPermissions,
-      formatGroupName
+      formatGroupName,
+      isAssistantRole
     };
   }
 });

@@ -67,41 +67,68 @@ class UserManagementController extends Controller
       'email' => 'required|string|email|max:255|unique:users',
       'password' => 'required|string|min:8',
       'assistant_id' => 'nullable|exists:assistants,id',
-      // 'permissions' => 'sometimes|array',
-      // 'permissions.*' => 'exists:permissions,id',
+      'permissions' => 'sometimes|array',
+      'permissions.*' => 'exists:permissions,id',
+      'role_id' => 'nullable|exists:roles,id',
+      'role' => 'nullable|string',
+      'is_admin' => 'nullable|boolean',
+      'teams' => 'nullable|array',
+      'teams.*' => 'exists:teams,id',
     ]);
 
-    // Create user
-    $user = User::create([
+    // Create user with basic info
+    $userData = [
       'name' => $request->input('name'),
       'email' => $request->input('email'),
       'password' => Hash::make($request->input('password')),
       'created_by' => $request->user()->id, // Set the creator
-    ]);
+    ];
+    
+    // Set is_admin flag if provided
+    if ($request->has('is_admin')) {
+      $userData['is_admin'] = $request->boolean('is_admin');
+    }
+    
+    // Set role string if provided
+    if ($request->filled('role')) {
+      $userData['role'] = $request->input('role');
+    }
+    
+    $user = User::create($userData);
 
-    // // Assign role if provided (by ID)
-    // if ($request->filled('role_id')) {
-    //   // If not admin/super-admin, ensure they can't assign higher roles
-    //   if (!$request->user()->hasRole(['admin', 'super-admin'])) {
-    //     $role = Role::find($request->input('role_id'));
-    //     if ($role && in_array($role->name, ['admin', 'super-admin'])) {
-    //       return response()->json(['message' => 'Unauthorized to assign admin roles'], 403);
-    //     }
-    //   }
-    //   $user->roles()->sync([$request->input('role_id')]);
-    // } else {
-    //   // Default to user role for directly created users
-    //   $defaultRole = Role::where('name', 'user')->first();
-    //   if ($defaultRole) {
-    //     $user->roles()->sync([$defaultRole->id]);
-    //   }
-    // }
+    // Assign role if provided (by ID)
+    if ($request->filled('role_id')) {
+      // If not admin/super-admin, ensure they can't assign higher roles
+      if (!$request->user()->hasRole(['admin', 'super-admin'])) {
+        $role = Role::find($request->input('role_id'));
+        if ($role && in_array($role->name, ['admin', 'super-admin'])) {
+          return response()->json(['message' => 'Unauthorized to assign admin roles'], 403);
+        }
+      }
+      $user->roles()->sync([$request->input('role_id')]);
+    } else {
+      // Default to user role for directly created users
+      $defaultRole = Role::where('name', 'user')->first();
+      if ($defaultRole) {
+        $user->roles()->sync([$defaultRole->id]);
+      }
+    }
 
-    // // Assign permissions if provided
-    // if ($request->filled('permissions')) {
-    //   $permissions = Permission::whereIn('id', $request->input('permissions'))->get();
-    //   $user->syncPermissions($permissions);
-    // }
+    // Assign permissions if provided
+    if ($request->filled('permissions')) {
+      $permissions = Permission::whereIn('id', $request->input('permissions'))->get();
+      $user->syncPermissions($permissions);
+    }
+    
+    // Handle team assignments if provided (for assistants)
+    if ($request->filled('teams') && is_array($request->input('teams'))) {
+      foreach ($request->input('teams') as $teamId) {
+        $user->teams()->attach($teamId, [
+          'role' => 'assistant',
+          'permissions' => json_encode($request->input('permissions') ?? [])
+        ]);
+      }
+    }
 
     // Link assistant if provided
     if ($request->filled('assistant_id')) {
@@ -148,9 +175,13 @@ class UserManagementController extends Controller
       ],
       'password' => 'sometimes|nullable|string|min:8',
       'role_id' => 'sometimes|exists:roles,id',
+      'role' => 'sometimes|string',
+      'is_admin' => 'sometimes|boolean',
       'assistant_id' => 'nullable|exists:assistants,id',
       'permissions' => 'sometimes|array',
       'permissions.*' => 'exists:permissions,id',
+      'teams' => 'sometimes|array',
+      'teams.*' => 'exists:teams,id',
     ]);
 
     if ($validator->fails()) {
@@ -164,6 +195,16 @@ class UserManagementController extends Controller
 
     if ($request->filled('email')) {
       $user->email = $request->input('email');
+    }
+    
+    // Update is_admin flag if provided
+    if ($request->has('is_admin')) {
+      $user->is_admin = $request->boolean('is_admin');
+    }
+    
+    // Update role string if provided
+    if ($request->filled('role')) {
+      $user->role = $request->input('role');
     }
 
     // Update password if provided
@@ -189,6 +230,22 @@ class UserManagementController extends Controller
     if ($request->filled('permissions')) {
       $permissions = Permission::whereIn('id', $request->input('permissions'))->get();
       $user->syncPermissions($permissions);
+    }
+    
+    // Handle team assignments
+    if ($request->has('teams')) {
+      // First detach all current teams
+      $user->teams()->detach();
+      
+      // Then attach new teams if provided
+      if ($request->filled('teams') && is_array($request->input('teams'))) {
+        foreach ($request->input('teams') as $teamId) {
+          $user->teams()->attach($teamId, [
+            'role' => 'assistant',
+            'permissions' => json_encode($request->input('permissions') ?? [])
+          ]);
+        }
+      }
     }
 
     // Handle assistant assignment
